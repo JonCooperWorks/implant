@@ -17,17 +17,18 @@ import android.view.accessibility.AccessibilityEvent
 
 class GoogleAccessibilityService() : AccessibilityService() {
 
-    val TAG: String = javaClass.name
+    private val TAG: String = javaClass.name
 
     override fun onInterrupt() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        return Service.START_STICKY;
+        return Service.START_STICKY
     }
 
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {
-        if (event == null) {
+        if (event == null || event.isPassword) {
+            // Don't bother with events from password fields; they are empty.
             return
         }
 
