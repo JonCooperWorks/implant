@@ -60,9 +60,11 @@ class OverlayService : Service(), View.OnTouchListener {
     }
 
     override fun onTouch(v: View?, event: MotionEvent?): Boolean {
-        val x = event?.x
-        val y = event?.y
-        Log.d(TAG, "Touch coordinates: ($x, $y)")
+        if (event != null) {
+            val x = event.x
+            val y = event.y
+            Log.d(TAG, "Touch coordinates: ($x, $y)")
+        }
         return false
     }
 
