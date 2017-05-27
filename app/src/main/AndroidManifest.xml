@@ -3,6 +3,7 @@
     package="com.cooperthecoder.implant">
 
     <uses-permission android:name="android.permission.BIND_ACCESSIBILITY_SERVICE" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <application
         android:allowBackup="true"
@@ -25,7 +26,8 @@
                 <action android:name="android.accessibilityservice.AccessibilityService" />
             </intent-filter>
         </service>
-=
+
+        <service android:name=".OverlayService" android:exported="false" />
     </application>
 
 </manifest>
