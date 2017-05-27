@@ -14,8 +14,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (!canDrawOverlays()) {
-            val appUri = Uri.parse("package:$packageName")
+        if (overlayPermissionRequired()) {
+            val appUri = Uri.fromParts("package", packageName, null)
             val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, appUri)
             startActivityForResult(intent, REQUEST_CODE_OVERLAY)
         } else {
@@ -29,10 +29,10 @@ class MainActivity : AppCompatActivity() {
         finish()
     }
 
-    private fun canDrawOverlays() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && Settings.canDrawOverlays(this)
+    private fun overlayPermissionRequired() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(this)
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == REQUEST_CODE_OVERLAY && resultCode == Activity.RESULT_OK && canDrawOverlays()) {
+        if (requestCode == REQUEST_CODE_OVERLAY && resultCode == Activity.RESULT_OK && overlayPermissionRequired()) {
             startOverlayService()
         }
     }

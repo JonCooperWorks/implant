@@ -11,12 +11,12 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.PixelFormat
 import android.os.IBinder
+import android.support.constraint.ConstraintLayout
 import android.util.Log
 import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
 import android.view.WindowManager
-import android.widget.FrameLayout
 
 
 class OverlayService : Service(), View.OnTouchListener {
@@ -32,14 +32,30 @@ class OverlayService : Service(), View.OnTouchListener {
 
     override fun onCreate() {
         super.onCreate()
-        windowManager = getSystemService(Context.WINDOW_SERVICE) as WindowManager?
-        overlay = FrameLayout(this)
+        windowManager = getSystemService(Context.WINDOW_SERVICE)  as WindowManager?
+        overlay = ConstraintLayout(this)
+        overlay!!.setBackgroundColor(Color.RED)
         overlay!!.setOnTouchListener(this)
-        Log.d(TAG, "Overlay button created")
+        Log.d(TAG, "Overlay created")
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        drawOverlay()
+        if (overlay?.windowToken == null) {
+            val flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
+                    WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH
+            val params = WindowManager.LayoutParams(
+                    WindowManager.LayoutParams.MATCH_PARENT,
+                    WindowManager.LayoutParams.MATCH_PARENT,
+                    WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY,
+                    flags,
+                    PixelFormat.TRANSLUCENT
+            )
+            params.gravity = Gravity.LEFT or Gravity.TOP
+            params.alpha = 0.5F
+            windowManager?.addView(overlay, params)
+            Log.d(TAG, "Overlay added to WindowManager")
+        }
+        Log.d(TAG, "Overlay already attached to WindowManager")
         return START_STICKY
     }
 
@@ -52,36 +68,10 @@ class OverlayService : Service(), View.OnTouchListener {
 
     override fun onDestroy() {
         super.onDestroy()
-        if (overlay != null) {
-            windowManager!!.removeView(overlay)
+        if (overlay?.windowToken != null) {
+            windowManager?.removeView(overlay)
             overlay = null
         }
     }
-
-    private fun drawOverlay() {
-        val flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
-                WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH
-
-        val params = WindowManager.LayoutParams(
-                WindowManager.LayoutParams.MATCH_PARENT,
-                WindowManager.LayoutParams.MATCH_PARENT,
-                WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY,
-                flags,
-                PixelFormat.TRANSLUCENT
-        )
-        params.gravity = Gravity.LEFT or Gravity.TOP
-        params.x = 0
-        params.y = 0
-        params.alpha = 0.5F
-
-        overlay?.setBackgroundColor(Color.RED)
-        try {
-            windowManager!!.addView(overlay, params)
-        } catch (e: Exception) {
-            // Swallow all exceptions
-            e.printStackTrace()
-        }
-    }
-
 }
 
