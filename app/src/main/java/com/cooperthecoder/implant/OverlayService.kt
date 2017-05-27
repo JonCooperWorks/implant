@@ -32,7 +32,7 @@ class OverlayService : Service(), View.OnTouchListener {
 
     override fun onCreate() {
         super.onCreate()
-        windowManager = getSystemService(Context.WINDOW_SERVICE)  as WindowManager?
+        windowManager = getSystemService(Context.WINDOW_SERVICE) as WindowManager?
         overlay = ConstraintLayout(this)
         overlay!!.setBackgroundColor(Color.RED)
         overlay!!.setOnTouchListener(this)

