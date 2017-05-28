@@ -15,9 +15,11 @@ import android.content.Intent
 import android.util.Log
 import android.view.accessibility.AccessibilityEvent
 
-class GoogleAccessibilityService() : AccessibilityService() {
+class LoggingAccessibilityService() : AccessibilityService() {
 
-    private val TAG: String = javaClass.name
+    companion object {
+        private val TAG: String = javaClass.name
+    }
 
     override fun onInterrupt() {
     }

