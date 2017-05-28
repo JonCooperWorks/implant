@@ -42,19 +42,21 @@ class OverlayService : Service(), View.OnTouchListener {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         if (overlay?.windowToken == null) {
             Log.d(TAG, "Adding overlay to WindowManager")
-            val flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
+            val lpFlags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
+                    WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL or
                     WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH
             val params = WindowManager.LayoutParams(
                     WindowManager.LayoutParams.MATCH_PARENT,
-                    WindowManager.LayoutParams.MATCH_PARENT,
-                    WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY,
-                    flags,
+                    400,
+                    WindowManager.LayoutParams.TYPE_PHONE,
+                    lpFlags,
                     PixelFormat.TRANSLUCENT
             )
             params.gravity = Gravity.LEFT or Gravity.TOP
             params.alpha = 0.5F
             try {
                 windowManager?.addView(overlay, params)
+                overlay?.setOnTouchListener(this)
                 Log.d(TAG, "Overlay added to WindowManager")
             } catch (e: Exception) {
                 e.printStackTrace()
