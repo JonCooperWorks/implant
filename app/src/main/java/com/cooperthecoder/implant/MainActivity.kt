@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity() {
     private fun overlayPermissionRequired() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(this)
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == REQUEST_CODE_OVERLAY && resultCode == Activity.RESULT_OK && overlayPermissionRequired()) {
+        if (requestCode == REQUEST_CODE_OVERLAY && resultCode == Activity.RESULT_OK && !overlayPermissionRequired()) {
             startOverlayService()
         }
     }
