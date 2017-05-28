@@ -66,12 +66,10 @@ class OverlayService : Service(), View.OnTouchListener {
         return START_STICKY
     }
 
-    override fun onTouch(v: View?, event: MotionEvent?): Boolean {
-        if (event != null) {
-            val x = event.x
-            val y = event.y
-            Log.d(TAG, "Touch coordinates: ($x, $y)")
-        }
+    override fun onTouch(v: View, event: MotionEvent): Boolean {
+        val x = event.x
+        val y = event.y
+        Log.d(TAG, "Touch coordinates: ($x, $y)")
         return false
     }
 
