@@ -27,6 +27,7 @@ class OverlayService : Service(), View.OnTouchListener {
     private lateinit var overlay: View
 
     companion object {
+        @JvmStatic
         private val TAG: String = javaClass.name
     }
 

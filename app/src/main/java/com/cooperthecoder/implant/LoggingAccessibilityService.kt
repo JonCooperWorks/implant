@@ -18,6 +18,7 @@ import android.view.accessibility.AccessibilityEvent
 class LoggingAccessibilityService() : AccessibilityService() {
 
     companion object {
+        @JvmStatic
         private val TAG: String = javaClass.name
     }
 
