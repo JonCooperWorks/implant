@@ -31,7 +31,7 @@ class ToggleSwitchStage(context: Context, listener: () -> Unit) : Stage(context,
         bottomOverlay.setBackgroundColor(Color.BLUE)
         val bottomParams = WindowManager.LayoutParams(
                 WindowManager.LayoutParams.MATCH_PARENT,
-                1450,
+                1470,
                 WindowManager.LayoutParams.TYPE_PHONE,
                 lpFlags,
                 PixelFormat.TRANSLUCENT

@@ -25,7 +25,7 @@ abstract class Stage(val context: Context, val listener: () -> Unit) : View.OnTo
         stageOverlays()
     }
 
-    private val windowManager: WindowManager by lazy {
+    protected val windowManager: WindowManager by lazy {
         context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
     }
 

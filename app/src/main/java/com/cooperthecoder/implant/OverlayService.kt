@@ -17,7 +17,7 @@ class OverlayService : Service() {
 
     companion object {
         @JvmStatic
-        private val TAG: String = javaClass.name
+        private val TAG: String = OverlayService::class.java.name
     }
 
     override fun onBind(intent: Intent?): IBinder? {

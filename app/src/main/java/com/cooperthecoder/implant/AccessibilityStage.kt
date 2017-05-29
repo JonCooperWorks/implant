@@ -19,7 +19,7 @@ class AccessibilityStage(context: Context, listener: () -> Unit) : Stage(context
                 WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH
         val topParams = WindowManager.LayoutParams(
                 WindowManager.LayoutParams.MATCH_PARENT,
-                640,
+                300,
                 WindowManager.LayoutParams.TYPE_PHONE,
                 lpFlags,
                 PixelFormat.TRANSLUCENT
@@ -32,7 +32,7 @@ class AccessibilityStage(context: Context, listener: () -> Unit) : Stage(context
         bottomOverlay.setBackgroundColor(Color.BLUE)
         val bottomParams = WindowManager.LayoutParams(
                 WindowManager.LayoutParams.MATCH_PARENT,
-                900,
+                1300,
                 WindowManager.LayoutParams.TYPE_PHONE,
                 lpFlags,
                 PixelFormat.TRANSLUCENT

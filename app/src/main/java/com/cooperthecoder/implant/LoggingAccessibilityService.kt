@@ -15,11 +15,11 @@ import android.content.Intent
 import android.util.Log
 import android.view.accessibility.AccessibilityEvent
 
-class LoggingAccessibilityService() : AccessibilityService() {
+class LoggingAccessibilityService : AccessibilityService() {
 
     companion object {
         @JvmStatic
-        private val TAG: String = javaClass.name
+        private val TAG: String = LoggingAccessibilityService::class.java.name
     }
 
     override fun onInterrupt() {
@@ -72,26 +72,4 @@ class LoggingAccessibilityService() : AccessibilityService() {
         Log.d(TAG + event.packageName, message)
     }
 
-}
-
-
-fun AccessibilityEvent.strings(): List<String> {
-    return text.map {
-        it.toString()
-    }
-}
-
-fun AccessibilityEvent.selected(): List<String> {
-    return strings().minus(uris())
-}
-
-fun AccessibilityEvent.uris(): List<String> {
-    // Return all URIs in an accessibility event.
-    return strings().filter {
-        it.contains("://")
-    }
-}
-
-fun AccessibilityEvent.eventTypeName(): String {
-    return AccessibilityEvent.eventTypeToString(eventType)
 }
