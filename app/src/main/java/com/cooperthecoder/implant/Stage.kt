@@ -47,6 +47,9 @@ abstract class Stage(val context: Context, val listener: () -> Unit) : View.OnTo
         val x = event.x
         val y = event.y
         Log.d(TAG, "Touch coordinates: ($x, $y)")
+        // Android returns (0, 0) for all touches outside of our overlay.
+        // Since all overlays share this OnTouchListener, this condition will only be true when the
+        // user has clicked on the hole left for the clickjacked UI control.
         if (x == 0.0F && y == 0.0F) {
             listener()
         }
