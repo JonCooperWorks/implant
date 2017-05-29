@@ -4,6 +4,9 @@
 * we can infer that a user has clicked on the necessary area by covering the rest of the screen with
 * overlays and recording when a MotionEvent with (0, 0) is passed to onTouch.
 * Each Stage of an attack should inherit from this class.
+*
+* Subclasses of this should simply return all the Overlays used in the attack in their implementation
+* of stageOverlays.
 * */
 package com.cooperthecoder.implant
 
