@@ -9,13 +9,13 @@ import android.view.Gravity
 import android.view.View
 import android.view.WindowManager
 
-class AccessiblityStage(listener: RedressingAttack.Listener?) : Stage(listener), View.OnTouchListener {
+class AccessiblityStage(context: Context, listener: RedressingAttack.Listener?) : Stage(context, listener), View.OnTouchListener {
     val TAG = javaClass.name
 
     var topOverlay: View? = null
     var bottomOverlay: View? = null
 
-    override fun drawOnScreen(context: Context, windowManager: WindowManager) {
+    override fun drawOnScreen() {
         topOverlay = ConstraintLayout(context)
         bottomOverlay = ConstraintLayout(context)
 
@@ -35,7 +35,7 @@ class AccessiblityStage(listener: RedressingAttack.Listener?) : Stage(listener),
         )
         topParams.gravity = Gravity.LEFT or Gravity.TOP
         topParams.alpha = 0.5F
-        addOverlay(topOverlay!!, windowManager, topParams)
+        addOverlay(topOverlay!!, topParams)
 
         val bottomParams = WindowManager.LayoutParams(
                 WindowManager.LayoutParams.MATCH_PARENT,
@@ -46,13 +46,12 @@ class AccessiblityStage(listener: RedressingAttack.Listener?) : Stage(listener),
         )
         bottomParams.gravity = Gravity.LEFT or Gravity.BOTTOM
         bottomParams.alpha = 0.5F
-        addOverlay(bottomOverlay!!, windowManager, bottomParams)
+        addOverlay(bottomOverlay!!, bottomParams)
     }
 
-    override fun clearFromScreen(context: Context, windowManager: WindowManager) {
-        removeOverlay(topOverlay, windowManager)
-        removeOverlay(bottomOverlay, windowManager)
-        listener = null
+    override fun clearFromScreen() {
+        removeOverlay(topOverlay)
+        removeOverlay(bottomOverlay)
     }
 
 

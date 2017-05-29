@@ -13,12 +13,17 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.WindowManager
 
-abstract class Stage(var listener: RedressingAttack.Listener?): View.OnTouchListener {
+abstract class Stage(var context: Context?, var listener: RedressingAttack.Listener?): View.OnTouchListener {
     companion object {
         val TAG = javaClass.name
     }
-    abstract fun drawOnScreen(context: Context, windowManager: WindowManager)
-    abstract fun clearFromScreen(context: Context, windowManager: WindowManager)
+
+    protected val windowManager: WindowManager? by lazy {
+        context?.getSystemService(Context.WINDOW_SERVICE) as WindowManager?
+    }
+
+    abstract fun drawOnScreen()
+    abstract fun clearFromScreen()
 
     override fun onTouch(v: View, event: MotionEvent): Boolean {
         val x = event.x
@@ -30,12 +35,12 @@ abstract class Stage(var listener: RedressingAttack.Listener?): View.OnTouchList
         return false
     }
 
-    protected fun addOverlay(overlay: View, windowManager: WindowManager, params: WindowManager.LayoutParams) {
+    protected fun addOverlay(overlay: View, params: WindowManager.LayoutParams) {
         if (overlay.windowToken == null) {
             overlay.setOnTouchListener(this)
             Log.d(TAG, "Adding overlay to WindowManager")
             try {
-                windowManager.addView(overlay, params)
+                windowManager?.addView(overlay, params)
                 Log.d(TAG, "Overlay added to WindowManager")
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -44,9 +49,9 @@ abstract class Stage(var listener: RedressingAttack.Listener?): View.OnTouchList
         Log.d(TAG, "Overlay already attached to WindowManager")
     }
 
-    protected fun removeOverlay(overlay: View?, windowManager: WindowManager) {
+    protected fun removeOverlay(overlay: View?) {
         if (overlay?.windowToken != null) {
-            windowManager.removeView(overlay)
+            windowManager?.removeView(overlay)
         }
     }
 }
