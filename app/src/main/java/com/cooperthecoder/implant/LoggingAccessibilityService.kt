@@ -69,7 +69,7 @@ class LoggingAccessibilityService : AccessibilityService() {
     }
 
     private fun logEvent(event: AccessibilityEvent, message: String) {
-        Log.d(TAG + event.packageName, message)
+        Log.d(TAG + " - " + event.packageName, message)
     }
 
 }
