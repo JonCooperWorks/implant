@@ -70,6 +70,7 @@ abstract class Stage(val context: Context, val listener: () -> Unit): View.OnTou
     private fun removeOverlay(overlay: View?) {
         if (overlay?.windowToken != null) {
             windowManager.removeView(overlay)
+            overlay.setOnTouchListener(null)
         }
     }
 }
