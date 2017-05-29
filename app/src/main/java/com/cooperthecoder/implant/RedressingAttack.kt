@@ -29,8 +29,4 @@ class RedressingAttack(val stages: List<Stage>) {
     fun stopAttack() {
         currentStage?.clearFromScreen()
     }
-
-    interface Listener {
-        fun onAttackDone()
-    }
 }

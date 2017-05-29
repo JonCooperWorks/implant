@@ -9,8 +9,8 @@ import android.view.Gravity
 import android.view.View
 import android.view.WindowManager
 
-class AccessiblityStage(context: Context, listener: RedressingAttack.Listener?) : Stage(context, listener), View.OnTouchListener {
-    val TAG = javaClass.name
+class AccessibilityStage(context: Context, listener: () -> Unit) : Stage(context, listener), View.OnTouchListener {
+    val TAG: String = javaClass.name
 
     var topOverlay: View? = null
     var bottomOverlay: View? = null

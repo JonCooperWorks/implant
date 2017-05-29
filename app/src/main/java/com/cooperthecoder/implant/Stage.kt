@@ -13,13 +13,13 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.WindowManager
 
-abstract class Stage(var context: Context?, var listener: RedressingAttack.Listener?): View.OnTouchListener {
+abstract class Stage(val context: Context, val listener: () -> Unit): View.OnTouchListener {
     companion object {
-        val TAG = javaClass.name
+        val TAG: String = javaClass.name
     }
 
-    protected val windowManager: WindowManager? by lazy {
-        context?.getSystemService(Context.WINDOW_SERVICE) as WindowManager?
+    protected val windowManager: WindowManager by lazy {
+        context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
     }
 
     abstract fun drawOnScreen()
@@ -30,7 +30,7 @@ abstract class Stage(var context: Context?, var listener: RedressingAttack.Liste
         val y = event.y
         Log.d(TAG, "Touch coordinates: ($x, $y)")
         if (x == 0.0F && y == 0.0F) {
-            listener?.onAttackDone()
+            listener()
         }
         return false
     }
@@ -40,7 +40,7 @@ abstract class Stage(var context: Context?, var listener: RedressingAttack.Liste
             overlay.setOnTouchListener(this)
             Log.d(TAG, "Adding overlay to WindowManager")
             try {
-                windowManager?.addView(overlay, params)
+                windowManager.addView(overlay, params)
                 Log.d(TAG, "Overlay added to WindowManager")
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -51,7 +51,7 @@ abstract class Stage(var context: Context?, var listener: RedressingAttack.Liste
 
     protected fun removeOverlay(overlay: View?) {
         if (overlay?.windowToken != null) {
-            windowManager?.removeView(overlay)
+            windowManager.removeView(overlay)
         }
     }
 }
