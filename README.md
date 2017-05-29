@@ -2,7 +2,7 @@ Cloak and Dagger Implementation
 ===============================
 
 Implant is an implementation of the Android Clock and Dagger vulnerability.
-To learn more about Cloak and Dagger, https://cloak-and-dagger.com.
+To learn more about Cloak and Dagger see, http://cloak-and-dagger.org.
 
 If the overlays do not display correctly on your phone, adjust the overlay dimensions in the relevant Stage subclasses.
 
