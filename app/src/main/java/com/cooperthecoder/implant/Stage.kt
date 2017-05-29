@@ -15,15 +15,30 @@ import android.view.WindowManager
 
 abstract class Stage(val context: Context, val listener: () -> Unit): View.OnTouchListener {
     companion object {
-        val TAG: String = javaClass.name
+        val TAG: String = Stage::class.java.name
+    }
+
+    val overlays: List<Overlay> by lazy {
+        stageOverlays()
     }
 
     protected val windowManager: WindowManager by lazy {
         context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
     }
 
-    abstract fun drawOnScreen()
-    abstract fun clearFromScreen()
+    abstract fun stageOverlays(): List<Overlay>
+
+    fun drawOnScreen() {
+        for(overlay in overlays) {
+            addOverlay(overlay.view, overlay.params)
+        }
+    }
+
+    fun clearFromScreen() {
+        for (overlay in overlays) {
+            removeOverlay(overlay.view)
+        }
+    }
 
     override fun onTouch(v: View, event: MotionEvent): Boolean {
         val x = event.x

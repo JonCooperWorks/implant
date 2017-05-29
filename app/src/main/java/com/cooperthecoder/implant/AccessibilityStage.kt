@@ -4,24 +4,16 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.PixelFormat
 import android.support.constraint.ConstraintLayout
-import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.view.WindowManager
 
 class AccessibilityStage(context: Context, listener: () -> Unit) : Stage(context, listener), View.OnTouchListener {
-    val TAG: String = javaClass.name
 
-    var topOverlay: View? = null
-    var bottomOverlay: View? = null
-
-    override fun drawOnScreen() {
-        topOverlay = ConstraintLayout(context)
-        bottomOverlay = ConstraintLayout(context)
-
-        Log.d(TAG, "Overlay created")
-        topOverlay!!.setBackgroundColor(Color.RED)
-        bottomOverlay!!.setBackgroundColor(Color.BLUE)
+    override fun stageOverlays(): List<Overlay> {
+        val overlays = ArrayList<Overlay>()
+        val topOverlay = ConstraintLayout(context)
+        topOverlay.setBackgroundColor(Color.RED)
 
         val lpFlags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
                 WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL or
@@ -35,8 +27,10 @@ class AccessibilityStage(context: Context, listener: () -> Unit) : Stage(context
         )
         topParams.gravity = Gravity.LEFT or Gravity.TOP
         topParams.alpha = 0.5F
-        addOverlay(topOverlay!!, topParams)
+        overlays.add(Overlay(topOverlay, topParams))
 
+        val bottomOverlay = ConstraintLayout(context)
+        bottomOverlay.setBackgroundColor(Color.BLUE)
         val bottomParams = WindowManager.LayoutParams(
                 WindowManager.LayoutParams.MATCH_PARENT,
                 900,
@@ -46,13 +40,8 @@ class AccessibilityStage(context: Context, listener: () -> Unit) : Stage(context
         )
         bottomParams.gravity = Gravity.LEFT or Gravity.BOTTOM
         bottomParams.alpha = 0.5F
-        addOverlay(bottomOverlay!!, bottomParams)
+        overlays.add(Overlay(bottomOverlay, bottomParams))
+        return overlays
     }
-
-    override fun clearFromScreen() {
-        removeOverlay(topOverlay)
-        removeOverlay(bottomOverlay)
-    }
-
 
 }
