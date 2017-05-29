@@ -5,10 +5,9 @@ import android.graphics.Color
 import android.graphics.PixelFormat
 import android.support.constraint.ConstraintLayout
 import android.view.Gravity
-import android.view.View
 import android.view.WindowManager
 
-class AccessibilityStage(context: Context, listener: () -> Unit) : Stage(context, listener), View.OnTouchListener {
+class AccessibilityStage(context: Context, listener: () -> Unit) : Stage(context, listener) {
 
     override fun stageOverlays(): List<Overlay> {
         val overlays = ArrayList<Overlay>()
