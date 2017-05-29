@@ -21,9 +21,7 @@ class AccessiblityStage(listener: RedressingAttack.Listener?) : Stage(listener),
 
         Log.d(TAG, "Overlay created")
         topOverlay!!.setBackgroundColor(Color.RED)
-        topOverlay!!.setOnTouchListener(this)
         bottomOverlay!!.setBackgroundColor(Color.BLUE)
-        bottomOverlay!!.setOnTouchListener(this)
 
         val lpFlags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
                 WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL or
