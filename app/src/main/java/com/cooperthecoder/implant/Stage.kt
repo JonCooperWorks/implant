@@ -16,7 +16,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.WindowManager
 
-abstract class Stage(val context: Context, val listener: () -> Unit): View.OnTouchListener {
+abstract class Stage(val context: Context, val listener: () -> Unit) : View.OnTouchListener {
     companion object {
         val TAG: String = Stage::class.java.name
     }
@@ -32,7 +32,7 @@ abstract class Stage(val context: Context, val listener: () -> Unit): View.OnTou
     abstract fun stageOverlays(): List<Overlay>
 
     fun drawOnScreen() {
-        for(overlay in overlays) {
+        for (overlay in overlays) {
             addOverlay(overlay.view, overlay.params)
         }
     }

@@ -9,7 +9,8 @@ import android.view.WindowManager
 
 class OkButtonStage(context: Context, listener: () -> Unit) : Stage(context, listener) {
 
-    override fun stageOverlays(): List<Overlay> {        val overlays = ArrayList<Overlay>()
+    override fun stageOverlays(): List<Overlay> {
+        val overlays = ArrayList<Overlay>()
         val topOverlay = ConstraintLayout(context)
         topOverlay.setBackgroundColor(Color.RED)
 
