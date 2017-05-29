@@ -21,11 +21,11 @@ abstract class Stage(val context: Context, val listener: () -> Unit): View.OnTou
         val TAG: String = Stage::class.java.name
     }
 
-    protected val overlays: List<Overlay> by lazy {
+    private val overlays: List<Overlay> by lazy {
         stageOverlays()
     }
 
-    protected val windowManager: WindowManager by lazy {
+    private val windowManager: WindowManager by lazy {
         context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
     }
 
@@ -53,7 +53,7 @@ abstract class Stage(val context: Context, val listener: () -> Unit): View.OnTou
         return false
     }
 
-    protected fun addOverlay(overlay: View, params: WindowManager.LayoutParams) {
+    private fun addOverlay(overlay: View, params: WindowManager.LayoutParams) {
         if (overlay.windowToken == null) {
             overlay.setOnTouchListener(this)
             Log.d(TAG, "Adding overlay to WindowManager")
@@ -67,7 +67,7 @@ abstract class Stage(val context: Context, val listener: () -> Unit): View.OnTou
         Log.d(TAG, "Overlay already attached to WindowManager")
     }
 
-    protected fun removeOverlay(overlay: View?) {
+    private fun removeOverlay(overlay: View?) {
         if (overlay?.windowToken != null) {
             windowManager.removeView(overlay)
         }
