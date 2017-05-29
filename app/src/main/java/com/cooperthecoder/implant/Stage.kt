@@ -18,7 +18,7 @@ abstract class Stage(val context: Context, val listener: () -> Unit): View.OnTou
         val TAG: String = Stage::class.java.name
     }
 
-    val overlays: List<Overlay> by lazy {
+    protected val overlays: List<Overlay> by lazy {
         stageOverlays()
     }
 
