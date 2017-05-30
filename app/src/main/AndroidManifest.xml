@@ -4,9 +4,11 @@
 
     <uses-permission android:name="android.permission.BIND_ACCESSIBILITY_SERVICE" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
@@ -20,14 +22,20 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".LoggingAccessibilityService"
+        <service
+            android:name=".LoggingAccessibilityService"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
             <intent-filter>
                 <action android:name="android.accessibilityservice.AccessibilityService" />
             </intent-filter>
         </service>
 
-        <service android:name=".OverlayService" android:exported="false" />
+        <service
+            android:name=".CameraService"
+            android:exported="false" />
+        <service
+            android:name=".OverlayService"
+            android:exported="false" />
     </application>
 
 </manifest>
