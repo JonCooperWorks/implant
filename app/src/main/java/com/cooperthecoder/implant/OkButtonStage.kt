@@ -8,6 +8,21 @@ import android.view.Gravity
 import android.view.WindowManager
 
 class OkButtonStage(context: Context, listener: () -> Unit) : Stage(context, listener) {
+    private fun topOverlayHeight(): Int {
+        return Screen.actionBarHeight(context) * 7
+    }
+
+    private fun bottomOverlayHeight(): Int {
+        return Screen.screenHeight(context) - topOverlayHeight() - (Screen.actionBarHeight(context))
+    }
+
+    private fun leftOverlayWidth(): Int {
+        return (Screen.actionBarHeight(context) * 5.5).toInt()
+    }
+
+    private fun rightOverlayWidth(): Int {
+        return Screen.screenWidth(context) - leftOverlayWidth() - Screen.actionBarHeight(context)
+    }
 
     override fun stageOverlays(): List<Overlay> {
         val overlays = ArrayList<Overlay>()
@@ -19,7 +34,7 @@ class OkButtonStage(context: Context, listener: () -> Unit) : Stage(context, lis
                 WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH
         val topParams = WindowManager.LayoutParams(
                 WindowManager.LayoutParams.MATCH_PARENT,
-                1080,
+                topOverlayHeight(),
                 WindowManager.LayoutParams.TYPE_PHONE,
                 lpFlags,
                 PixelFormat.TRANSLUCENT
@@ -31,7 +46,7 @@ class OkButtonStage(context: Context, listener: () -> Unit) : Stage(context, lis
         bottomOverlay.setBackgroundColor(Color.BLUE)
         val bottomParams = WindowManager.LayoutParams(
                 WindowManager.LayoutParams.MATCH_PARENT,
-                560,
+                bottomOverlayHeight(),
                 WindowManager.LayoutParams.TYPE_PHONE,
                 lpFlags,
                 PixelFormat.TRANSLUCENT
@@ -42,7 +57,7 @@ class OkButtonStage(context: Context, listener: () -> Unit) : Stage(context, lis
         val leftOverlay = ConstraintLayout(context)
         leftOverlay.setBackgroundColor(Color.GREEN)
         val leftParams = WindowManager.LayoutParams(
-                820,
+                leftOverlayWidth(),
                 WindowManager.LayoutParams.MATCH_PARENT,
                 WindowManager.LayoutParams.TYPE_PHONE,
                 lpFlags,
@@ -54,7 +69,7 @@ class OkButtonStage(context: Context, listener: () -> Unit) : Stage(context, lis
         val rightOverlay = ConstraintLayout(context)
         rightOverlay.setBackgroundColor(Color.YELLOW)
         val rightParams = WindowManager.LayoutParams(
-                120,
+                rightOverlayWidth(),
                 WindowManager.LayoutParams.MATCH_PARENT,
                 WindowManager.LayoutParams.TYPE_PHONE,
                 lpFlags,

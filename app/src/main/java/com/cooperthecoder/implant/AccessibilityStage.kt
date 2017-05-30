@@ -7,8 +7,6 @@ import android.support.constraint.ConstraintLayout
 import android.view.Gravity
 import android.view.WindowManager
 import android.view.accessibility.AccessibilityManager
-import android.util.TypedValue
-
 
 
 class AccessibilityStage(context: Context, listener: () -> Unit) : Stage(context, listener) {
@@ -35,33 +33,16 @@ class AccessibilityStage(context: Context, listener: () -> Unit) : Stage(context
         for ((index, value) in accessibilityServices.withIndex()) {
             val targetServiceId = targetServiceId + ""
             if (value.id == targetServiceId) {
-                return (index * listViewItemSize()) + topPadding()
+                return (index * Screen.listViewItemHeight(context)) + (2 * Screen.actionBarHeight(context))
             }
         }
         throw IllegalStateException("No accessibility service configured. Try setting Config.ACCESSIBILITY_SERVICE_CLASS to your AccessibilityService.")
     }
 
-    private fun topPadding(): Int {
-        val tv = TypedValue()
-        var height = Config.ACCESSIBILITY_SETTINGS_TOP_PADDING
-        if (context.theme.resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
-            height = TypedValue.complexToDimensionPixelSize(tv.data, context.resources.displayMetrics)
-        }
-        return height * 2
-    }
-
-    private fun listViewItemSize(): Int {
-        var tv = TypedValue()
-        var height = Config.ACCESSIBILITY_SETTINGS_HEIGHT
-        if (context.theme.resolveAttribute(android.R.attr.listPreferredItemHeightLarge, tv, true)) {
-            height = TypedValue.complexToDimensionPixelSize(tv.data, context.resources.displayMetrics)
-        }
-        return height
-    }
 
     private fun bottomOverlayHeight(): Int {
-        val screenHeight = context.resources.displayMetrics.heightPixels
-        return screenHeight - topOverlayHeight() - listViewItemSize()
+        val screenHeight = Screen.screenHeight(context)
+        return screenHeight - topOverlayHeight() - Screen.listViewItemHeight(context)
     }
 
     override fun stageOverlays(): List<Overlay> {

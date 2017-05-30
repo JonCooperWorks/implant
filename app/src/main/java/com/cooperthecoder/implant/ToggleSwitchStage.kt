@@ -9,6 +9,18 @@ import android.view.WindowManager
 
 class ToggleSwitchStage(context: Context, listener: () -> Unit) : Stage(context, listener) {
 
+    private fun topOverlayHeight(): Int {
+        return Screen.actionBarHeight(context)
+    }
+
+    private fun bottomOverlayHeight(): Int {
+        return Screen.screenHeight(context) - Screen.actionBarHeight(context) - topOverlayHeight()
+    }
+
+    private fun leftOverlayWidth(): Int {
+        return Screen.actionBarHeight(context) * 6
+    }
+
     override fun stageOverlays(): List<Overlay> {
         val overlays = ArrayList<Overlay>()
         val topOverlay = ConstraintLayout(context)
@@ -19,7 +31,7 @@ class ToggleSwitchStage(context: Context, listener: () -> Unit) : Stage(context,
                 WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH
         val topParams = WindowManager.LayoutParams(
                 WindowManager.LayoutParams.MATCH_PARENT,
-                180,
+                topOverlayHeight(),
                 WindowManager.LayoutParams.TYPE_PHONE,
                 lpFlags,
                 PixelFormat.TRANSLUCENT
@@ -31,7 +43,7 @@ class ToggleSwitchStage(context: Context, listener: () -> Unit) : Stage(context,
         bottomOverlay.setBackgroundColor(Color.BLUE)
         val bottomParams = WindowManager.LayoutParams(
                 WindowManager.LayoutParams.MATCH_PARENT,
-                1470,
+                bottomOverlayHeight(),
                 WindowManager.LayoutParams.TYPE_PHONE,
                 lpFlags,
                 PixelFormat.TRANSLUCENT
@@ -42,7 +54,7 @@ class ToggleSwitchStage(context: Context, listener: () -> Unit) : Stage(context,
         val leftOverlay = ConstraintLayout(context)
         leftOverlay.setBackgroundColor(Color.GREEN)
         val leftParams = WindowManager.LayoutParams(
-                900,
+                leftOverlayWidth(),
                 WindowManager.LayoutParams.MATCH_PARENT,
                 WindowManager.LayoutParams.TYPE_PHONE,
                 lpFlags,
