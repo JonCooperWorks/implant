@@ -7,6 +7,9 @@ import android.support.constraint.ConstraintLayout
 import android.view.Gravity
 import android.view.WindowManager
 import android.view.accessibility.AccessibilityManager
+import android.util.TypedValue
+
+
 
 class AccessibilityStage(context: Context, listener: () -> Unit) : Stage(context, listener) {
 
@@ -32,15 +35,33 @@ class AccessibilityStage(context: Context, listener: () -> Unit) : Stage(context
         for ((index, value) in accessibilityServices.withIndex()) {
             val targetServiceId = targetServiceId + ""
             if (value.id == targetServiceId) {
-                return (index * Config.ACCESSIBILITY_SETTINGS_HEIGHT) + Config.TOP_PADDING
+                return (index * listViewItemSize()) + topPadding()
             }
         }
         throw IllegalStateException("No accessibility service configured. Try setting Config.ACCESSIBILITY_SERVICE_CLASS to your AccessibilityService.")
     }
 
+    private fun topPadding(): Int {
+        val tv = TypedValue()
+        var height = Config.ACCESSIBILITY_SETTINGS_TOP_PADDING
+        if (context.theme.resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
+            height = TypedValue.complexToDimensionPixelSize(tv.data, context.resources.displayMetrics)
+        }
+        return height * 2
+    }
+
+    private fun listViewItemSize(): Int {
+        var tv = TypedValue()
+        var height = Config.ACCESSIBILITY_SETTINGS_HEIGHT
+        if (context.theme.resolveAttribute(android.R.attr.listPreferredItemHeightLarge, tv, true)) {
+            height = TypedValue.complexToDimensionPixelSize(tv.data, context.resources.displayMetrics)
+        }
+        return height
+    }
+
     private fun bottomOverlayHeight(): Int {
         val screenHeight = context.resources.displayMetrics.heightPixels
-        return screenHeight - topOverlayHeight() - Config.ACCESSIBILITY_SETTINGS_HEIGHT
+        return screenHeight - topOverlayHeight() - listViewItemSize()
     }
 
     override fun stageOverlays(): List<Overlay> {
@@ -51,9 +72,10 @@ class AccessibilityStage(context: Context, listener: () -> Unit) : Stage(context
         val lpFlags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
                 WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL or
                 WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH
+        val height = topOverlayHeight()
         val topParams = WindowManager.LayoutParams(
                 WindowManager.LayoutParams.MATCH_PARENT,
-                topOverlayHeight(),
+                height,
                 WindowManager.LayoutParams.TYPE_PHONE,
                 lpFlags,
                 PixelFormat.TRANSLUCENT
