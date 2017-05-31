@@ -31,7 +31,6 @@ class AccessibilityStage(context: Context, listener: () -> Unit) : Stage(context
     * */
     private fun topOverlayHeight(): Int {
         for ((index, value) in accessibilityServices.withIndex()) {
-            val targetServiceId = targetServiceId + ""
             if (value.id == targetServiceId) {
                 return (index * Screen.listViewItemHeight(context)) + (2 * Screen.actionBarHeight(context))
             }

