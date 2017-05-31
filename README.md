@@ -20,6 +20,20 @@ Implant uses coloured translucent overlays to show exactly what is going on in t
 Simply click the holes in the overlay to progress the attack.
 It has been tested in the Android emulator Nexus 5X running Marshmallow and Nougat.
 
+Accessibility Service Capabilities
+==================================
+Done
+----
+Log keystrokes
+Log browser history
+Log selected text
+Log applications used
+
+To Do
+-----
+Log login PIN
+Dropper mechanism for installing second stage payload
+
 Disclaimer
 ==========
 I am not responsible for anything illegal, immoral or stupid you do with this code.
