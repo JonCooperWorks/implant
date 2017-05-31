@@ -16,7 +16,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.WindowManager
 
-abstract class Stage(val context: Context, val listener: () -> Unit) : View.OnTouchListener {
+abstract class Stage(val context: Context, var listener: (() -> Unit)?) : View.OnTouchListener {
     companion object {
         val TAG: String = Stage::class.java.name
     }
@@ -51,7 +51,7 @@ abstract class Stage(val context: Context, val listener: () -> Unit) : View.OnTo
         // Since all overlays share this OnTouchListener, this condition will only be true when the
         // user has clicked on the hole left for the clickjacked UI control.
         if (x == 0.0F && y == 0.0F) {
-            listener()
+            listener?.invoke()
         }
         return false
     }
@@ -75,5 +75,6 @@ abstract class Stage(val context: Context, val listener: () -> Unit) : View.OnTo
             windowManager.removeView(overlay)
             overlay.setOnTouchListener(null)
         }
+        listener = null
     }
 }
