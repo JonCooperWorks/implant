@@ -24,15 +24,15 @@ Accessibility Service Capabilities
 ==================================
 Done
 ----
-Log keystrokes
-Log browser history
-Log selected text
-Log applications used
++ Log keystrokes
++ Log browser history
++ Log selected text
++ Log applications used
 
 To Do
 -----
-Log login PIN
-Dropper mechanism for installing second stage payload
++ Log login PIN
++ Dropper mechanism for installing second stage payload
 
 Disclaimer
 ==========
