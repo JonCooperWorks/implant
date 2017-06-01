@@ -46,7 +46,7 @@ Overlay Capabilities
 ====================
 Done
 ----
-+ Determine the position of our AccessibilityService in the Settings Menu dynamicallygt
++ Determine the position of our AccessibilityService in the Settings Menu dynamically
 + Clickjacking -> a11y working on some screen sizes
 
 To Do
