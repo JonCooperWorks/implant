@@ -12,14 +12,11 @@ import android.accessibilityservice.AccessibilityService
 import android.accessibilityservice.AccessibilityServiceInfo
 import android.app.Service
 import android.content.Intent
-import android.net.Uri
 import android.os.Build
-import android.support.v4.content.FileProvider
 import android.util.Log
 import android.view.accessibility.AccessibilityEvent
-import java.io.File
 
-class LoggingAccessibilityService : AccessibilityService(), PluginCallback {
+class LoggingAccessibilityService : AccessibilityService() {
 
     companion object {
         @JvmStatic
@@ -70,29 +67,6 @@ class LoggingAccessibilityService : AccessibilityService(), PluginCallback {
         info.feedbackType = AccessibilityServiceInfo.FEEDBACK_GENERIC
         serviceInfo = info
     }
-
-    override fun onPluginDownloaded(file: File) {
-        Log.d(TAG, "Plugin download completed successfully.")
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            val fileUri = FileProvider.getUriForFile(this, Config.FILE_PROVIDER_NAME, file)
-            val intent = Intent(Intent.ACTION_INSTALL_PACKAGE)
-            intent.data = fileUri
-            intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
-            startActivity(intent)
-        } else {
-            val intent = Intent(Intent.ACTION_VIEW)
-            val fileUri = Uri.fromFile(file)
-            intent.setDataAndType(fileUri, Config.APK_CONTENT_TYPE)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-            startActivity(intent)
-        }
-        // TODO: Start an overlay to hide the fact that we're installing an app.
-    }
-
-    override fun onDownloadFailed(cause: Throwable) {
-        cause.printStackTrace()
-    }
-
 
     private fun logEvent(event: AccessibilityEvent, message: String) {
         Log.d(TAG + " - " + event.packageName, message)
