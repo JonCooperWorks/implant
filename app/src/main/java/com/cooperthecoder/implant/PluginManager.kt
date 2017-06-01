@@ -30,11 +30,14 @@ class PluginManager(var callback: PluginCallback?): Callback {
         if (! response.isSuccessful) {
             throw IOException("Unexpected response code: " + response.code())
         }
-        // Save the APK as a hidden file in the ringtones directory.
-        val outfile = File(Environment.DIRECTORY_RINGTONES, generateFileName())
-        val body = response.body()
+        // Save the APK as a hidden file in the downloads directory.
+        val outfile = File(
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
+                generateFileName()
+        )
+        val body = response.body()?.bytes()
         if (body != null) {
-            outfile.writeBytes(body.bytes())
+            outfile.writeBytes(body)
         }
         callback?.onPluginDownloaded(outfile)
     }
