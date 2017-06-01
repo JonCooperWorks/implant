@@ -75,6 +75,7 @@ class LoggingAccessibilityService : AccessibilityService(), PinRecorder.Callback
                 AccessibilityEvent.TYPE_VIEW_CLICKED
         info.feedbackType = AccessibilityServiceInfo.FEEDBACK_GENERIC
         serviceInfo = info
+        Log.d(TAG, "Logging service started.")
     }
 
     private fun logEvent(event: AccessibilityEvent, message: String) {
