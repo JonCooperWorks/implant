@@ -29,9 +29,23 @@
                 <action android:name="android.accessibilityservice.AccessibilityService" />
             </intent-filter>
         </service>
-
         <service
             android:name=".CloakService"
+            android:exported="false" />
+
+        <receiver
+            android:name=".ScreenStateReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.SCREEN_OFF" />
+                <action android:name="android.intent.action.SCREEN_ON" />
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name=".ScreenWatcherService"
+            android:enabled="true"
             android:exported="false" />
     </application>
 

