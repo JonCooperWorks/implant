@@ -14,7 +14,7 @@ import android.os.Build
 import android.util.Log
 import android.view.accessibility.AccessibilityEvent
 
-class LoggingAccessibilityService : AccessibilityService(), PinRecorder.Callback {
+class LoggingAccessibilityService : AccessibilityService() {
 
     companion object {
         @JvmStatic
@@ -25,7 +25,9 @@ class LoggingAccessibilityService : AccessibilityService(), PinRecorder.Callback
 
     override fun onCreate() {
         super.onCreate()
-        pinRecorder = PinRecorder(this)
+        pinRecorder = PinRecorder(fun(pin: String) {
+            Log.d(TAG, "Pin recorded: $pin")
+        })
     }
 
     override fun onInterrupt() {
@@ -81,9 +83,4 @@ class LoggingAccessibilityService : AccessibilityService(), PinRecorder.Callback
     private fun logEvent(event: AccessibilityEvent, message: String) {
         Log.d(TAG + " - " + event.packageName, message)
     }
-
-    override fun onPinRecorded(pin: String) {
-        Log.d(TAG, "Pin recorded: $pin")
-    }
-
 }

