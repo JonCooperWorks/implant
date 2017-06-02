@@ -11,13 +11,13 @@ import android.os.IBinder
 import android.util.Log
 
 
-class OverlayService : Service() {
+class CloakService : Service() {
 
     private lateinit var attack: RedressingAttack
 
     companion object {
         @JvmStatic
-        private val TAG: String = OverlayService::class.java.name
+        private val TAG: String = CloakService::class.java.name
     }
 
     override fun onBind(intent: Intent?): IBinder? {

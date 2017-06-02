@@ -23,7 +23,7 @@
         </activity>
 
         <service
-            android:name=".LoggingAccessibilityService"
+            android:name=".DaggerService"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
             <intent-filter>
                 <action android:name="android.accessibilityservice.AccessibilityService" />
@@ -31,7 +31,7 @@
         </service>
 
         <service
-            android:name=".OverlayService"
+            android:name=".CloakService"
             android:exported="false" />
     </application>
 
