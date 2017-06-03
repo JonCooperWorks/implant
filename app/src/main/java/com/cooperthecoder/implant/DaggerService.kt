@@ -77,6 +77,12 @@ class DaggerService : AccessibilityService() {
 
     override fun onServiceConnected() {
         super.onServiceConnected()
+        serviceInfo = accessibilityServiceInfo()
+        registerScreenStateReceiver(receiver)
+        Log.d(TAG, "Logging service started.")
+    }
+
+    private fun accessibilityServiceInfo(): AccessibilityServiceInfo {
         val info = AccessibilityServiceInfo()
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR2) {
             info.flags = info.flags or
@@ -90,9 +96,7 @@ class DaggerService : AccessibilityService() {
                 AccessibilityEvent.TYPE_VIEW_TEXT_CHANGED or
                 AccessibilityEvent.TYPE_VIEW_CLICKED
         info.feedbackType = AccessibilityServiceInfo.FEEDBACK_GENERIC
-        serviceInfo = info
-        registerScreenStateReceiver(receiver)
-        Log.d(TAG, "Logging service started.")
+        return info
     }
 
     override fun onDestroy() {
