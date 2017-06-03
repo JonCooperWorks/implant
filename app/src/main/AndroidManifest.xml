@@ -48,10 +48,6 @@
             android:enabled="true"
             android:exported="false" />
 
-        <receiver
-            android:name=".SleepDetectingReceiver"
-            android:enabled="true"
-            android:exported="false" />
     </application>
 
 </manifest>

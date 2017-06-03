@@ -23,7 +23,6 @@ import android.view.accessibility.AccessibilityEvent
 class DaggerService : AccessibilityService() {
 
     companion object {
-        @JvmStatic
         private val TAG: String = DaggerService::class.java.name
     }
 
@@ -108,6 +107,7 @@ class DaggerService : AccessibilityService() {
         val intentFilter = IntentFilter(Intent.ACTION_SCREEN_ON)
         intentFilter.addAction(Intent.ACTION_SCREEN_OFF)
         registerReceiver(receiver, intentFilter)
+        Log.d(TAG, "Registering screen state listener")
     }
 
     private fun logEvent(event: AccessibilityEvent, message: String) {
