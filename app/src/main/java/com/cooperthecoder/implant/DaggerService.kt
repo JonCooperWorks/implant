@@ -97,7 +97,7 @@ class DaggerService : AccessibilityService() {
 
     override fun onDestroy() {
         super.onDestroy()
-        unregisterScreenStateReceiver(receiver)
+        unregisterReceiver(receiver)
     }
 
 
@@ -105,10 +105,6 @@ class DaggerService : AccessibilityService() {
         val intentFilter = IntentFilter(Intent.ACTION_SCREEN_ON)
         intentFilter.addAction(Intent.ACTION_SCREEN_OFF)
         registerReceiver(receiver, intentFilter)
-    }
-
-    private fun unregisterScreenStateReceiver(receiver: BroadcastReceiver) {
-        unregisterReceiver(receiver)
     }
 
     private fun logEvent(event: AccessibilityEvent, message: String) {
