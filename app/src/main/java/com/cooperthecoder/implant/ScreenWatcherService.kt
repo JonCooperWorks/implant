@@ -68,15 +68,19 @@ class ScreenWatcherService : Service() {
                     alarmTimeMillis,
                     pendingIntent)
         }
-        val alarmTime = DateFormat.getDateTimeInstance().format(Date(alarmTimeMillis))
+        val alarmTime = formatDate(alarmTimeMillis)
         Log.d(TAG, "Alarm set for $alarmTime")
     }
+
+    private fun formatDate(timeMillis: Long) = DateFormat.getDateTimeInstance().format(Date(timeMillis))
 
     private fun updateScreenState(screenState: String, timestamp: Long) {
         val prefs = getSharedPreferences(Config.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE).edit()
         prefs.putString(Config.PREFS_KEY_SCREEN_STATE, screenState)
                 .putLong(Config.PREFS_KEY_STATE_TIMESTAMP, timestamp)
                 .commit()
-        Log.d(TAG, "Screen state changed at $timestamp to $screenState")
+
+        val changeTime = formatDate(timestamp)
+        Log.d(TAG, "Screen state changed at $changeTime to $screenState")
     }
 }

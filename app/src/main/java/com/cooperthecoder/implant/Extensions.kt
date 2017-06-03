@@ -1,8 +1,5 @@
 package com.cooperthecoder.implant
 
-import android.content.Context
-import android.util.DisplayMetrics
-import android.view.WindowManager
 import android.view.accessibility.AccessibilityEvent
 
 

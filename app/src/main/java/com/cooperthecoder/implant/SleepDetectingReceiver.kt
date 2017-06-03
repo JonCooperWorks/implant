@@ -25,6 +25,7 @@ class SleepDetectingReceiver : BroadcastReceiver() {
             // Unlock the screen and do things.
             Log.d(TAG, "User is asleep.")
         } else {
+            // This shouldn't happen but in case it does, handle it
             Log.d(TAG, "User is awake.")
         }
     }

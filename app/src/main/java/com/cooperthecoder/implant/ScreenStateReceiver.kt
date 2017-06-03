@@ -4,8 +4,6 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.util.Log
-import java.text.DateFormat
-import java.util.*
 
 class ScreenStateReceiver : BroadcastReceiver() {
 
