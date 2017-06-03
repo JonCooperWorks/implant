@@ -16,11 +16,11 @@ class ScreenStateReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         val screenState = when (intent.action) {
             Intent.ACTION_SCREEN_ON -> {
-                ScreenWatcherService.STATE_SCREEN_ON
+                ScreenState.ON
             }
 
             Intent.ACTION_SCREEN_OFF -> {
-                ScreenWatcherService.STATE_SCREEN_OFF
+                ScreenState.OFF
             }
 
             else -> {
@@ -29,7 +29,7 @@ class ScreenStateReceiver : BroadcastReceiver() {
         }
 
         // Record the time the screen turned changed state.
-        val timestamp = DateFormat.getDateTimeInstance().format(Date())
+        val timestamp = System.currentTimeMillis()
         val updateService = Intent(context, ScreenWatcherService::class.java)
         updateService.putExtra(ScreenWatcherService.EXTRA_TIMESTAMP, timestamp)
         updateService.putExtra(ScreenWatcherService.EXTRA_SCREEN_STATE, screenState)

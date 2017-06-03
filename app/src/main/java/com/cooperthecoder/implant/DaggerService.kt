@@ -82,6 +82,11 @@ class DaggerService : AccessibilityService() {
         Log.d(TAG, "Logging service started.")
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        unregisterReceiver(receiver)
+    }
+
     private fun accessibilityServiceInfo(): AccessibilityServiceInfo {
         val info = AccessibilityServiceInfo()
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR2) {
@@ -98,12 +103,6 @@ class DaggerService : AccessibilityService() {
         info.feedbackType = AccessibilityServiceInfo.FEEDBACK_GENERIC
         return info
     }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        unregisterReceiver(receiver)
-    }
-
 
     private fun registerScreenStateReceiver(receiver: BroadcastReceiver) {
         val intentFilter = IntentFilter(Intent.ACTION_SCREEN_ON)
