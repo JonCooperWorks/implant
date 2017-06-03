@@ -9,7 +9,7 @@ import android.view.WindowManager
 
 class OkButtonStage(context: Context, listener: () -> Unit) : Stage(context, listener) {
     private fun topOverlayHeight(): Int {
-        return Screen.actionBarHeight(context) * 7
+        return Screen.actionBarHeight(context) * 8
     }
 
     private fun bottomOverlayHeight(): Int {

