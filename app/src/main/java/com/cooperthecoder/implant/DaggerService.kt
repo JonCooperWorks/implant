@@ -87,7 +87,7 @@ class DaggerService : AccessibilityService() {
         serviceInfo = accessibilityServiceInfo()
         registerScreenStateReceiver(receiver)
         running = true
-        Log.d(TAG, "Logging service started.")
+        Log.d(TAG, "DaggerService started.")
     }
 
     override fun onDestroy() {
