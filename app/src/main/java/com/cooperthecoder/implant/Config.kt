@@ -12,5 +12,8 @@ object Config {
     const val SHARED_PREFERENCES_NAME = "screen_state"
     const val PREFS_KEY_SCREEN_STATE = "last_screen_state"
     const val PREFS_KEY_STATE_TIMESTAMP = "timestamp"
+    const val CLOSE_ACCESSIBILITY_SETTINGS = "Dismiss Settings Accessibility."
+    const val KEYBOARD_PACKAGE_NAME = "com.android.inputmethod.latin"
+    const val KEY_PRESS_TIMEOUT = 10L
 }
 
