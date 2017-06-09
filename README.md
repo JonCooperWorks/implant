@@ -35,12 +35,12 @@ Done
 + Log selected text
 + Log applications used
 + Log Security Pin
++ Log password keystrokes
 
 To Do
 -----
 + Unlock login screen
 + Install additional payload from an APK
-+ Log password keystrokes
 
 Overlay Capabilities
 ====================

