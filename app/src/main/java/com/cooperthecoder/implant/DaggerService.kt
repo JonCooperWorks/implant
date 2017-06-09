@@ -49,8 +49,6 @@ class DaggerService : AccessibilityService() {
     }
 
     override fun onAccessibilityEvent(event: AccessibilityEvent) {
-        logEvent(event, "In foreground")
-
         when (event.packageName) {
             Config.SYSTEMUI_PACKAGE_NAME -> {
                 when (event.eventType) {
