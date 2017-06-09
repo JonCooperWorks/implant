@@ -13,7 +13,7 @@ object Config {
     const val PREFS_KEY_SCREEN_STATE = "last_screen_state"
     const val PREFS_KEY_STATE_TIMESTAMP = "timestamp"
     const val KEYBOARD_PACKAGE_NAME = "com.android.inputmethod.latin"
-    const val KEY_PRESS_TIMEOUT = 40L
+    const val KEY_PRESS_TIMEOUT = 150L
     const val KEYBOARD_DISMISSED_TEXT = "[keyboard hidden]"
 }
 
