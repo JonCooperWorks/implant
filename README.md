@@ -24,7 +24,12 @@ have to manually enable the permission and press the back button to begin the at
 it to the Play Store.
 Implant uses coloured translucent overlays to show exactly what is going on in the background.
 Simply click the holes in the overlay to progress the attack.
-It has been tested in the Android emulator Nexus 5X running Marshmallow and Nougat.
+
+Supported Devices
+-----------------
++ Nexus 5X Nougat
++ Nexus 5X Marshmallow
++ Nexus 4 Lollipop
 
 Accessibility Service Capabilities
 ==================================
