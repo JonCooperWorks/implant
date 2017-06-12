@@ -25,6 +25,7 @@ class PinRecorder(val callback: (String) -> Unit) {
         const val NINE = "[WXYZ, 9]"
         const val ZERO = "[0, +]"
         const val DELETE = "[Delete]"
+        const val BACK = "[Back]"
         const val ENTER = "[Enter]"
         const val EMERGENCY = "[Emergency]"
     }
@@ -35,6 +36,10 @@ class PinRecorder(val callback: (String) -> Unit) {
         when (digit) {
             PinPad.DELETE -> {
                 // Remove the last digit logged if the user pressed delete.
+                digitQueue.poll()
+            }
+
+            PinPad.BACK -> {
                 digitQueue.poll()
             }
 
