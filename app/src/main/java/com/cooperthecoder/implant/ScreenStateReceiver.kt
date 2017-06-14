@@ -22,7 +22,7 @@ class ScreenStateReceiver : BroadcastReceiver() {
             }
 
             else -> {
-                throw IllegalStateException("This should never happen.")
+                intent.action
             }
         }
 
