@@ -3,7 +3,6 @@ package com.cooperthecoder.implant
 import android.app.IntentService
 import android.content.Context
 import android.content.Intent
-import android.os.IBinder
 import android.util.Log
 import java.text.DateFormat
 import java.util.*
@@ -21,6 +20,13 @@ class ScreenWatcherService : IntentService(TAG) {
         val screenState = intent.getStringExtra(EXTRA_SCREEN_STATE)
         val timestamp = intent.getLongExtra(EXTRA_TIMESTAMP, 0)
         updateScreenState(screenState, timestamp)
+        showUnlockScreen()
+    }
+
+    private fun showUnlockScreen() {
+        val intent = Intent(this, LockScreenActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        startActivity(intent)
     }
 
     private fun formatDate(timeMillis: Long) = DateFormat.getDateTimeInstance().format(Date(timeMillis))

