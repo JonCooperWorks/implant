@@ -1,7 +1,6 @@
 package com.cooperthecoder.implant
 
 import android.app.IntentService
-import android.content.Context
 import android.content.Intent
 import android.util.Log
 import java.text.DateFormat
@@ -32,12 +31,12 @@ class ScreenWatcherService : IntentService(TAG) {
     private fun formatDate(timeMillis: Long) = DateFormat.getDateTimeInstance().format(Date(timeMillis))
 
     private fun updateScreenState(screenState: String, timestamp: Long) {
-        val prefs = getSharedPreferences(Config.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE).edit()
-        prefs.putString(Config.PREFS_KEY_SCREEN_STATE, screenState)
-                .putLong(Config.PREFS_KEY_STATE_TIMESTAMP, timestamp)
-                .commit()
-
-        val changeTime = formatDate(timestamp)
-        Log.d(TAG, "Screen state changed at $changeTime to $screenState")
+        val changed = SharedPreferencesQuery.updateScreenState(this, screenState, timestamp)
+        if (changed) {
+            val changeTime = formatDate(timestamp)
+            Log.d(TAG, "Screen state changed at $changeTime to $screenState")
+        } else {
+            Log.d(TAG, "Failed to update screen state.")
+        }
     }
 }

