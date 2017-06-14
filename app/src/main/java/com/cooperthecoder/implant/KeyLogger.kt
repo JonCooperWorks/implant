@@ -26,11 +26,7 @@ class KeyLogger {
         }
 
         lastEvent.set(time)
-        when (keystroke) {
-            else -> {
-                keystrokeQueue.add(keystroke)
-            }
-        }
+        keystrokeQueue.add(keystroke)
     }
 
     fun emptyKeyQueue(): String {
