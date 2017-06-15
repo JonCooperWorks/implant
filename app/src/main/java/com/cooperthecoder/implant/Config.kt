@@ -1,8 +1,5 @@
 package com.cooperthecoder.implant
 
-import android.app.AlarmManager
-import java.util.*
-
 object Config {
     const val OVERLAY_DELAY: Long = 2000L
     @JvmField val ACCESSIBILITY_SERVICE_CLASS = DaggerService::class.java

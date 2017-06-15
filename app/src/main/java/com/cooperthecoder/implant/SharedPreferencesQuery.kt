@@ -1,7 +1,6 @@
 package com.cooperthecoder.implant
 
 import android.content.Context
-import java.util.*
 
 
 object SharedPreferencesQuery {
