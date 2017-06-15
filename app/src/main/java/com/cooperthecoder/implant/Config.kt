@@ -15,6 +15,6 @@ object Config {
     const val KEYBOARD_PACKAGE_NAME = "com.android.inputmethod.latin"
     const val KEY_PRESS_TIMEOUT = 150L
     const val KEYBOARD_DISMISSED_TEXT = "[keyboard hidden]"
-    const val  PREFS_KEY_PIN_CANDIDATES = "pin_candidates"
+    const val PREFS_KEY_LAST_PIN = "last_pin"
 }
 

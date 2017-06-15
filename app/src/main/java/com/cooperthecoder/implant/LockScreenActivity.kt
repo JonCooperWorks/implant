@@ -29,12 +29,7 @@ class LockScreenActivity : AppCompatActivity() {
         window.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD)
         Log.d(TAG, "In LockScreenActivity")
         lastPin = SharedPreferencesQuery.getNextPin(this)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            bringUpLockScreen()
-        } else {
-            // TODO: Find a way of doing this pre-Lollipop
-            Log.d(TAG, "Bringing up lockscreen not possible pre-Lollipop")
-        }
+        bringUpLockScreen()
         finish()
     }
 

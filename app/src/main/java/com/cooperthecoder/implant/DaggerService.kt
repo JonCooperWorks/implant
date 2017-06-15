@@ -38,7 +38,7 @@ class DaggerService : AccessibilityService() {
     override fun onCreate() {
         super.onCreate()
         pinRecorder = PinRecorder(fun(pin: String) {
-            val added = SharedPreferencesQuery.addPinCandidate(this, pin)
+            val added = SharedPreferencesQuery.addLastPinEntered(this, pin)
             if (added) {
                 Log.d(TAG, "Pin recorded: $pin")
             } else {
