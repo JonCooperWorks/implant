@@ -20,13 +20,6 @@ class ScreenWatcherService : IntentService(TAG) {
         val screenState = intent.getStringExtra(EXTRA_SCREEN_STATE)
         val timestamp = intent.getLongExtra(EXTRA_TIMESTAMP, 0)
         updateScreenState(screenState, timestamp)
-        showUnlockScreen()
-    }
-
-    private fun showUnlockScreen() {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(Config.TARGET_URL_FOR_OPEN))
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS
-        startActivity(intent)
     }
 
     private fun formatDate(timeMillis: Long) = DateFormat.getDateTimeInstance().format(Date(timeMillis))
