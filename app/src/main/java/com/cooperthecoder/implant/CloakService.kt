@@ -16,7 +16,6 @@ class CloakService : Service() {
     private lateinit var attack: RedressingAttack
 
     companion object {
-        @JvmStatic
         private val TAG: String = CloakService::class.java.name
     }
 

