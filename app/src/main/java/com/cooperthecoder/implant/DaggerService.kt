@@ -65,24 +65,6 @@ class DaggerService : AccessibilityService() {
                         // This is a PIN, let's record it.
                         pinRecorder.appendPinDigit(event.text.toString())
                     }
-
-                    AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED -> {
-                        val screenState = SharedPreferencesQuery.getScreenState(this)
-                        if (screenState == ScreenState.OFF) {
-                            val pin = SharedPreferencesQuery.getNextPin(this)
-                            val parent = event.source?.parent
-                            if (pin != null && parent != null) {
-                                Log.d(TAG, "Screen is off. Attempting to unlock with PIN: $pin")
-                                // Inject click events to accessibility events.
-                                Log.d(TAG, "Parent: $parent)")
-                                (0 until parent.childCount).forEach {
-                                    val child = parent.getChild(it)
-                                    Log.d(TAG, "Child: $child")
-                                }
-                            }
-                        }
-                        event.recycle()
-                    }
                 }
             }
 

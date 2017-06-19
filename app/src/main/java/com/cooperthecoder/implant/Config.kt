@@ -13,6 +13,5 @@ object Config {
     const val KEY_PRESS_TIMEOUT = 150L
     const val KEYBOARD_DISMISSED_TEXT = "[keyboard hidden]"
     const val PREFS_KEY_LAST_PIN = "last_pin"
-    const val  TARGET_URL_FOR_OPEN = "https://google.com"
 }
 
