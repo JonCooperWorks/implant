@@ -58,6 +58,27 @@ To Do
 -----
 + Determine the location of all clickjacking targets dynamically
 
+Command and Control
+===================
+Implant uses ZeroMQ with CurveZMQ encryption in order to receive commands from the C&C
+and queue captured data for exfiltration in real time.
+This will enable the operator to interact with devices under her control in a chat-like
+manner.
+To avoid finishing the victim's mobile data allowance, no large payloads are transmitted
+on mobile connections.
+Instead, payloads are sent via ZeroMQ as URLs and added to a queue locally to be
+downloaded when the victim connects to an unmetered Wi-Fi network.
+Large uploads are handled similarly.
+When an upload command is sent via ZeroMQ, the data will be encrypted using the server's
+public key and queued for upload when the victim connects to Wi-Fi.
+
+Supported Operations
+--------------------
++ Automatic keystroke uploads when user is sleeping and connected to Wi-Fi
++ Execute shell commands
++ Download payload from URL
++ Add upload job to queue
+
 Disclaimer
 ==========
 I am not responsible for anything illegal, immoral or stupid you do with this code.
