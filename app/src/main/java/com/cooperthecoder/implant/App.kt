@@ -8,8 +8,8 @@ class App: Application() {
         super.onCreate()
         JobManager.create(this).addJobCreator {
             when (it) {
-                UploadKeystrokesJob.TAG -> {
-                    UploadKeystrokesJob()
+                UploadQueueJob.TAG -> {
+                    UploadQueueJob()
                 }
 
                 else -> {

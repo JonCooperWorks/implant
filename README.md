@@ -60,16 +60,15 @@ To Do
 
 Command and Control
 ===================
-Implant uses ZeroMQ with CurveZMQ encryption in order to receive commands from the C&C
-and queue captured data for exfiltration in real time.
+Implant uses push notifications in order to receive commands from the C&C.
 This will enable the operator to interact with devices under her control in a chat-like
 manner.
 To avoid finishing the victim's mobile data allowance, no large payloads are transmitted
 on mobile connections.
-Instead, payloads are sent via ZeroMQ as URLs and added to a queue locally to be
+Instead, payloads are sent via push as URLs and added to a queue locally to be
 downloaded when the victim connects to an unmetered Wi-Fi network.
 Large uploads are handled similarly.
-When an upload command is sent via ZeroMQ, the data will be encrypted using the server's
+When an upload command is sent via push, the data will be encrypted using the server's
 public key and queued for upload when the victim connects to Wi-Fi.
 
 Supported Operations
@@ -78,6 +77,13 @@ Supported Operations
 + Execute shell commands
 + Download payload from URL
 + Add upload job to queue
+
+Push Service
+------------
+Since Google doesn't let us silently receive background messages (for obvious reasons),
+we'll have to do it ourselves using the JobScheduler API to poll for commands when
+the device is charging and connected to Wi-Fi.
+This means that we'll be giving up real time communication with the device.
 
 Disclaimer
 ==========
