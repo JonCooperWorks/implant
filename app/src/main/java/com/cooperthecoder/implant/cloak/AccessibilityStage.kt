@@ -1,4 +1,4 @@
-package com.cooperthecoder.implant
+package com.cooperthecoder.implant.cloak
 
 import android.content.Context
 import android.graphics.Color
@@ -8,6 +8,7 @@ import android.support.constraint.ConstraintLayout
 import android.view.Gravity
 import android.view.WindowManager
 import android.view.accessibility.AccessibilityManager
+import com.cooperthecoder.implant.Config
 
 
 class AccessibilityStage(context: Context, listener: () -> Unit) : Stage(context, listener) {

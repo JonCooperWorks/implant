@@ -1,4 +1,4 @@
-package com.cooperthecoder.implant
+package com.cooperthecoder.implant.decoy
 
 import android.app.Activity
 import android.content.Intent
@@ -7,6 +7,8 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.support.v7.app.AppCompatActivity
+import com.cooperthecoder.implant.cloak.CloakService
+import com.cooperthecoder.implant.dagger.DaggerService
 
 
 class MainActivity : AppCompatActivity() {

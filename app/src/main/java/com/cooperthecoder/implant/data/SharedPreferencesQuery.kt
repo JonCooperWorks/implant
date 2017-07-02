@@ -1,7 +1,8 @@
-package com.cooperthecoder.implant
+package com.cooperthecoder.implant.data
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.cooperthecoder.implant.Config
 
 
 object SharedPreferencesQuery {

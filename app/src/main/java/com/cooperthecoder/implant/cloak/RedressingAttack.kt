@@ -1,4 +1,4 @@
-package com.cooperthecoder.implant
+package com.cooperthecoder.implant.cloak
 
 
 class RedressingAttack(val stages: List<Stage>) {

