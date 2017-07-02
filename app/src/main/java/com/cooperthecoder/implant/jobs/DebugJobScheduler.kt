@@ -24,11 +24,6 @@ class DebugJobScheduler : IntentService(TAG) {
 
     private fun runTask(tag: String) {
         when (tag) {
-            CheckForCommandsJob.JOB_NAME -> {
-                val rv = CheckForCommandsEngine(this).action()
-                Log.d(TAG, "Check for commands returned: $rv")
-            }
-
             else -> {
                 Log.d(TAG, "Job not implemented yet: $tag")
             }

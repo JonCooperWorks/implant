@@ -14,5 +14,9 @@ object Config {
     const val KEYBOARD_DISMISSED_TEXT = "[keyboard hidden]"
     const val PREFS_KEY_LAST_PIN = "last_pin"
     const val DEBUG = true
+    const val COMMAND_SERVER = "172.16.184.161"
+    // TODO: Change to HTTPS
+    const val HTTPS_ENDPOINT = "http://$COMMAND_SERVER:4444"
+    const val WEBSOCKETS_ENDPOINT = "ws://$COMMAND_SERVER:5555"
 }
 

