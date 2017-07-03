@@ -1,4 +1,4 @@
-package com.cooperthecoder.implant.jobs
+package com.cooperthecoder.implant.command
 
 import android.content.Intent
 import android.util.Log

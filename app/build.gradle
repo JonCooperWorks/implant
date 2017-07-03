@@ -35,8 +35,5 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
     compile 'com.evernote:android-job:1.1.11'
-    compile 'com.squareup.retrofit2:retrofit:2.3.0'
-    compile 'com.squareup.moshi:moshi:1.5.0'
-    compile 'com.squareup.retrofit2:converter-moshi:2.3.0'
-
+    compile 'com.squareup.okhttp3:okhttp:3.8.1'
 }
