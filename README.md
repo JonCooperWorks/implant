@@ -44,7 +44,6 @@ Done
 
 To Do
 -----
-+ Unlock login screen
 + Install additional payload from an APK
 
 Overlay Capabilities
@@ -94,7 +93,6 @@ command | String | The function to be called on the remote end.
 arguments | Map(String -> String) | Arguments to be passed to the function.
 nonce | String | A unique ID to allow for tracking of command execution. The nonce does not have to be random but must be unique
 
-
 #####Execute
 The `execute` command allows the server to execute a shell command on the device.
 ```
@@ -106,7 +104,6 @@ The `execute` command allows the server to execute a shell command on the device
     }
 }
 ```
-
 
 #####Upload
 The `upload` command allows the server to queue a file on the device for uploading when the device

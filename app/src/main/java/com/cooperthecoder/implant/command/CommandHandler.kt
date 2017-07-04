@@ -1,12 +1,10 @@
 package com.cooperthecoder.implant.command
 
-import android.os.Environment
 import android.util.Log
 import com.cooperthecoder.implant.data.UploadQueue
 import com.cooperthecoder.implant.model.Command
 import okhttp3.WebSocket
 import java.io.BufferedReader
-import java.io.File
 import java.io.InputStreamReader
 
 class CommandHandler(val command: Command, val socket: WebSocket) {

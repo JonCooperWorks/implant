@@ -17,7 +17,7 @@ class CommandListener(private val context: Context) : WebSocketListener() {
     }
 
     override fun onOpen(webSocket: WebSocket, response: Response) {
-        Log.d(CommandService.TAG, "WebSocket opened.")
+        Log.d(CommandService.TAG, "Listening for commands.")
     }
 
     override fun onMessage(webSocket: WebSocket, text: String) {
