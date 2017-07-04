@@ -1,4 +1,4 @@
-package com.cooperthecoder.implant.model
+package com.cooperthecoder.implant.command
 
 import org.json.JSONObject
 import java.util.*

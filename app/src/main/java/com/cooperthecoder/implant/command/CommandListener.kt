@@ -2,7 +2,6 @@ package com.cooperthecoder.implant.command
 
 import android.content.Context
 import android.util.Log
-import com.cooperthecoder.implant.model.Command
 import okhttp3.Response
 import okhttp3.WebSocket
 import okhttp3.WebSocketListener
