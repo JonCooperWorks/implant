@@ -130,7 +130,7 @@ The `pin` command sends the device's unlock PIN to the server.
 
 #####Reply
 Sometimes, the output of a command is useful.
-The `reply` command should be used to send a reply, and is supported by both client and server.
+The `reply` command should be used to send a reply to the server.
 Since there is no guarantee that commands will execute in order, the nonce should be used to
 track which command the response is for.
 ```

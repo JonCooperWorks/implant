@@ -8,7 +8,7 @@ import okhttp3.OkHttpClient
 
 class App : Application() {
 
-    val httpClient by lazy {
+    val httpClient: OkHttpClient by lazy {
         OkHttpClient.Builder()
                 .addInterceptor {
                     val original = it.request()
