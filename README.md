@@ -89,7 +89,7 @@ All messages between client and server represent remote function calls.
 
 #####Message Format
 Key | Type | Description
---------------------------
+----|------|----------------
 command | String | The function to be called on the remote end.
 arguments | Map(String -> String) | Arguments to be passed to the function.
 nonce | String | A unique ID to allow for tracking of command execution. The nonce does not have to be random but must be unique
