@@ -17,7 +17,6 @@ class StartCommandServiceJob : Job() {
             JobRequest.Builder(JOB_NAME)
                     .setRequiredNetworkType(JobRequest.NetworkType.UNMETERED)
                     .setPeriodic(TimeUnit.MINUTES.toMillis(30))
-                    .setRequiresDeviceIdle(true)
                     .setRequiresCharging(true)
                     .setRequirementsEnforced(true)
                     .setPersisted(true)
