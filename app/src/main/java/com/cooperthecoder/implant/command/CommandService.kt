@@ -87,6 +87,7 @@ class CommandService : Service() {
 
     private fun onMeteredConnection() {
         Log.d(TAG, "Network is metered. Stopping CommandService.")
+        mainHandler.removeCallbacks(checkMeteredTask)
         stopSelf()
     }
 }
