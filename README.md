@@ -132,7 +132,8 @@ track which command the response is for.
     "nonce": "1234-5467-4312-0987"
     "arguments": {
         "command": "1234-5467-4353-1359",
-        "output": "/sdcard/Documents/CompanySecrets.docx queued for upload."
+        "output": "/sdcard/Documents/CompanySecrets.docx queued for upload.",
+        "error": ""
     }
 }
 ```

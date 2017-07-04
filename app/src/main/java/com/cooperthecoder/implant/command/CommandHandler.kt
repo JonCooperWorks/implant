@@ -43,13 +43,20 @@ class CommandHandler(val command: Command, val socket: WebSocket) {
         }
         process.waitFor()
 
-        val reader = BufferedReader(InputStreamReader(process.inputStream))
-        val outputBuffer = StringBuffer()
-        reader.forEachLine {
-            outputBuffer.append(it)
+        val outputReader = BufferedReader(InputStreamReader(process.inputStream))
+        val errorReader = BufferedReader(InputStreamReader(process.errorStream))
+        val outputBuilder = StringBuilder()
+        val errorBuilder = StringBuilder()
+        outputReader.forEachLine {
+            outputBuilder.append(it)
         }
-        val output = outputBuffer.toString()
-        reply(output)
+        errorReader.forEachLine {
+            errorBuilder.append(it)
+        }
+
+        val output = outputBuilder.toString()
+        val error = errorBuilder.toString()
+        reply(output, error)
         Log.d(CommandListener.TAG, "Output is: $output")
     }
 
@@ -61,10 +68,11 @@ class CommandHandler(val command: Command, val socket: WebSocket) {
 
     }
 
-    private fun reply(output: String) {
+    private fun reply(output: String, error: String) {
         val arguments = hashMapOf(
                 "nonce" to command.nonce,
-                "output" to output
+                "output" to output,
+                "error" to error
         )
         val command = Command.Builder()
                 .command(CommandListener.REPLY)
