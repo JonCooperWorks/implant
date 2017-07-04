@@ -94,19 +94,6 @@ command | String | The function to be called on the remote end.
 arguments | Map(String -> String) | Arguments to be passed to the function.
 nonce | String | A unique ID to allow for tracking of command execution. The nonce does not have to be random but must be unique
 
-#####Ready
-To signal that it is ready to execute commands, the device sends a message with its unique
-Android device ID.
-
-```
-{
-    "command": "ready",
-    "nonce": "1234-5467-4353-6467",
-    "arguments": {
-        "deviceId": "2342DFS4355"
-    }
-}
-```
 
 #####Execute
 The `execute` command allows the server to execute a shell command on the device.

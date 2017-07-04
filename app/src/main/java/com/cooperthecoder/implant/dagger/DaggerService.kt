@@ -16,8 +16,11 @@ import android.accessibilityservice.AccessibilityServiceInfo
 import android.os.Build
 import android.util.Log
 import android.view.accessibility.AccessibilityEvent
-import com.cooperthecoder.implant.*
+import com.cooperthecoder.implant.Config
 import com.cooperthecoder.implant.data.SharedPreferencesQuery
+import com.cooperthecoder.implant.selected
+import com.cooperthecoder.implant.strings
+import com.cooperthecoder.implant.uris
 
 class DaggerService : AccessibilityService() {
 
