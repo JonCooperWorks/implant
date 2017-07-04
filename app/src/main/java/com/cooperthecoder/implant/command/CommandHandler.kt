@@ -11,22 +11,22 @@ class CommandHandler(val command: Command, val socket: WebSocket) {
     fun handle() {
         when (command.command) {
             CommandListener.EXECUTE -> {
-                val shellCommand = command.arguments.get("shell_command")
+                val shellCommand = command.arguments["shell_command"]
                 if (shellCommand != null) {
                     handleExecute(shellCommand)
                 }
             }
 
             CommandListener.REPLY -> {
-                val nonce = command.arguments.get("nonce")
-                val output = command.arguments.get("output")
+                val nonce = command.arguments["nonce"]
+                val output = command.arguments["output"]
                 if (nonce != null && output != null) {
                     handleReply(nonce, output)
                 }
             }
 
             CommandListener.UPLOAD -> {
-                val filename = command.arguments.get("filename")
+                val filename = command.arguments["filename"]
                 if (filename != null) {
                     handleUpload(filename)
                 }
