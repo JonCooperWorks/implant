@@ -41,7 +41,7 @@ class CommandService : Service() {
     }
 
     val checkMeteredTask: Runnable = Runnable {
-        if (!Networking.isUnmeteredNetwork(this@CommandService)) {
+        if (Networking.isMeteredNetwork(this@CommandService)) {
             Log.d(TAG, "Metered network detected.")
             mainHandler.post(meteredNetworkTask)
 
