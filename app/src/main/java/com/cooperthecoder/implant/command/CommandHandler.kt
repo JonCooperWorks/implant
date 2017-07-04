@@ -56,6 +56,7 @@ class CommandHandler(context: Context, val command: Command, val socket: WebSock
             Runtime.getRuntime().exec(shellCommand)
         } catch (e: Exception) {
             Log.e(CommandListener.TAG, "Error running command", e)
+            e.message?.let { reply("", it) }
             return
         }
         process.waitFor()
