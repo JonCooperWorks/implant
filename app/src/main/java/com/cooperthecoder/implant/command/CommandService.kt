@@ -74,8 +74,7 @@ class CommandService : Service() {
         webSocket = (application as App).httpClient.newWebSocket(request, commandListener)
         val connectivityThread = HandlerThread(WORKER_THREAD_NAME)
         connectivityThread.start()
-        val looper = connectivityThread.looper
-        connectionHandler = Handler(looper)
+        connectionHandler = Handler(connectivityThread.looper)
         mainHandler = Handler(mainLooper)
         connectionHandler.post(checkMeteredTask)
 
