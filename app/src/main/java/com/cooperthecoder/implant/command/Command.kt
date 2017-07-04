@@ -5,7 +5,7 @@ import java.util.*
 
 class Command private constructor(
         val command: String,
-        val arguments: Map<String, String>,
+        val arguments: HashMap<String, String>,
         val nonce: String = UUID.randomUUID().toString()
 ) {
 
@@ -16,11 +16,8 @@ class Command private constructor(
 
         fun fromJson(text: String): Command {
             val json = JSONObject(text)
-            val arguments = hashMapOf<String, String>()
-            val argumentsJSONObject = json.getJSONObject(FIELD_NAME_ARGUMENTS)
-            for (key in argumentsJSONObject.keys()) {
-                arguments.put(key, argumentsJSONObject.getString(key))
-            }
+
+            val arguments = json.getJSONObject(FIELD_NAME_ARGUMENTS)
             val command = Command.Builder()
                     .command(json.getString(FIELD_NAME_COMMAND))
                     .nonce(json.getString(FIELD_NAME_NONCE))
@@ -32,7 +29,7 @@ class Command private constructor(
 
     class Builder {
         private var command: String? = null
-        private var arguments: Map<String, String>? = null
+        private var arguments = hashMapOf<String, String>()
         private var nonce: String? = null
 
         fun command(command: String): Builder {
@@ -40,8 +37,16 @@ class Command private constructor(
             return this
         }
 
-        fun arguments(arguments: Map<String, String>): Builder {
+        fun arguments(arguments: HashMap<String, String>): Builder {
             this.arguments = arguments
+            return this
+        }
+
+        fun arguments(arguments: JSONObject): Builder {
+            this.arguments = hashMapOf<String, String>()
+            for (key in arguments.keys()) {
+                this.arguments[key] = arguments.getString(key)
+            }
             return this
         }
 
@@ -52,10 +57,10 @@ class Command private constructor(
 
         fun build(): Command {
             if (nonce != null) {
-                return Command(command!!, arguments!!, nonce!!)
+                return Command(command!!, arguments, nonce!!)
             }
 
-            return Command(command!!, arguments!!)
+            return Command(command!!, arguments)
         }
     }
 
