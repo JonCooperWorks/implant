@@ -67,6 +67,7 @@ class CommandService : Service() {
 
     override fun onDestroy() {
         closeCommandChannel()
+        Log.d(TAG, "Command listener stopped.")
         super.onDestroy()
     }
 
