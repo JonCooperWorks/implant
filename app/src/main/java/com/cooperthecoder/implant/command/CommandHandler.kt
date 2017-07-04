@@ -50,7 +50,7 @@ class CommandHandler(val command: Command, val socket: WebSocket) {
         }
         val output = outputBuffer.toString()
         reply(output)
-        Log.d(CommandListener.TAG, "Output is: $outputBuffer")
+        Log.d(CommandListener.TAG, "Output is: $output")
     }
 
     private fun handleUpload(filename: String) {
