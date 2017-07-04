@@ -17,10 +17,14 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        CommandService.start(this)
         if (!overlayPermissionRequired()) {
             startCloakService()
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        startService(CommandService.intent(this))
     }
 
     private fun startCloakService() {
