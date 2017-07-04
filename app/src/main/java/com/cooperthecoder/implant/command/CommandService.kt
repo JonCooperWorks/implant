@@ -40,17 +40,15 @@ class CommandService : Service() {
         this@CommandService.onMeteredConnection()
     }
 
-    val checkMeteredTask: Runnable = object : Runnable {
-        override fun run() {
-            if (!Networking.isUnmeteredNetwork(this@CommandService)) {
-                Log.d(TAG, "Metered network detected.")
-                mainHandler.post(meteredNetworkTask)
+    val checkMeteredTask: Runnable = Runnable {
+        if (!Networking.isUnmeteredNetwork(this@CommandService)) {
+            Log.d(TAG, "Metered network detected.")
+            mainHandler.post(meteredNetworkTask)
 
-            }
-
-            Log.d(TAG, "Network still unmetered, checking again in $HEARTBEAT_INTERVAL ms")
-            this@CommandService.heartbeat()
         }
+
+        Log.d(TAG, "Network still unmetered, checking again in $HEARTBEAT_INTERVAL ms")
+        this@CommandService.heartbeat()
     }
 
     override fun onBind(intent: Intent): IBinder? {
