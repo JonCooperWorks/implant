@@ -22,8 +22,8 @@ class CommandService : Service() {
         }
     }
 
-    private lateinit var webSocket: WebSocket
-
+    private var webSocket: WebSocket? = null
+    val commandListener = CommandListener(this)
 
     override fun onBind(intent: Intent): IBinder? {
         return null
@@ -42,15 +42,17 @@ class CommandService : Service() {
     }
 
     private fun openCommandChannel() {
-        val request = Request.Builder()
-                .url(Config.WEBSOCKETS_ENDPOINT)
-                .build()
-        val commandListener = CommandListener(this)
-        webSocket = (application as App).httpClient.newWebSocket(request, commandListener)
+        if (!commandListener.isRunning()) {
+            val request = Request.Builder()
+                    .url(Config.WEBSOCKETS_ENDPOINT)
+                    .build()
+
+            webSocket = (application as App).httpClient.newWebSocket(request, commandListener)
+        }
     }
 
 
     private fun closeCommandChannel() {
-        webSocket.close(SOCKET_CLOSE, null)
+        webSocket?.close(SOCKET_CLOSE, null)
     }
 }

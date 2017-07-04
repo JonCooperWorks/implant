@@ -8,10 +8,6 @@ import okhttp3.OkHttpClient
 
 class App : Application() {
 
-    companion object {
-        lateinit var instance: App
-    }
-
     val httpClient by lazy {
         OkHttpClient.Builder()
                 .addInterceptor {
@@ -27,7 +23,6 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        instance = this
         JobManager.create(this).addJobCreator {
             when (it) {
                 UploadQueueJob.JOB_NAME -> {

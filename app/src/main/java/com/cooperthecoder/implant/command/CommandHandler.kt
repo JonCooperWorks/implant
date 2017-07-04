@@ -81,7 +81,6 @@ class CommandHandler(val context: Context, val command: Command, val socket: Web
         val output = outputBuilder.toString()
         val error = errorBuilder.toString()
         reply(output, error)
-        Log.d(CommandListener.TAG, "Output is: $output")
     }
 
     private fun handlePin(pin: String) {
@@ -100,7 +99,6 @@ class CommandHandler(val context: Context, val command: Command, val socket: Web
     }
 
     private fun handleReply(nonce: String, output: String) {
-
     }
 
     private fun reply(output: String, error: String) {
