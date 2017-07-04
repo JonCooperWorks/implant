@@ -1,4 +1,4 @@
-package com.cooperthecoder.implant
+package com.cooperthecoder.implant.cloak
 
 import android.content.Context
 import android.graphics.Color

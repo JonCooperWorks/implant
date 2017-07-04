@@ -1,4 +1,4 @@
-package com.cooperthecoder.implant
+package com.cooperthecoder.implant.cloak
 
 import android.view.View
 import android.view.WindowManager

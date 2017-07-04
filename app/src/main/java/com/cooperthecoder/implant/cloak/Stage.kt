@@ -8,7 +8,7 @@
 * Subclasses of this should simply return all the Overlays used in the attack in their implementation
 * of stageOverlays.
 * */
-package com.cooperthecoder.implant
+package com.cooperthecoder.implant.cloak
 
 import android.content.Context
 import android.util.Log
