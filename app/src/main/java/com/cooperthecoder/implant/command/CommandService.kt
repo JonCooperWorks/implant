@@ -3,7 +3,6 @@ package com.cooperthecoder.implant.command
 import android.app.Service
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.os.Handler
 import android.os.IBinder
 import android.util.Log
@@ -38,11 +37,10 @@ class CommandService : Service() {
         if (Networking.isMeteredNetwork(this@CommandService)) {
             Log.d(TAG, "Metered network detected.")
             this@CommandService.onMeteredConnection()
-
+        } else {
+            Log.d(TAG, "Network still unmetered, checking again in $HEARTBEAT_INTERVAL ms")
+            this@CommandService.heartbeat()
         }
-
-        Log.d(TAG, "Network still unmetered, checking again in $HEARTBEAT_INTERVAL ms")
-        this@CommandService.heartbeat()
     }
 
     override fun onBind(intent: Intent): IBinder? {
