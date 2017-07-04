@@ -28,6 +28,8 @@ class PinRecorder(val callback: (String) -> Unit) {
         const val BACK = "[Back]"
         const val ENTER = "[Enter]"
         const val EMERGENCY = "[Emergency]"
+        const val HOME = "[Home]"
+        const val OVERVIEW = "[Overview]"
     }
 
     private val digitStack = Stack<String>()
@@ -50,7 +52,7 @@ class PinRecorder(val callback: (String) -> Unit) {
             PinPad.ENTER -> {
                 clearPinStack()
             }
-            PinPad.EMERGENCY -> {
+            PinPad.EMERGENCY, PinPad.HOME, PinPad.OVERVIEW -> {
                 // Ignore these
             }
             else -> {
