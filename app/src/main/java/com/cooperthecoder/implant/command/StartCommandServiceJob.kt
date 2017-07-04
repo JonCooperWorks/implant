@@ -5,7 +5,7 @@ import com.evernote.android.job.JobRequest
 import java.util.concurrent.TimeUnit
 
 
-class StartCommandServiceJob: Job() {
+class StartCommandServiceJob : Job() {
 
     companion object {
         val JOB_NAME: String = StartCommandServiceJob::class.java.name

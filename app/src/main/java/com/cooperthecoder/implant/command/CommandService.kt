@@ -16,8 +16,7 @@ import java.util.concurrent.TimeUnit
 class CommandService : Service() {
 
     companion object {
-        val TAG = CommandService::class.java.name
-        const val WORKER_THREAD_NAME = "MeteredConnectionWorker"
+        val TAG: String = CommandService::class.java.name
         const val SOCKET_CLOSE = 1000
         val HEARTBEAT_INTERVAL = TimeUnit.SECONDS.toMillis(10)
 
