@@ -60,7 +60,7 @@ class CommandService : Service() {
         val clientId = DeviceProperties.deviceId(this)
         client = MqttAndroidClient(applicationContext, Config.MQTT_BROKER, clientId)
         val commandMqttConnectionListener = CommandConnectionListener(client)
-        val commandMqttCallback = CommandMqttConnectionCallback(client, applicationContext)
+        val commandMqttCallback = CommandMqttMessageCallback(client, applicationContext)
         client.setCallback(commandMqttCallback)
         client.connect(null, commandMqttConnectionListener)
         heartbeat()

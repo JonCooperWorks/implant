@@ -7,10 +7,10 @@ import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken
 import org.eclipse.paho.client.mqttv3.MqttCallback
 import org.eclipse.paho.client.mqttv3.MqttMessage
 
-class CommandMqttConnectionCallback(val client: MqttAndroidClient, context: Context) : MqttCallback {
+class CommandMqttMessageCallback(val client: MqttAndroidClient, context: Context) : MqttCallback {
 
     companion object {
-        val TAG: String = CommandMqttConnectionCallback::class.java.name
+        val TAG: String = CommandMqttMessageCallback::class.java.name
     }
 
     val context: Context = context.applicationContext
