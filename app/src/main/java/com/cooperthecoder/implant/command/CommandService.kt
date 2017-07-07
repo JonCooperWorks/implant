@@ -67,7 +67,7 @@ class CommandService : Service() {
     }
 
     private fun heartbeat() {
-        // mainHandler.postDelayed(heartbeatTask, HEARTBEAT_INTERVAL)
+        mainHandler.postDelayed(heartbeatTask, HEARTBEAT_INTERVAL)
     }
 
 
