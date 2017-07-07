@@ -9,13 +9,14 @@ import org.eclipse.paho.client.mqttv3.MqttCallbackExtended
 import org.eclipse.paho.client.mqttv3.MqttMessage
 import java.nio.charset.Charset
 
-class CommandMessageCallback(val client: MqttAndroidClient, context: Context) : MqttCallbackExtended {
+class CommandMessageCallback(client: MqttAndroidClient, context: Context) : MqttCallbackExtended {
 
     companion object {
         val TAG: String = CommandMessageCallback::class.java.name
     }
 
     val context: Context = context.applicationContext
+    val commandHandler = CommandHandler(context, client)
 
     override fun messageArrived(topic: String, message: MqttMessage) {
         val text = message.payload.toString(Charset.defaultCharset())
@@ -27,13 +28,12 @@ class CommandMessageCallback(val client: MqttAndroidClient, context: Context) : 
             e.printStackTrace()
             return
         }
-        val commandHandler = CommandHandler(context, command, client)
-        commandHandler.handle()
+        commandHandler.handle(command)
     }
 
-    override fun connectionLost(cause: Throwable) {
+    override fun connectionLost(cause: Throwable?) {
         Log.d(TAG, "Lost connection to MQTT server")
-        cause.printStackTrace()
+        cause?.printStackTrace()
     }
 
     override fun deliveryComplete(token: IMqttDeliveryToken) {
