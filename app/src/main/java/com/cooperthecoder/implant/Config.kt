@@ -16,6 +16,6 @@ object Config {
     const val DEBUG = true
     const val COMMAND_SERVER = "188.226.135.191"
     const val HTTPS_ENDPOINT = "https://$COMMAND_SERVER:4444"
-    const val WEBSOCKETS_ENDPOINT = "ws://$COMMAND_SERVER:8080"
+    const val MQTT_BROKER = "tcp://$COMMAND_SERVER:1883"
 }
 

