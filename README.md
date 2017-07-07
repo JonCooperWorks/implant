@@ -79,7 +79,7 @@ Push Service
 ------------
 The CommandService is started whenever the device is idle and connected to an
 unmetered network.
-It opens a Websocket connection to the C&C and listens for commands.
+It opens a MQTT connection to the C&C and listens for commands.
 On startup, the client signals it is ready to receive commands by sending its unique
 Android device ID.
 When the user disconnects from the unmetered network, this service should stop
