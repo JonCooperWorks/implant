@@ -43,6 +43,10 @@
         <service
             android:name=".command.CommandService"
             android:exported="false" />
+
+        <service
+            android:name="org.eclipse.paho.android.service.MqttService"
+            android:exported="false" />
     </application>
 
 </manifest>

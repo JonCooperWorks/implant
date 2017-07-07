@@ -25,11 +25,14 @@ class CommandService : Service() {
     }
 
 
-    lateinit var client: MqttAndroidClient
+    val client: MqttAndroidClient by lazy {
+        val clientId = DeviceProperties.deviceId(this)
+        MqttAndroidClient(applicationContext, Config.MQTT_BROKER, clientId)
+    }
 
-    lateinit var mainHandler: Handler
+    val mainHandler = Handler()
 
-    val checkMeteredTask: Runnable = Runnable {
+    val heartbeatTask: Runnable = Runnable {
         if (Networking.isMeteredNetwork(this@CommandService)) {
             Log.d(TAG, "Metered network detected.")
             this@CommandService.onMeteredConnection()
@@ -56,27 +59,25 @@ class CommandService : Service() {
     }
 
     private fun openCommandChannel() {
-        mainHandler = Handler()
-        val clientId = DeviceProperties.deviceId(this)
-        client = MqttAndroidClient(applicationContext, Config.MQTT_BROKER, clientId)
         val commandMqttConnectionListener = CommandConnectionListener(client)
-        val commandMqttCallback = CommandMqttMessageCallback(client, applicationContext)
+        val commandMqttCallback = CommandMessageCallback(client, applicationContext)
         client.setCallback(commandMqttCallback)
         client.connect(null, commandMqttConnectionListener)
         heartbeat()
     }
 
     private fun heartbeat() {
-        mainHandler.postDelayed(checkMeteredTask, HEARTBEAT_INTERVAL)
+        // mainHandler.postDelayed(heartbeatTask, HEARTBEAT_INTERVAL)
     }
 
 
     private fun closeCommandChannel() {
+        client.close()
     }
 
     private fun onMeteredConnection() {
         Log.d(TAG, "Network is metered. Stopping CommandService.")
-        mainHandler.removeCallbacks(checkMeteredTask)
+        mainHandler.removeCallbacks(heartbeatTask)
         stopSelf()
     }
 }

@@ -20,9 +20,11 @@ class CommandConnectionListener(val client: MqttAndroidClient) : IMqttActionList
 
     override fun onFailure(asyncActionToken: IMqttToken, exception: Throwable) {
         Log.d(TAG, "Failed to connect to ${client.serverURI}")
+        exception.printStackTrace()
     }
 
     fun subscribeToCommandChannels() {
+        Log.d(TAG, "Connection successful! Subscribing to ${client.serverURI}/${client.clientId}")
         client.subscribe(client.clientId, DEFAULT_QOS)
     }
 }
