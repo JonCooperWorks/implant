@@ -59,10 +59,13 @@ class CommandService : Service() {
     }
 
     private fun openCommandChannel() {
-        val commandMqttConnectionListener = CommandConnectionListener(client)
-        val commandMqttCallback = CommandMessageCallback(client, applicationContext)
-        client.setCallback(commandMqttCallback)
-        client.connect(null, commandMqttConnectionListener)
+        val commandConnectionListener = CommandConnectionListener(
+                client,
+                DeviceProperties.identifier(this)
+        )
+        val commandMessageCallback = CommandMessageCallback(client, applicationContext)
+        client.setCallback(commandMessageCallback)
+        client.connect(null, commandConnectionListener)
         heartbeat()
     }
 

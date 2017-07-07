@@ -6,7 +6,7 @@ import org.eclipse.paho.client.mqttv3.IMqttActionListener
 import org.eclipse.paho.client.mqttv3.IMqttToken
 
 
-class CommandConnectionListener(val client: MqttAndroidClient) : IMqttActionListener {
+class CommandConnectionListener(val client: MqttAndroidClient, val channel: String) : IMqttActionListener {
 
     companion object {
         const val DEFAULT_QOS = 0
@@ -25,6 +25,6 @@ class CommandConnectionListener(val client: MqttAndroidClient) : IMqttActionList
 
     fun subscribeToCommandChannels() {
         Log.d(TAG, "Connection successful! Subscribing to ${client.serverURI}/${client.clientId}")
-        client.subscribe(client.clientId, DEFAULT_QOS)
+        client.subscribe(channel, DEFAULT_QOS)
     }
 }

