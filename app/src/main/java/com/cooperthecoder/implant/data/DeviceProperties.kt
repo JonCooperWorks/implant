@@ -15,10 +15,14 @@ object DeviceProperties {
     }
 
     fun identifier(context: Context): String {
-        return "implants/${model()}/${deviceId(context)}".replace("\\s+".toRegex(), "")
+        return "${model()}/${deviceId(context)}".replace("\\s+".toRegex(), "")
     }
 
-    fun responseIdentifier(context: Context)  : String {
-        return "${identifier(context)}/replies"
+    fun commandChannelName(context: Context): String {
+        return "commands/${identifier(context)}"
+    }
+
+    fun replyChannelName(context: Context): String {
+        return "replies/${identifier(context)}"
     }
 }

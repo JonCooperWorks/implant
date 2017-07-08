@@ -111,6 +111,6 @@ class CommandHandler(context: Context, val client: MqttAndroidClient) {
 
         val message = MqttMessage()
         message.payload = reply.json().toByteArray()
-        client.publish(DeviceProperties.responseIdentifier(context), message)
+        client.publish(DeviceProperties.replyChannelName(context), message)
     }
 }

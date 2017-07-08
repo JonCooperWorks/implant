@@ -34,14 +34,13 @@ class CommandService : Service() {
 
     val commandConnectionListener by lazy {
         CommandConnectionListener(
-                DeviceProperties.identifier(this)
+                applicationContext,
+                DeviceProperties.commandChannelName(this)
         )
     }
     val commandMessageCallback by lazy {
         CommandMessageCallback(client, applicationContext)
     }
-
-    var connectedToken: IMqttToken? = null
 
     val mainHandler = Handler()
 
@@ -60,9 +59,9 @@ class CommandService : Service() {
     }
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
-        if (connectedToken == null) {
+        if (!client.isConnected) {
             Log.d(TAG, "Connecting to MQTT broker")
-            connectedToken = openCommandChannel()
+            openCommandChannel()
         } else {
             Log.d(TAG, "Client already connected to broker.")
         }
@@ -88,7 +87,6 @@ class CommandService : Service() {
 
     private fun closeCommandChannel() {
         client.disconnect()
-        connectedToken = null
     }
 
     private fun onMeteredConnection() {

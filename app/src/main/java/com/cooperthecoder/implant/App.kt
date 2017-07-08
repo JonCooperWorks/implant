@@ -39,7 +39,6 @@ class App : Application() {
                 }
             }
         }
-        StartCommandServiceJob.schedule()
     }
 }
 
