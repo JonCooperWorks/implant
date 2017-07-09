@@ -6,6 +6,7 @@ import com.cooperthecoder.implant.command.UploadQueueJob
 import com.cooperthecoder.implant.data.DeviceProperties
 import com.evernote.android.job.JobManager
 import okhttp3.OkHttpClient
+import org.libsodium.jni.NaCl
 
 class App : Application() {
 
@@ -24,6 +25,9 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
+
+        // Initialize crypto
+        NaCl.sodium()
         JobManager.create(this).addJobCreator {
             when (it) {
                 UploadQueueJob.JOB_NAME -> {
