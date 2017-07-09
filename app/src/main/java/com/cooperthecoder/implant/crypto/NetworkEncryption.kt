@@ -47,13 +47,13 @@ class NetworkEncryption(val serverPublicKey: ByteArray, val clientPrivateKey: By
         return encoded
     }
 
-    fun decrypt(ciphertext: String): String {
-        val ciphertextBytes = Base64.decode(ciphertext, Base64.DEFAULT)
+    fun decrypt(nonceAndCiphertext: String): String {
+        val ciphertextBytes = Base64.decode(nonceAndCiphertext, Base64.DEFAULT)
         val plaintext = decrypt(ciphertextBytes)
         return String(plaintext)
     }
 
-    private fun encrypt(plaintext: ByteArray): ByteArray {
+    fun encrypt(plaintext: ByteArray): ByteArray {
         val ciphertext = ByteArray(ciphertextLength(plaintext))
         val nonce = nonce()
         val result = Sodium.crypto_box_easy(
@@ -70,7 +70,7 @@ class NetworkEncryption(val serverPublicKey: ByteArray, val clientPrivateKey: By
         return nonce.plus(ciphertext)
     }
 
-    private fun decrypt(nonceAndCiphertext: ByteArray): ByteArray {
+    fun decrypt(nonceAndCiphertext: ByteArray): ByteArray {
         val plaintext = ByteArray(plaintextLength(nonceAndCiphertext))
         val nonce = nonce(nonceAndCiphertext)
         val ciphertext = nonceAndCiphertext.copyOfRange(nonce.size, nonceAndCiphertext.size)
