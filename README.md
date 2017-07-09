@@ -145,6 +145,10 @@ track which command the response is for.
 }
 ```
 
+All messages are encrypted with the server's public key before being sent to the C&C via a TLS 
+connection.
+
+
 Disclaimer
 ==========
 I am not responsible for anything illegal, immoral or stupid you do with this code.
