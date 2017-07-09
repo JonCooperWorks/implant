@@ -26,8 +26,6 @@ class NetworkEncryption(val serverPublicKey: ByteArray, val clientPrivateKey: By
             Base64.decode(clientPrivateKey, Base64.DEFAULT)
     )
 
-    val nonceSize = Sodium.crypto_box_noncebytes()
-
     override fun isDestroyed(): Boolean {
         for (byte in clientPrivateKey) {
             if (byte != 0x00.toByte()) {
@@ -73,7 +71,7 @@ class NetworkEncryption(val serverPublicKey: ByteArray, val clientPrivateKey: By
     private fun decrypt(nonceAndCiphertext: ByteArray): ByteArray {
         val plaintext = ByteArray(plaintextLength(nonceAndCiphertext))
         val nonce = nonce(nonceAndCiphertext)
-        val ciphertext = nonceAndCiphertext.copyOfRange(nonceSize, nonceAndCiphertext.size)
+        val ciphertext = nonceAndCiphertext.copyOfRange(nonce.size, nonceAndCiphertext.size)
         val result = Sodium.crypto_box_open_easy(
                 plaintext,
                 ciphertext,
@@ -90,6 +88,7 @@ class NetworkEncryption(val serverPublicKey: ByteArray, val clientPrivateKey: By
     }
 
     private fun nonce(ciphertext: ByteArray? = null): ByteArray {
+        val nonceSize = Sodium.crypto_box_noncebytes()
         if (ciphertext == null) {
             val nonce = ByteArray(nonceSize)
             SecureRandom().nextBytes(nonce)
