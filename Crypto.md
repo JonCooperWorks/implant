@@ -31,11 +31,11 @@ function encrypt(peerPublicKey, plaintext)
 Decryption is done using the following algorithm:
 ```
 function decrypt(peerPublicKey, nonceAndCiphertext)
-    nonce = firstNBytesOfBuffer(
+    nonce = platformFirstNBytesOfBuffer(
         n=cryptoBoxNonceSize,
         buffer=nonceAndCiphertext
     )
-    ciphertext = restOfBuffer(after=nonceAndCiphertextSize)
+    ciphertext = platformRestOfBuffer(after=nonceAndCiphertextSize)
     plaintext = platformCryptoBoxEasyOpen(
         nonce=nonce,
         ciphertext=ciphertext,
