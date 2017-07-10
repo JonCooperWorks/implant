@@ -14,7 +14,7 @@ import org.libsodium.jni.Sodium
 import org.libsodium.jni.keys.KeyPair
 import javax.security.auth.Destroyable
 
-class NetworkEncryption(val serverPublicKey: ByteArray, val clientPrivateKey: ByteArray): Encryption, Destroyable {
+class NetworkEncryption(val serverPublicKey: ByteArray, val clientPrivateKey: ByteArray): AsymmetricEncryption, Destroyable {
 
     constructor(serverPublicKey: String, clientPrivateKey: String) : this(
             Base64Encoder.decode(serverPublicKey),
@@ -40,13 +40,13 @@ class NetworkEncryption(val serverPublicKey: ByteArray, val clientPrivateKey: By
         clientPrivateKey.fill(0x00)
     }
 
-    fun encrypt(plaintext: String): String {
+    override fun encrypt(plaintext: String): String {
         val ciphertext = encrypt(plaintext.toByteArray())
         val encoded = Base64Encoder.encode(ciphertext)
         return encoded
     }
 
-    fun decrypt(nonceAndCiphertext: String): String {
+    override fun decrypt(nonceAndCiphertext: String): String {
         val ciphertextBytes = Base64Encoder.decode(nonceAndCiphertext)
         val plaintext = decrypt(ciphertextBytes)
         return String(plaintext)
@@ -64,7 +64,7 @@ class NetworkEncryption(val serverPublicKey: ByteArray, val clientPrivateKey: By
                 clientPrivateKey
         )
         if (result != 0) {
-            throw Encryption.EncryptionException("Error encrypting message. Libsodium result code: $result")
+            throw AsymmetricEncryption.EncryptionException("Error encrypting message. Libsodium result code: $result")
         }
         return nonce.plus(ciphertext)
     }
@@ -83,7 +83,7 @@ class NetworkEncryption(val serverPublicKey: ByteArray, val clientPrivateKey: By
         )
 
         if (result != 0) {
-            throw Encryption.DecryptionException("Error decrypting message. Libsodium result code: $result")
+            throw AsymmetricEncryption.DecryptionException("Error decrypting message. Libsodium result code: $result")
         }
         return plaintext
     }
