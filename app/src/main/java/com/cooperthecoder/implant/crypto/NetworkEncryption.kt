@@ -12,7 +12,7 @@ package com.cooperthecoder.implant.crypto
 
 import android.util.Base64
 import org.libsodium.jni.Sodium
-import java.security.SecureRandom
+import org.libsodium.jni.keys.KeyPair
 import javax.security.auth.Destroyable
 
 class NetworkEncryption(val serverPublicKey: ByteArray, val clientPrivateKey: ByteArray) : Destroyable {
@@ -28,6 +28,13 @@ class NetworkEncryption(val serverPublicKey: ByteArray, val clientPrivateKey: By
 
     companion object {
         private val nonceSize = Sodium.crypto_box_noncebytes()
+        private const val SEED_SIZE = 32
+
+        fun newKeyPair(): KeyPair {
+            val seed = ByteArray(SEED_SIZE)
+            Sodium.randombytes(seed, seed.size)
+            return KeyPair(seed)
+        }
     }
 
     override fun isDestroyed(): Boolean {
@@ -89,7 +96,7 @@ class NetworkEncryption(val serverPublicKey: ByteArray, val clientPrivateKey: By
     private fun nonce(ciphertext: ByteArray? = null): ByteArray {
         if (ciphertext == null) {
             val nonce = ByteArray(nonceSize)
-            SecureRandom().nextBytes(nonce)
+            Sodium.randombytes(nonce, nonce.size)
             return nonce
         }
         return ciphertext.copyOf(nonceSize)
