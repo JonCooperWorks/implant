@@ -44,3 +44,30 @@ function decrypt(peerPublicKey, nonceAndCiphertext)
     )
     return plaintext
 ```
+
+Sending is done as:
+```
+function sendToServer(plaintext)
+    ciphertext = encrypt(
+        peerPublicKey=serverPublicKey,
+        plaintext=plaintext
+    )
+    platformSendToServerViaNetwork(ciphertext)
+```
+
+And receiving should look like:
+```
+function receiveFromClient(ciphertext)
+    message = decrypt(
+        peerPublicKey=clientPublicKey,
+        nonceAndCiphertext=ciphertext
+    )
+    platformProcessMessage(message)
+```
+
+
+Server state
+----------------
+A server is a node that subscribes to the replies channel and publishes on the commands chanel.
+Since clients will only accept commands that are signed with the server key, it does not matter
+who is able to publish commands.
