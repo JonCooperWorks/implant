@@ -1,6 +1,6 @@
 Cryptography
 ============
-Although the underlying connection must use TLS, an additional layer of encryption is needed to prevent
+Although the underlying MQTT connection must use TLS, an additional layer of encryption is needed to prevent
 a rogue endpoint from subscribing to other channels and being able to see commands and responses 
 sent to devices other than those they possess the key for.
 This architecture also allows for separating the private key from the C&C server.
@@ -66,8 +66,25 @@ function receiveFromClient(ciphertext)
 ```
 
 
-Server state
-----------------
-A server is a node that subscribes to the replies channel and publishes on the commands chanel.
-Since clients will only accept commands that are signed with the server key, it does not matter
-who is able to publish commands.
+Topics
+------
+
+###Commands
+The commands topic, `commands/`, is to be used to send commands to
+clients.
+To send a command to a client, the operator must sign a command with
+her private key and encrypt it with the public key provided by the
+client, then publish it on their client-specific channel.
+Clients must disregard any message from the commands topic that is not
+signed by the operator's key.
+
+###Replies
+The replies topic, `replies/`, is used to send the output of commands to
+the operator.
+To send a message to the operator, the client must sign its reply with
+its private key generated on device, then encrypt it with the operator's
+public key.
+Messages that are not signed by the client's public key should be
+discarded.
+To eliminate the need for managing changing keys, clients should use
+their public key as a client ID.

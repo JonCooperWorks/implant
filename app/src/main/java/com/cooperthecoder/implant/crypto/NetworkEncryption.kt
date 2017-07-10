@@ -26,15 +26,12 @@ class NetworkEncryption(val serverPublicKey: ByteArray, val clientPrivateKey: By
             Base64.decode(clientPrivateKey, Base64.DEFAULT)
     )
 
-    private val nonceSize = Sodium.crypto_box_noncebytes()
+    companion object {
+        private val nonceSize = Sodium.crypto_box_noncebytes()
+    }
 
     override fun isDestroyed(): Boolean {
-        for (byte in clientPrivateKey) {
-            if (byte != 0x00.toByte()) {
-                return false
-            }
-        }
-        return true
+        return clientPrivateKey.none { it != 0x00.toByte() }
     }
 
     override fun destroy() {
