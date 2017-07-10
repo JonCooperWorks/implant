@@ -14,11 +14,7 @@ import org.libsodium.jni.Sodium
 import org.libsodium.jni.keys.KeyPair
 import javax.security.auth.Destroyable
 
-class NetworkEncryption(val serverPublicKey: ByteArray, val clientPrivateKey: ByteArray) : Destroyable {
-
-    open class CryptoException(e: String) : Exception(e)
-    class DecryptionException(e: String) : CryptoException(e)
-    class EncryptionException(e: String) : CryptoException(e)
+class NetworkEncryption(val serverPublicKey: ByteArray, val clientPrivateKey: ByteArray): Encryption, Destroyable {
 
     constructor(serverPublicKey: String, clientPrivateKey: String) : this(
             Base64Encoder.decode(serverPublicKey),
@@ -56,7 +52,7 @@ class NetworkEncryption(val serverPublicKey: ByteArray, val clientPrivateKey: By
         return String(plaintext)
     }
 
-    fun encrypt(plaintext: ByteArray): ByteArray {
+    override fun encrypt(plaintext: ByteArray): ByteArray {
         val ciphertext = ByteArray(ciphertextLength(plaintext))
         val nonce = nonce()
         val result = Sodium.crypto_box_easy(
@@ -68,12 +64,12 @@ class NetworkEncryption(val serverPublicKey: ByteArray, val clientPrivateKey: By
                 clientPrivateKey
         )
         if (result != 0) {
-            throw EncryptionException("Error encrypting message. Libsodium result code: $result")
+            throw Encryption.EncryptionException("Error encrypting message. Libsodium result code: $result")
         }
         return nonce.plus(ciphertext)
     }
 
-    fun decrypt(nonceAndCiphertext: ByteArray): ByteArray {
+    override fun decrypt(nonceAndCiphertext: ByteArray): ByteArray {
         val plaintext = ByteArray(plaintextLength(nonceAndCiphertext))
         val nonce = nonce(nonceAndCiphertext)
         val ciphertext = nonceAndCiphertext.copyOfRange(nonce.size, nonceAndCiphertext.size)
@@ -87,7 +83,7 @@ class NetworkEncryption(val serverPublicKey: ByteArray, val clientPrivateKey: By
         )
 
         if (result != 0) {
-            throw DecryptionException("Error decrypting message. Libsodium result code: $result")
+            throw Encryption.DecryptionException("Error decrypting message. Libsodium result code: $result")
         }
         return plaintext
     }
