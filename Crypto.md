@@ -68,6 +68,15 @@ function receiveFromClient(ciphertext)
 
 Topics
 ------
+The use of a MQTT broker as the C&C adds flexibility to the malware.
+Any node in possession of the operator key can act as the C&C by
+subscribing to the *Replies* topic and publishing commands signed with
+the operator key and encrypted with a client's public key.
+It also ensures that compromising the C&C will yield no useful
+information.
+The operator node should subscribe to the broker's new client topic and
+take note of nodes that have subscribed and unsubscribed in order to
+send messages to them.
 
 ###Commands
 The commands topic, `commands/`, is to be used to send commands to
