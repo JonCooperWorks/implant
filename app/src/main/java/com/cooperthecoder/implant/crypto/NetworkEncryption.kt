@@ -16,12 +16,6 @@ import javax.security.auth.Destroyable
 
 class NetworkEncryption(val serverPublicKey: ByteArray, val clientPrivateKey: ByteArray) : Destroyable {
 
-    private val clientPublicKey by lazy {
-        KeyPair(String(clientPrivateKey), Base64Encoder.encoder)
-                .publicKey
-                .toBytes()
-    }
-
     open class CryptoException(e: String) : Exception(e)
     class DecryptionException(e: String) : CryptoException(e)
     class EncryptionException(e: String) : CryptoException(e)
@@ -48,10 +42,6 @@ class NetworkEncryption(val serverPublicKey: ByteArray, val clientPrivateKey: By
 
     override fun destroy() {
         clientPrivateKey.fill(0x00)
-    }
-
-    fun clientPublicKeyString(): String {
-        return Base64Encoder.encode(clientPublicKey)
     }
 
     fun encrypt(plaintext: String): String {
