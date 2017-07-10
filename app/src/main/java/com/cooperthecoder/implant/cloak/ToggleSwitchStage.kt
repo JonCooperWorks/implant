@@ -6,6 +6,7 @@ import android.graphics.PixelFormat
 import android.support.constraint.ConstraintLayout
 import android.view.Gravity
 import android.view.WindowManager
+import com.cooperthecoder.implant.Overlay
 
 class ToggleSwitchStage(context: Context, listener: () -> Unit) : Stage(context, listener) {
 
