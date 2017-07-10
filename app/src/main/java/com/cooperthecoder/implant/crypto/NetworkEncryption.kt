@@ -10,20 +10,25 @@
 * */
 package com.cooperthecoder.implant.crypto
 
-import android.util.Base64
 import org.libsodium.jni.Sodium
 import org.libsodium.jni.keys.KeyPair
 import javax.security.auth.Destroyable
 
 class NetworkEncryption(val serverPublicKey: ByteArray, val clientPrivateKey: ByteArray) : Destroyable {
 
+    private val clientPublicKey by lazy {
+        KeyPair(String(clientPrivateKey), Base64Encoder.encoder)
+                .publicKey
+                .toBytes()
+    }
+
     open class CryptoException(e: String) : Exception(e)
     class DecryptionException(e: String) : CryptoException(e)
     class EncryptionException(e: String) : CryptoException(e)
 
     constructor(serverPublicKey: String, clientPrivateKey: String) : this(
-            Base64.decode(serverPublicKey, Base64.DEFAULT),
-            Base64.decode(clientPrivateKey, Base64.DEFAULT)
+            Base64Encoder.decode(serverPublicKey),
+            Base64Encoder.decode(clientPrivateKey)
     )
 
     companion object {
@@ -45,14 +50,18 @@ class NetworkEncryption(val serverPublicKey: ByteArray, val clientPrivateKey: By
         clientPrivateKey.fill(0x00)
     }
 
+    fun clientPublicKeyString(): String {
+        return Base64Encoder.encode(clientPublicKey)
+    }
+
     fun encrypt(plaintext: String): String {
         val ciphertext = encrypt(plaintext.toByteArray())
-        val encoded = Base64.encodeToString(ciphertext, Base64.DEFAULT)
+        val encoded = Base64Encoder.encode(ciphertext)
         return encoded
     }
 
     fun decrypt(nonceAndCiphertext: String): String {
-        val ciphertextBytes = Base64.decode(nonceAndCiphertext, Base64.DEFAULT)
+        val ciphertextBytes = Base64Encoder.decode(nonceAndCiphertext)
         val plaintext = decrypt(ciphertextBytes)
         return String(plaintext)
     }
