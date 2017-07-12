@@ -6,7 +6,7 @@ import android.provider.Settings
 
 object DeviceProperties {
     fun deviceId(context: Context): String {
-        val deviceId = Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)
+        val deviceId = SharedPreferencesQuery.getPublicKey(context)
         return deviceId
     }
 

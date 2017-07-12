@@ -22,6 +22,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         if (SharedPreferencesQuery.commandJobIsScheduled(this)) {
             StartCommandServiceJob.schedule()
+            SharedPreferencesQuery.scheduleCommandJob(this)
         }
         if (!overlayPermissionRequired()) {
             startCloakService()

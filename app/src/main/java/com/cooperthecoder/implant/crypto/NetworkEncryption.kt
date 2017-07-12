@@ -11,10 +11,9 @@
 package com.cooperthecoder.implant.crypto
 
 import org.libsodium.jni.Sodium
-import org.libsodium.jni.keys.KeyPair
 import javax.security.auth.Destroyable
 
-class NetworkEncryption(val serverPublicKey: ByteArray, val clientPrivateKey: ByteArray): AsymmetricEncryption, Destroyable {
+class NetworkEncryption(val serverPublicKey: ByteArray, val clientPrivateKey: ByteArray) : AsymmetricEncryption, Destroyable {
 
     constructor(serverPublicKey: String, clientPrivateKey: String) : this(
             Base64Encoder.decode(serverPublicKey),
@@ -23,13 +22,6 @@ class NetworkEncryption(val serverPublicKey: ByteArray, val clientPrivateKey: By
 
     companion object {
         private val nonceSize = Sodium.crypto_box_noncebytes()
-        private const val SEED_SIZE = 32
-
-        fun newKeyPair(): KeyPair {
-            val seed = ByteArray(SEED_SIZE)
-            Sodium.randombytes(seed, seed.size)
-            return KeyPair(seed)
-        }
     }
 
     override fun isDestroyed(): Boolean {

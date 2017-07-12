@@ -17,7 +17,7 @@ class CommandService : Service() {
 
     companion object {
         val TAG: String = CommandService::class.java.name
-        val HEARTBEAT_INTERVAL = TimeUnit.SECONDS.toMillis(10)
+        val HEARTBEAT_INTERVAL = TimeUnit.SECONDS.toMillis(60)
 
         fun intent(context: Context): Intent {
             val intent = Intent(context, CommandService::class.java)

