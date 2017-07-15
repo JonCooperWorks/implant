@@ -22,6 +22,7 @@ android {
 
 repositories {
     mavenCentral()
+    maven { url 'https://jitpack.io' }
     maven {
         url "https://repo.eclipse.org/content/repositories/paho-snapshots/"
     }
@@ -43,4 +44,5 @@ dependencies {
     compile 'org.eclipse.paho:org.eclipse.paho.android.service:1.1.1'
     compile "com.github.joshjdevl.libsodiumjni:libsodium-jni-aar:1.0.6"
     compile "com.github.joshjdevl.libsodiumjni:libsodium-jni:1.0.6"
+    compile 'com.github.ExCiteS:apache-commons-codec-shaded:1.10'
 }

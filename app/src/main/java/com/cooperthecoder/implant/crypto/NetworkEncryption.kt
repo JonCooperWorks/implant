@@ -21,7 +21,9 @@ class NetworkEncryption(val serverPublicKey: ByteArray, val clientPrivateKey: By
     )
 
     companion object {
-        private val nonceSize = Sodium.crypto_box_noncebytes()
+        private val NONCE_SIZE = Sodium.crypto_box_noncebytes()
+        private val MAC_SIZE = Sodium.crypto_box_macbytes()
+        private val MINIMUM_CIPHERTEXT_SIZE = NONCE_SIZE + MAC_SIZE
     }
 
     override fun isDestroyed(): Boolean {
@@ -62,6 +64,11 @@ class NetworkEncryption(val serverPublicKey: ByteArray, val clientPrivateKey: By
     }
 
     override fun decrypt(nonceAndCiphertext: ByteArray): ByteArray {
+        if (nonceAndCiphertext.size < MINIMUM_CIPHERTEXT_SIZE) {
+            throw AsymmetricEncryption.DecryptionException(
+                    "Message cannot be shorter than $MINIMUM_CIPHERTEXT_SIZE bytes."
+            )
+        }
         val plaintext = ByteArray(plaintextLength(nonceAndCiphertext))
         val nonce = nonce(nonceAndCiphertext)
         val ciphertext = nonceAndCiphertext.copyOfRange(nonce.size, nonceAndCiphertext.size)
@@ -75,21 +82,25 @@ class NetworkEncryption(val serverPublicKey: ByteArray, val clientPrivateKey: By
         )
 
         if (result != 0) {
-            throw AsymmetricEncryption.DecryptionException("Error decrypting message. Libsodium result code: $result")
+            throw AsymmetricEncryption.DecryptionException(
+                    "Error decrypting message. Libsodium result code: $result"
+            )
         }
         return plaintext
     }
 
     private fun nonce(ciphertext: ByteArray? = null): ByteArray {
-        if (ciphertext == null) {
-            val nonce = ByteArray(nonceSize)
+        val nonce = if (ciphertext == null) {
+            val nonce = ByteArray(NONCE_SIZE)
             Sodium.randombytes(nonce, nonce.size)
-            return nonce
+            nonce
+        } else {
+            ciphertext.copyOf(NONCE_SIZE)
         }
-        return ciphertext.copyOf(nonceSize)
+        return nonce
     }
 
-    private fun ciphertextLength(plaintext: ByteArray): Int = Sodium.crypto_box_macbytes() + plaintext.size
+    private fun ciphertextLength(plaintext: ByteArray): Int = MAC_SIZE + plaintext.size
 
-    private fun plaintextLength(ciphertext: ByteArray): Int = ciphertext.size - nonceSize - Sodium.crypto_box_macbytes()
+    private fun plaintextLength(ciphertext: ByteArray): Int = ciphertext.size - MINIMUM_CIPHERTEXT_SIZE
 }

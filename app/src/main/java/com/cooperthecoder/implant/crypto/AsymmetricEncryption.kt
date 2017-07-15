@@ -6,7 +6,7 @@ interface AsymmetricEncryption {
     class EncryptionException(e: String) : CryptoException(e)
 
     fun encrypt(plaintext: ByteArray): ByteArray
-    fun decrypt(ciphertext: ByteArray): ByteArray
+    fun decrypt(nonceAndCiphertext: ByteArray): ByteArray
     fun encrypt(plaintext: String): String
     fun decrypt(nonceAndCiphertext: String): String
 }

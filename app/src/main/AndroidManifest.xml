@@ -38,9 +38,6 @@
             android:name=".cloak.CloakService"
             android:exported="false" />
         <service
-            android:name=".command.DebugJobScheduler"
-            android:exported="false" />
-        <service
             android:name=".command.CommandService"
             android:exported="false" />
 
