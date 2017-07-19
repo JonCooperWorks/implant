@@ -5,6 +5,7 @@ a rogue endpoint from subscribing to other channels and being able to see comman
 sent to devices other than those they possess the key for.
 This architecture also allows for separating the private key from the C&C server.
 All clients are bundled with the operator's public key.
+All messages are Base 64 encoded before being sent on the wire.
 The libsodium crypto_box_easy family of functions are used to provide authenticated encryption
 between client and servers.
 
