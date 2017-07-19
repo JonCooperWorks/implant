@@ -6,7 +6,7 @@ android {
     buildToolsVersion "25.0.3"
     defaultConfig {
         applicationId "com.cooperthecoder.implant"
-        minSdkVersion 14
+        minSdkVersion 16
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
@@ -22,6 +22,7 @@ android {
 
 repositories {
     mavenCentral()
+    maven { url 'https://jitpack.io' }
     maven {
         url "https://repo.eclipse.org/content/repositories/paho-snapshots/"
     }
@@ -41,4 +42,7 @@ dependencies {
     compile 'com.squareup.okhttp3:okhttp:3.8.1'
     compile 'org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.1.0'
     compile 'org.eclipse.paho:org.eclipse.paho.android.service:1.1.1'
+    compile "com.github.joshjdevl.libsodiumjni:libsodium-jni-aar:1.0.6"
+    compile "com.github.joshjdevl.libsodiumjni:libsodium-jni:1.0.6"
+    compile 'com.github.ExCiteS:apache-commons-codec-shaded:1.10'
 }

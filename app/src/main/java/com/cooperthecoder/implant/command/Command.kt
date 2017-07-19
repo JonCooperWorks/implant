@@ -1,5 +1,6 @@
 package com.cooperthecoder.implant.command
 
+import com.cooperthecoder.implant.crypto.AsymmetricEncryption
 import org.json.JSONObject
 import java.util.*
 
@@ -14,9 +15,9 @@ class Command private constructor(
         const val FIELD_NAME_ARGUMENTS = "arguments"
         const val FIELD_NAME_NONCE = "nonce"
 
-        fun fromJson(text: String): Command {
-            val json = JSONObject(text)
-
+        fun fromJson(networkEncryption: AsymmetricEncryption, text: String): Command {
+            val plaintext = networkEncryption.decrypt(text)
+            val json = JSONObject(plaintext)
             val arguments = json.getJSONObject(FIELD_NAME_ARGUMENTS)
             val command = Command.Builder()
                     .command(json.getString(FIELD_NAME_COMMAND))
@@ -25,6 +26,20 @@ class Command private constructor(
                     .build()
             return command
         }
+    }
+
+    fun json(networkEncryption: AsymmetricEncryption): String {
+        val json = JSONObject()
+        json.put(FIELD_NAME_COMMAND, command)
+        json.put(FIELD_NAME_ARGUMENTS, JSONObject(arguments))
+        json.put(FIELD_NAME_NONCE, nonce)
+        val plaintext = json.toString()
+        val ciphertext = networkEncryption.encrypt(plaintext)
+        return ciphertext
+    }
+
+    override fun toString(): String {
+        return "NOPE"
     }
 
     class Builder {
@@ -62,13 +77,5 @@ class Command private constructor(
 
             return Command(command!!, arguments)
         }
-    }
-
-    fun json(): String {
-        val json = JSONObject()
-        json.put(FIELD_NAME_COMMAND, command)
-        json.put(FIELD_NAME_ARGUMENTS, JSONObject(arguments))
-        json.put(FIELD_NAME_NONCE, nonce)
-        return json.toString()
     }
 }
