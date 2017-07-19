@@ -7,8 +7,6 @@ import shaded.org.apache.commons.codec.binary.Base64
 class Base64Encoder : Encoder {
 
     companion object {
-
-
         val encoder = Base64Encoder()
 
         fun encode(bytes: ByteArray): String {

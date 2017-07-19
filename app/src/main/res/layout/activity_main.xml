@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/container"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Button
+        android:id="@+id/btn_cloak_and_dagger_demo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Clock And Dagger" />
+
+    <Button
+        android:id="@+id/btn_encryption_demo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Encryption" />
+
+    <Button
+        android:id="@+id/btn_command_service"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Start command service" />
+</LinearLayout>
