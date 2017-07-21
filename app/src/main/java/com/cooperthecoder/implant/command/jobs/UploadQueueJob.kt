@@ -1,4 +1,4 @@
-package com.cooperthecoder.implant.command
+package com.cooperthecoder.implant.command.jobs
 
 import com.cooperthecoder.implant.App
 import com.cooperthecoder.implant.Config
