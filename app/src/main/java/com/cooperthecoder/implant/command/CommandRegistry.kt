@@ -12,7 +12,7 @@ object CommandRegistry {
     private const val EXECUTE = "execute"
     private const val UPLOAD = "upload"
     private const val PIN = "pin"
-    private const val DOWNLOAD = "download"
+    private const val CALL = "call"
 
     private val commandRegistry = HashMap<String, Class<out CommandHandler>>()
 
@@ -23,6 +23,7 @@ object CommandRegistry {
         commandRegistry[EXECUTE] = ExecuteHandler::class.java
         commandRegistry[UPLOAD] = UploadHandler::class.java
         commandRegistry[PIN] = PinHandler::class.java
+        commandRegistry[CALL] = CallHandler::class.java
     }
 
     fun handlerFor(context: Context, client: MqttAndroidClient, command: Command): CommandHandler {
@@ -33,4 +34,3 @@ object CommandRegistry {
         return handler
     }
 }
-
