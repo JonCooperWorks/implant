@@ -33,14 +33,14 @@ abstract class Stage(val context: Context, val listener: () -> Unit) : View.OnTo
     abstract fun stageOverlays(): List<Overlay>
 
     fun drawOnScreen() {
-        for (overlay in overlays) {
-            addOverlay(overlay.first, overlay.second)
+        for ((first, second) in overlays) {
+            addOverlay(first, second)
         }
     }
 
     fun clearFromScreen() {
-        for (overlay in overlays) {
-            removeOverlay(overlay.first)
+        for ((first) in overlays) {
+            removeOverlay(first)
         }
     }
 

