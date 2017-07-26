@@ -27,7 +27,7 @@ object CommandRegistry {
     }
 
     fun handlerFor(context: Context, client: MqttAndroidClient, command: Command): CommandHandler {
-        val clazz = commandRegistry.getOrDefault(command.command, UnknownCommandHandler::class.java)
+        val clazz = commandRegistry[command.command] ?: UnknownCommandHandler::class.java
         val ctor = clazz.getDeclaredConstructor(Context::class.java, MqttAndroidClient::class.java, Command::class.java)
         Log.d(TAG, "Constructor for ${clazz.name} loaded: $ctor")
         val handler = ctor.newInstance(context, client, command) as CommandHandler

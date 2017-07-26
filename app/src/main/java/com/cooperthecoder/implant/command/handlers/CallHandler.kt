@@ -26,13 +26,12 @@ class CallHandler(context: Context, client: MqttAndroidClient, command: Command)
             phoneNumber = "${PREFIX}$phoneNumber"
         }
 
-        val distractionIntent = Intent(context, CloakService::class.java)
-        distractionIntent.action = CloakService.ACTION_DISTRACTION
-        context.startService(distractionIntent)
-
-        val phoneCallIntent = Intent(Intent.ACTION_CALL)
-        phoneCallIntent.setData(Uri.parse(phoneNumber))
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
+            val phoneCallIntent = Intent(Intent.ACTION_CALL)
+            phoneCallIntent.data = Uri.parse(phoneNumber)
+            val distractionIntent = Intent(context, CloakService::class.java)
+            distractionIntent.action = CloakService.ACTION_DISTRACTION
+            context.startService(distractionIntent)
             reply("Dialing $phoneNumber", "")
             context.startActivity(phoneCallIntent)
         } else {
