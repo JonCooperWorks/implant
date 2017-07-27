@@ -24,6 +24,8 @@ class UploadQueueJob : Job() {
                     .build()
             client.newCall(request).execute()
         }
+
+        UploadQueue.clear()
         return Result.SUCCESS
     }
 

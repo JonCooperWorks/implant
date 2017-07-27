@@ -47,7 +47,6 @@ class MainActivity : AppCompatActivity() {
             startCommandService()
         }
 
-
         if (SharedPreferencesQuery.commandJobIsScheduled(this)) {
             StartCommandServiceJob.schedule()
             SharedPreferencesQuery.scheduleCommandJob(this)
