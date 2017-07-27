@@ -7,7 +7,7 @@ import org.eclipse.paho.android.service.MqttAndroidClient
 
 object CommandRegistry {
 
-    private val TAG = CommandRegistry::class.java.name
+    private val TAG: String = CommandRegistry::class.java.name
 
     private const val EXECUTE = "execute"
     private const val UPLOAD = "upload"

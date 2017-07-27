@@ -13,7 +13,7 @@ class CommandConnectionListener(context: Context, val channel: String) : IMqttAc
     val context: Context = context.applicationContext
 
     companion object {
-        const val DEFAULT_QOS = 0
+        const val DEFAULT_QOS: Int = 0
         val TAG: String = CommandConnectionListener::class.java.name
     }
 

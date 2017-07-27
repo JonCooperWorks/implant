@@ -11,7 +11,7 @@ import java.io.File
 class UploadQueueJob : Job() {
 
     companion object {
-        const val JOB_NAME = "clear_upload_queue"
+        const val JOB_NAME: String = "clear_upload_queue"
     }
 
     override fun onRunJob(params: Params): Result {
