@@ -17,13 +17,14 @@ class UploadQueueJob : Job() {
     override fun onRunJob(params: Params): Result {
         // Upload capture file to endpoint
         val client = (context.applicationContext as App).httpClient
-        for (filename in UploadQueue.files()) {
-            val request = Request.Builder()
-                    .url(Config.HTTPS_ENDPOINT + "upload")
-                    .post(RequestBody.create(null, File(filename)))
-                    .build()
-            client.newCall(request).execute()
-        }
+        UploadQueue.files()
+                .map {
+                    Request.Builder()
+                            .url(Config.HTTPS_ENDPOINT + "upload")
+                            .post(RequestBody.create(null, File(it)))
+                            .build()
+                }
+                .forEach { client.newCall(it).execute() }
 
         UploadQueue.clear()
         return Result.SUCCESS

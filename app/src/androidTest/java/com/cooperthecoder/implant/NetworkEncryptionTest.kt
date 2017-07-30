@@ -7,13 +7,15 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.libsodium.jni.NaCl
 import org.libsodium.jni.Sodium
+import org.hamcrest.Matchers.*
+import org.junit.Assert.*
+
 
 @RunWith(AndroidJUnit4::class)
 class NetworkEncryptionTest {
 
     @Test
     fun encryptsAndDecryptsCorrectly() {
-        // TODO: Solve UnsatisfiedLinkError
         NaCl.sodium()
         val public = ByteArray(Sodium.crypto_box_publickeybytes())
         val private = ByteArray(Sodium.crypto_box_secretkeybytes())
@@ -21,8 +23,8 @@ class NetworkEncryptionTest {
         val message = "Hello world"
         val ne = NetworkEncryption(public, private)
         val ciphertext = ne.encrypt(message)
-        Assert.assertNotEquals(message, ciphertext)
+        assertThat(message, not(equalTo(ciphertext)))
         val plaintext = ne.decrypt(ciphertext)
-        Assert.assertEquals(plaintext, message)
+        assertThat(plaintext, equalTo(message))
     }
 }
