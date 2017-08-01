@@ -15,7 +15,7 @@ import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.WindowManager
-import com.cooperthecoder.implant.Overlay
+import com.cooperthecoder.implant.magic.Overlay
 
 abstract class Stage(val context: Context, val listener: () -> Unit) : View.OnTouchListener {
     companion object {

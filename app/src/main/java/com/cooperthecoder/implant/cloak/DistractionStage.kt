@@ -6,7 +6,7 @@ import android.graphics.PixelFormat
 import android.support.constraint.ConstraintLayout
 import android.view.Gravity
 import android.view.WindowManager
-import com.cooperthecoder.implant.Overlay
+import com.cooperthecoder.implant.magic.Overlay
 
 class DistractionStage(context: Context, listener: () -> Unit) : Stage(context, listener) {
     override fun stageOverlays(): List<Overlay> {

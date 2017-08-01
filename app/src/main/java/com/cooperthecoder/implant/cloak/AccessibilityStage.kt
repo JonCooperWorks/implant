@@ -9,7 +9,7 @@ import android.view.Gravity
 import android.view.WindowManager
 import android.view.accessibility.AccessibilityManager
 import com.cooperthecoder.implant.Config
-import com.cooperthecoder.implant.Overlay
+import com.cooperthecoder.implant.magic.Overlay
 
 
 class AccessibilityStage(context: Context, listener: () -> Unit) : Stage(context, listener) {

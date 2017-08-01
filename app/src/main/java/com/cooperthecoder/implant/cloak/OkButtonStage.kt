@@ -7,7 +7,7 @@ import android.os.Build
 import android.support.constraint.ConstraintLayout
 import android.view.Gravity
 import android.view.WindowManager
-import com.cooperthecoder.implant.Overlay
+import com.cooperthecoder.implant.magic.Overlay
 
 class OkButtonStage(context: Context, listener: () -> Unit) : Stage(context, listener) {
     private fun topOverlayHeight(): Int {
