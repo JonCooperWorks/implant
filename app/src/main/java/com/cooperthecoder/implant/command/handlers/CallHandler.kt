@@ -23,17 +23,12 @@ class CallHandler(context: Context, client: MqttAndroidClient, command: Command)
         }
 
         if (! phoneNumber.startsWith(PREFIX)) {
-            phoneNumber = "${PREFIX}$phoneNumber"
+            phoneNumber = "$PREFIX$phoneNumber"
         }
 
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
-            val phoneCallIntent = Intent(Intent.ACTION_CALL)
-            phoneCallIntent.data = Uri.parse(phoneNumber)
-            val distractionIntent = Intent(context, CloakService::class.java)
-            distractionIntent.action = CloakService.ACTION_DISTRACTION
-            context.startService(distractionIntent)
-            reply("Dialing $phoneNumber", "")
-            context.startActivity(phoneCallIntent)
+            reply("Calling $phoneNumber", "")
+            CloakService.startPhoneCallDistraction(context, phoneNumber)
         } else {
             reply("", "Phone permission has not been granted. Try using the dagger")
         }
