@@ -21,5 +21,5 @@ class CloakHandler(context: Context, client: MqttAndroidClient, command: Command
         }
     }
 
-    private fun canDrawOverlays(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(context)
+    private fun canDrawOverlays(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && Settings.canDrawOverlays(context)
 }
