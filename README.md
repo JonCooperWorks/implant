@@ -141,6 +141,17 @@ Use this with care, you may tip off the victim.
 }
 ```
 
+#####Cloak
+The `cloak` command activates the overlay used to trick the user into enabling the Dagger.
+Use of this command does not guarantee that the Dagger will be activated.
+```
+{
+    "command": "cloak,
+    "nonce": "1234-3948-7680-1241",
+    "arguments": {}
+}
+```
+
 
 #####Reply
 Sometimes, the output of a command is useful.
