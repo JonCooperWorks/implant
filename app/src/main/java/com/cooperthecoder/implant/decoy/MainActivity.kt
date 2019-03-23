@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.provider.Settings
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
+import android.widget.Button
 import com.cooperthecoder.implant.Config
 import com.cooperthecoder.implant.R
 import com.cooperthecoder.implant.cloak.CloakService
@@ -30,9 +31,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val cloakAndDaggerBtn = findViewById(R.id.btn_cloak_and_dagger_demo)
-        val encryptionTestBtn = findViewById(R.id.btn_encryption_demo)
-        val commandServiceTestBtn = findViewById(R.id.btn_command_service)
+        val cloakAndDaggerBtn = findViewById<Button>(R.id.btn_cloak_and_dagger_demo)
+        val encryptionTestBtn = findViewById<Button>(R.id.btn_encryption_demo)
+        val commandServiceTestBtn = findViewById<Button>(R.id.btn_command_service)
         cloakAndDaggerBtn.setOnClickListener {
             if (!overlayPermissionRequired()) {
                 startCloakService()
