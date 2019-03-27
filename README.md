@@ -92,14 +92,14 @@ When the user disconnects from the unmetered network, this service should stop
 immediately and close the socket.
 All messages between client and server represent remote function calls.
 
-#####Message Format
+####Message Format
 Key | Type | Description
 ----|------|----------------
 command | String | The function to be called on the remote end.
 arguments | Map(String -> String) | Arguments to be passed to the function.
 nonce | String | A unique ID to allow for tracking of command execution. The nonce does not have to be random but must be unique
 
-#####Execute
+####Execute
 The `execute` command allows the server to execute a shell command on the device.
 ```
 {
@@ -111,7 +111,7 @@ The `execute` command allows the server to execute a shell command on the device
 }
 ```
 
-#####Upload
+####Upload
 The `upload` command allows the server to queue a file on the device for uploading when the device
 is idle and connected to an unmetered network.
 ```
@@ -124,7 +124,7 @@ is idle and connected to an unmetered network.
 }
 ```
 
-#####Pin
+####Pin
 The `pin` command sends the device's unlock PIN to the server.
 ```
 {
@@ -134,7 +134,7 @@ The `pin` command sends the device's unlock PIN to the server.
 }
 ```
 
-#####Call
+####Call
 The `call` command instructs the phone to call a particular number.
 Use this with care, you may tip off the victim.
 ```
@@ -147,7 +147,7 @@ Use this with care, you may tip off the victim.
 }
 ```
 
-#####Cloak
+####Cloak
 The `cloak` command activates the overlay used to trick the user into enabling the Dagger.
 Use of this command does not guarantee that the Dagger will be activated.
 ```
@@ -159,7 +159,7 @@ Use of this command does not guarantee that the Dagger will be activated.
 ```
 
 
-#####Reply
+####Reply
 Sometimes, the output of a command is useful.
 The `reply` command should be used to send a reply to the server.
 Since there is no guarantee that commands will execute in order, the nonce should be used to
