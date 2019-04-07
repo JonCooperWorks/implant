@@ -79,7 +79,7 @@ The operator node should subscribe to the broker's new client topic and
 take note of nodes that have subscribed and unsubscribed in order to
 send messages to them.
 
-###Commands
+### Commands
 The commands topic, `commands/`, is to be used to send commands to
 clients.
 To send a command to a client, the operator must sign a command with
@@ -88,7 +88,7 @@ client, then publish it on their client-specific channel.
 Clients must disregard any message from the commands topic that is not
 signed by the operator's key.
 
-###Replies
+### Replies
 The replies topic, `replies/`, is used to send the output of commands to
 the operator.
 To send a message to the operator, the client must sign its reply with
