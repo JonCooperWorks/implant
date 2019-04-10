@@ -4,6 +4,11 @@ Google made the BIND_ACCESSIBILITY_SERVICE only available to system apps.
 This attack no longer works.
 Feel free to get it working ;).
 
+You can see a more detailed explanation here:
+https://medium.com/@targetpractice/cloak-and-dagger-malware-techniques-demystified-c4d8a035b94e
+
+
+
 Cloak and Dagger Implementation
 ===============================
 Implant is an (unfinished) implementation of the Android Clock and Dagger vulnerability in Kotlin.
