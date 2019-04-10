@@ -8,17 +8,6 @@
         android:id="@+id/btn_cloak_and_dagger_demo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Clock And Dagger" />
+        android:text="Cloak And Dagger Demo" />
 
-    <Button
-        android:id="@+id/btn_encryption_demo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Encryption" />
-
-    <Button
-        android:id="@+id/btn_command_service"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Start command service" />
 </LinearLayout>
