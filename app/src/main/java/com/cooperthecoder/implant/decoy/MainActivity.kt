@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.provider.Settings
 import android.support.v7.app.AppCompatActivity
 import android.widget.Button
+import android.widget.Toast
 import com.cooperthecoder.implant.R
 import com.cooperthecoder.implant.cloak.CloakService
 import com.cooperthecoder.implant.dagger.DaggerService
@@ -28,6 +29,8 @@ class MainActivity : AppCompatActivity() {
         cloakAndDaggerBtn.setOnClickListener {
             if (!overlayPermissionRequired()) {
                 startCloakService()
+            } else {
+                Toast.makeText(this, "Allow this app to draw over other apps in settings!", Toast.LENGTH_LONG).show()
             }
         }
     }
