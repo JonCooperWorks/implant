@@ -48,20 +48,11 @@ Done
 + Log Security Pin
 + Log password keystrokes
 
-To Do
------
-+ Install additional payload from an APK
-
 Overlay Capabilities
 ====================
-Done
-----
 + Determine the position of our AccessibilityService in the Settings Menu dynamically
 + Clickjacking -> a11y working on some screen sizes
 
-To Do
------
-+ Determine the location of all clickjacking targets dynamically
 
 Disclaimer
 ==========
